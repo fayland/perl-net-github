@@ -15,7 +15,7 @@ has 'project' => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        returnNet::GitHub::Project->new( $self->args_to_pass );
+        return Net::GitHub::Project->new( $self->args_to_pass );
     }
 );
 
@@ -34,10 +34,28 @@ Net::GitHub - Perl Interface for github.com
     use Net::GitHub;
 
     # for http://github.com/fayland/perl-net-github/tree/master
-    my $github = Net::GitHub->new( owner => 'fayland', project => 'perl-net-github' );
-    ...
+    my $github = Net::GitHub->new( owner => 'fayland', name => 'perl-net-github' );
+    print $github->project->public_clone_url;
 
-=head1 EXPORT
+=head1 DESCRIPTION
+
+L<http://github.com> is a popular git host.
+
+Please feel free to fork L<http://github.com/fayland/perl-net-github/tree/master>, fix or contribute some code. :)
+
+=head1 METHODS
+
+=head2 $github->project
+
+instance of L<Net::GitHub::Project>
+
+=head1 Git URL
+
+L<http://github.com/fayland/perl-net-github/tree/master>
+
+=head1 SEE ALSO
+
+L<Moose>
 
 =head1 AUTHOR
 

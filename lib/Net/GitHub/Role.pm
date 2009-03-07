@@ -10,7 +10,7 @@ use Carp qw/croak/;
 
 # http://github.com/fayland/perl-net-github/tree/master
 has 'owner' => ( isa => 'Str', is => 'rw' );
-has 'project'  => ( isa => 'Str', is => 'rw' );
+has 'name'  => ( isa => 'Str', is => 'rw' );
 
 # login
 has 'email' => ( isa => 'Str', is => 'rw' );
@@ -59,3 +59,41 @@ no Moose::Role;
 
 1;
 __END__
+
+=head1 NAME
+
+Net::GitHub::Role - Common between Net::GitHub::* libs
+
+=head1 SYNOPSIS
+
+    package Net::GitHub::XXX;
+    
+    use Moose;
+    does 'Net::GitHub::Role';
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=over 4
+
+=item owner
+
+'fayland' of http://github.com/fayland/perl-net-github/tree/master
+
+=item name
+
+'perl-net-github' of http://github.com/fayland/perl-net-github/tree/master
+
+=back
+
+=head1 AUTHOR
+
+Fayland Lam, C<< <fayland at gmail.com> >>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Fayland Lam, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
