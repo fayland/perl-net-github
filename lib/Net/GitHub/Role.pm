@@ -6,7 +6,11 @@ our $VERSION = '0.01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use WWW::Mechanize;
+use JSON::Any;
 use Carp qw/croak/;
+use Data::Dumper;
+
+has 'debug' => ( is => 'rw', isa => 'Str', default => 0 );
 
 # http://github.com/fayland/perl-net-github/tree/master
 has 'owner' => ( isa => 'Str', is => 'rw' );
@@ -40,6 +44,14 @@ has 'ua' => (
         return $m;
     }
 );
+has 'json' => (
+    is => 'ro',
+    isa => 'JSON::Any',
+    lazy => 1,
+    default => sub {
+        return JSON::Any->new;
+    }
+);
 
 sub get {
     my ( $self, $url) = @_;
@@ -53,7 +65,6 @@ sub get {
         return $self->ua->content;
     }
 }
-
 
 no Moose::Role;
 
