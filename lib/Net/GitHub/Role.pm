@@ -57,7 +57,7 @@ has 'json' => (
 );
 
 sub get {
-    my ( $self, $url) = @_;
+    my ( $self, $url ) = @_;
 
     $self->ua->get($url);
     if ( ! $self->ua->success() ) {

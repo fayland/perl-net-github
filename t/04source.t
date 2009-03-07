@@ -15,22 +15,19 @@ my $c1 = read_file($filec1);
 my $filec2 = "$Bin/mockdata/single_commit.json";
 my $c2 = read_file($filec2);
 
-my $mock = Test::MockModule->new('Net::GitHub::Role');
-$mock->mock(
-    'fetch',
-    sub {
-    	( undef, my $uri ) = @_;
-    	if ( $uri eq 'http://github.com/api/v1/json/fayland/perl-net-github/commits/master' ) {
-    		return $c1;
-    	} elsif ( $uri eq 'http://github.com/api/v1/json/fayland/perl-net-github/commit/725d3f6e8094e533f768710ce96504f7e2b67420' ) {
-    	    return $c2;
-    	}
-    }
-);
+my $mock = Test::MockModule->new('Net::GitHub::Project::Source');
+$mock->mock( 'get', sub {
+	( undef, my $url ) = @_;
+	if ( $url eq 'http://github.com/api/v1/json/fayland/perl-net-github/commits/master' ) {
+		return $c1;
+	} elsif ( $url eq 'http://github.com/api/v1/json/fayland/perl-net-github/commit/725d3f6e8094e533f768710ce96504f7e2b67420' ) {
+	    return $c2;
+	}
+} );
 
 
 my $src = Net::GitHub::Project::Source->new( owner => 'fayland', name => 'perl-net-github' );
-is scalar @{$src->commits}, 14;
+is scalar @{$src->commits}, 13;
 is_deeply $src->commits->[-6], {
     'committer' => {
                      'email' => 'fayland@gmail.com',
