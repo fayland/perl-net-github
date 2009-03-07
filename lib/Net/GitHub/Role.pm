@@ -5,8 +5,8 @@ use Moose::Role;
 our $VERSION = '0.01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-use WWW::Mechanize;
 use JSON::Any;
+use WWW::Mechanize;
 use Carp qw/croak/;
 use Data::Dumper;
 

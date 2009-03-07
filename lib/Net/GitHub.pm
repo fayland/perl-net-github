@@ -5,8 +5,6 @@ use Moose;
 our $VERSION = '0.01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-use Net::GitHub::Project;
-
 with 'Net::GitHub::Role';
 
 has 'project' => (
@@ -15,8 +13,20 @@ has 'project' => (
     lazy => 1,
     default => sub {
         my $self = shift;
+        require Net::GitHub::Project;
         return Net::GitHub::Project->new( $self->args_to_pass );
     }
+);
+
+has '_search' => (
+    is => 'rw',
+    isa => 'Net::GitHub::Search',
+    lazy => 1,
+    default => sub {
+        require Net::GitHub::Search;
+        return Net::GitHub::Search->new();
+    },
+    handles => ['search'],
 );
 
 no Moose;
@@ -51,6 +61,12 @@ Please feel free to fork L<http://github.com/fayland/perl-net-github/tree/master
 =head2 $github->project
 
 instance of L<Net::GitHub::Project>
+
+=head2 $github->search
+
+    $github->search('fayland');
+
+handled by L<Net::GitHub::Search>
 
 =head1 Git URL
 
