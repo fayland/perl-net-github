@@ -10,6 +10,8 @@ require 'WWW::Mechanize';
 
 build_requires 'Test::More';
 
+test_requires 'Test::MockModule';
+
 auto_install;
 
 WriteAll;
