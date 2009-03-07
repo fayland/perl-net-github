@@ -11,7 +11,6 @@ require 'WWW::Mechanize';
 require 'HTML::TokeParser::Simple';
 
 build_requires 'Test::More';
-
 test_requires 'Test::MockModule';
 
 auto_install;
