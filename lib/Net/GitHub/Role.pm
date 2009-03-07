@@ -6,10 +6,13 @@ our $VERSION = '0.01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use WWW::Mechanize;
+use Carp qw/croak/;
 
-has 'username' => ( isa => 'Str', is => 'ro', required => 1 );
-has 'project'  => ( isa => 'Str', is => 'ro', required => 1 );
+# http://github.com/fayland/perl-net-github/tree/master
+has 'owner' => ( isa => 'Str', is => 'rw' );
+has 'project'  => ( isa => 'Str', is => 'rw' );
 
+# login
 has 'email' => ( isa => 'Str', is => 'rw' );
 has 'password' => ( isa => 'Str', is => 'rw' );
 
@@ -28,8 +31,21 @@ has 'ua' => (
         );
         return $m;
     }
-
 );
+
+sub get {
+    my ( $self, $url) = @_;
+
+    $self->ua->get($url);
+    if ( ! $self->ua->response->is_success ) {
+        croak 'Server threw an error '
+          . $self->mech->response->status_line . ' for '
+          . $url;
+    } else {
+        return $self->mech->content;
+    }
+}
+
 
 no Moose::Role;
 

@@ -22,7 +22,8 @@ Net::GitHub - Perl Interface for github.com
 
     use Net::GitHub;
 
-    my $foo = Net::GitHub->new( username => 'fayland', project => 'perl-net-github' );
+    # for http://github.com/fayland/perl-net-github/tree/master
+    my $github = Net::GitHub->new( owner => 'fayland', project => 'perl-net-github' );
     ...
 
 =head1 EXPORT
