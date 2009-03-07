@@ -35,3 +35,48 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 __END__
+
+=head1 NAME
+
+Net::GitHub::Project::Source - GitHub project Source Section
+
+=head1 SYNOPSIS
+
+    use Net::GitHub::Project::Source;
+
+    my $src = Net::GitHub::Project::Source->new(
+        owner => 'fayland', name => 'perl-net-github'
+    );
+    
+    # get all commits
+    my @commits = $src->commits;
+    foreach my $c ( @commits ) {
+        my $commit = $src->commit( $c->{id} );
+    }
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=over 4
+
+=item commits
+
+recent commits
+
+=item commit($id)
+
+a detailed single commit
+
+=back
+
+=head1 AUTHOR
+
+Fayland Lam, C<< <fayland at gmail.com> >>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Fayland Lam, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
