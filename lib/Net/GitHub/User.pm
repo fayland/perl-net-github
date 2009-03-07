@@ -9,15 +9,33 @@ with 'Net::GitHub::Role';
 
 has 'username' => ( is => 'ro', required => 1, isa => 'Str' );
 
-has '__user' => ( is => 'rw', isa => 'HashRef', lazy_build => 1 );
-sub _build__user {
+has '__user' => (
+    is => 'rw', isa => 'Net::GitHub::UserObj', lazy_build => 1,
+    handles => [qw/full_name repositories blog login location/],
+);
+sub _build___user {
     my $self = shift;
     
     my $url = $self->api_url . $self->username;
     my $json = $self->get($url);
-    my $user = $self->json->jsonToObj($json);
-    return $user;
+    my $data = $self->json->jsonToObj($json);
+    $data->{user}->{full_name} = delete $data->{user}->{name}
+        if $data; # 'name' is used in N::G::Role
+    return Net::GitHub::UserObj->new($data->{user});
 }
+
+package     # hide from PAUSE
+    Net::GitHub::UserObj;
+
+use Moose;
+
+has 'full_name' => ( is => 'rw' );
+has 'repositories' => (
+    is => 'rw', isa => 'ArrayRef'
+);
+has 'blog' => ( is => 'rw' );
+has 'login' => ( is => 'rw' );
+has 'location' => ( is => 'rw' );
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
@@ -34,6 +52,9 @@ Net::GitHub::User - GitHub user
     use Net::GitHub::User;
 
     my $user = Net::GitHub::User->new( username => 'fayland' );
+    foreach my $repos ( @{ $user->repositories} ) {
+        print "$repos->{owner} + $repos->{name}\n";
+    }
 
 =head1 DESCRIPTION
 
@@ -41,7 +62,17 @@ Net::GitHub::User - GitHub user
 
 =over 4
 
-=item 
+=item full_name
+
+=item blog
+
+=item login
+
+=item location
+
+=item repositories
+
+ArrayRef
 
 =back
 
