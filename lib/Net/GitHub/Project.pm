@@ -50,7 +50,7 @@ Net::GitHub::Project - GitHub project
 
 =head1 SYNOPSIS
 
-    use Net::GitHub;
+    use Net::GitHub::Project;
 
     # for http://github.com/fayland/perl-net-github/tree/master
     my $prj = Net::GitHub::Project->new( owner => 'fayland', name => 'perl-net-github' );
