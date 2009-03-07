@@ -35,7 +35,8 @@ has 'source' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::Project::Source->new( $self->args_to_pass );
-    }
+    },
+    handles => [qw/commits commit/],
 );
 
 no Moose;
@@ -55,6 +56,7 @@ Net::GitHub::Project - GitHub project
     # for http://github.com/fayland/perl-net-github/tree/master
     my $prj = Net::GitHub::Project->new( owner => 'fayland', name => 'perl-net-github' );
     print $prj->public_clone_url;
+    print Dumper(\$prj->commits);
 
 =head1 DESCRIPTION
 

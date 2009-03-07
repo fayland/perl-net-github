@@ -35,7 +35,10 @@ Net::GitHub - Perl Interface for github.com
 
     # for http://github.com/fayland/perl-net-github/tree/master
     my $github = Net::GitHub->new( owner => 'fayland', name => 'perl-net-github' );
+    
+    # project
     print $github->project->public_clone_url;
+    print Dumper(\$github->project->commits);
 
 =head1 DESCRIPTION
 
