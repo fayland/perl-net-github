@@ -56,6 +56,10 @@ L<http://github.com> is a popular git host.
 
 Please feel free to fork L<http://github.com/fayland/perl-net-github/tree/master>, fix or contribute some code. :)
 
+=head1 ALPHA WARNING
+
+Net::GitHub is still in its infancy. backwards compatibility is not yet guaranteed.
+
 =head1 METHODS
 
 =head2 $github->project
