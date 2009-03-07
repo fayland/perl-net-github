@@ -16,6 +16,14 @@ has 'project'  => ( isa => 'Str', is => 'rw' );
 has 'email' => ( isa => 'Str', is => 'rw' );
 has 'password' => ( isa => 'Str', is => 'rw' );
 
+sub args_to_pass {
+    my $self = shift;
+    my $ret;
+    foreach my $col ('owner', 'project', 'email', 'password' ) {
+        $ret->{$col} = $self->$col;
+    }
+    return $ret;
+}
 
 has 'ua' => (
     isa     => 'WWW::Mechanize',
@@ -37,12 +45,12 @@ sub get {
     my ( $self, $url) = @_;
 
     $self->ua->get($url);
-    if ( ! $self->ua->response->is_success ) {
+    if ( ! $self->ua->success() ) {
         croak 'Server threw an error '
-          . $self->mech->response->status_line . ' for '
+          . $self->ua->response->status_line . ' for '
           . $url;
     } else {
-        return $self->mech->content;
+        return $self->ua->content;
     }
 }
 

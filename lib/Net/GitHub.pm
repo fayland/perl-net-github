@@ -5,8 +5,19 @@ use Moose;
 our $VERSION = '0.01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
+use Net::GitHub::Project;
+
 does 'Net::GitHub::Role';
 
+has 'project' => (
+    is => 'rw',
+    isa => 'Net::GitHub::Project',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        returnNet::GitHub::Project->new( $self->args_to_pass );
+    }
+);
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
