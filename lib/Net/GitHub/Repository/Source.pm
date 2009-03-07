@@ -1,4 +1,4 @@
-package Net::GitHub::Source;
+package Net::GitHub::Repository::Source;
 
 use Moose;
 
