@@ -13,13 +13,13 @@ has 'owner' => ( isa => 'Str', is => 'rw' );
 has 'name'  => ( isa => 'Str', is => 'rw' );
 
 # login
-has 'email' => ( isa => 'Str', is => 'rw' );
-has 'password' => ( isa => 'Str', is => 'rw' );
+has 'email' => ( isa => 'Str', is => 'rw', default => '' );
+has 'password' => ( isa => 'Str', is => 'rw', default => '' );
 
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('owner', 'project', 'email', 'password' ) {
+    foreach my $col ('owner', 'name', 'email', 'password' ) {
         $ret->{$col} = $self->$col;
     }
     return $ret;
@@ -69,7 +69,7 @@ Net::GitHub::Role - Common between Net::GitHub::* libs
     package Net::GitHub::XXX;
     
     use Moose;
-    does 'Net::GitHub::Role';
+    with 'Net::GitHub::Role';
 
 =head1 DESCRIPTION
 

@@ -7,7 +7,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 
 use Net::GitHub::Project;
 
-does 'Net::GitHub::Role';
+with 'Net::GitHub::Role';
 
 has 'project' => (
     is => 'rw',

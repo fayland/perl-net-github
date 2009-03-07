@@ -7,7 +7,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 
 use Net::GitHub::Project::Source;
 
-does 'Net::GitHub::Role';
+with 'Net::GitHub::Role';
 
 # git://github.com/fayland/perl-net-github.git
 has 'public_clone_url' => (
@@ -15,7 +15,7 @@ has 'public_clone_url' => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        return 'git://github.com/' . $self->owner . '/' . $self->project . '.git';
+        return 'git://github.com/' . $self->owner . '/' . $self->name . '.git';
     }
 );
 # git@github.com:fayland/perl-net-github.git
@@ -24,7 +24,7 @@ has 'your_clone_url' => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        return 'git@github.com:' . $self->owner . '/' . $self->project . '.git';
+        return 'git@github.com:' . $self->owner . '/' . $self->name . '.git';
     }
 );
 

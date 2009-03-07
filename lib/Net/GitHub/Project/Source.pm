@@ -5,7 +5,7 @@ use Moose;
 our $VERSION = '0.01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-does 'Net::GitHub::Role';
+with 'Net::GitHub::Role';
 
 
 no Moose;
