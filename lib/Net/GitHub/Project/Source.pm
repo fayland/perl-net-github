@@ -15,10 +15,19 @@ has 'commits' => (
 sub _build_commits {
     my $self = shift;
     
-    my $url = 'http://github.com/api/v1/json/' . $self->owner . '/' . $self->name . '/commits/master';
+    my $url = $self->api_url . $self->owner . '/' . $self->name . '/commits/master';
     my $json = $self->get($url);
     my $commits = $self->json->jsonToObj($json);
     return $commits->{commits};
+}
+
+sub commit {
+    my ( $self, $id ) = @_;
+    
+    my $url = $self->api_url . $self->owner . '/' . $self->name . "/commit/$id";
+    my $json = $self->get($url);
+    my $commits = $self->json->jsonToObj($json);
+    return $commits->{"commit"};
 }
 
 no Moose;

@@ -20,6 +20,9 @@ has 'name'  => ( isa => 'Str', is => 'rw' );
 has 'email' => ( isa => 'Str', is => 'rw', default => '' );
 has 'password' => ( isa => 'Str', is => 'rw', default => '' );
 
+# api
+has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v1/json/');
+
 sub args_to_pass {
     my $self = shift;
     my $ret;
@@ -62,6 +65,9 @@ sub get {
           . $self->ua->response->status_line . ' for '
           . $url;
     } else {
+#        open(my $fh, '>', '/home/fayland/git/perl-net-github/t/mockdata/single_commit.json');
+#        print $fh $self->ua->content;
+#        close($fh);
         return $self->ua->content;
     }
 }
