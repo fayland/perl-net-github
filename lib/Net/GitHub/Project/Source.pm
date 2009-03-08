@@ -2,7 +2,7 @@ package Net::GitHub::Project::Source;
 
 use Moose;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::Role';
