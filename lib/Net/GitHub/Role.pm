@@ -81,13 +81,17 @@ Net::GitHub::Role - Common between Net::GitHub::* libs
 
 =over 4
 
-=item owner
+=item ua
 
-'fayland' of http://github.com/fayland/perl-net-github/tree/master
+instance of L<WWW::Mechanize>
 
-=item name
+=item json
 
-'perl-net-github' of http://github.com/fayland/perl-net-github/tree/master
+instance of L<JSON::Any>
+
+=item get
+
+wrap ua->get with success check
 
 =back
 
