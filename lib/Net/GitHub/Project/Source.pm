@@ -6,6 +6,7 @@ our $VERSION = '0.01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::Role';
+with 'Net::GitHub::Project::Role';
 
 has 'commits' => (
     is  => 'rw',

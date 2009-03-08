@@ -2,11 +2,12 @@
 
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Net::GitHub;
 
-my $github = Net::GitHub->new( owner => 'fayland', name => 'perl-net-github' );
-isa_ok($github->project, 'Net::GitHub::Project');
+my $github = Net::GitHub->new();
+isa_ok($github->project(owner => 'fayland', name => 'perl-net-github'), 'Net::GitHub::Project');
+isa_ok($github->user(username => 'fayland'), 'Net::GitHub::User');
 ok( $github->does('Net::GitHub::Role') );
 ok( $github->can('search') );
 

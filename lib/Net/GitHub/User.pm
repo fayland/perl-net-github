@@ -11,7 +11,7 @@ has 'username' => ( is => 'ro', required => 1, isa => 'Str' );
 
 has '__user' => (
     is => 'rw', isa => 'Net::GitHub::UserObj', lazy_build => 1,
-    handles => [qw/full_name repositories blog login location/],
+    handles => [qw/name repositories blog login location/],
 );
 sub _build___user {
     my $self = shift;
@@ -19,8 +19,6 @@ sub _build___user {
     my $url = $self->api_url . $self->username;
     my $json = $self->get($url);
     my $data = $self->json->jsonToObj($json);
-    $data->{user}->{full_name} = delete $data->{user}->{name}
-        if $data; # 'name' is used in N::G::Role
     return Net::GitHub::UserObj->new($data->{user});
 }
 
@@ -29,7 +27,7 @@ package     # hide from PAUSE
 
 use Moose;
 
-has 'full_name' => ( is => 'rw' );
+has 'name' => ( is => 'rw' );
 has 'repositories' => (
     is => 'rw', isa => 'ArrayRef'
 );
@@ -62,7 +60,7 @@ Net::GitHub::User - GitHub user
 
 =over 4
 
-=item full_name
+=item name
 
 =item blog
 

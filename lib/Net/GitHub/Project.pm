@@ -8,6 +8,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 use Net::GitHub::Project::Source;
 
 with 'Net::GitHub::Role';
+with 'Net::GitHub::Project::Role';
 
 # git://github.com/fayland/perl-net-github.git
 has 'public_clone_url' => (

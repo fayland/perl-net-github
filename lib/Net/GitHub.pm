@@ -2,21 +2,22 @@ package Net::GitHub;
 
 use Moose;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::Role';
 
-has 'project' => (
-    is => 'rw',
-    isa => 'Net::GitHub::Project',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        require Net::GitHub::Project;
-        return Net::GitHub::Project->new( $self->args_to_pass );
-    }
-);
+sub project {
+    my $self = shift;
+    require Net::GitHub::Project;
+    return Net::GitHub::Project->new( @_ );
+}
+
+sub user {
+    my $self = shift;
+    require Net::GitHub::User;
+    return Net::GitHub::User->new( @_ );
+}
 
 has '_search' => (
     is => 'rw',
@@ -44,11 +45,21 @@ Net::GitHub - Perl Interface for github.com
     use Net::GitHub;
 
     # for http://github.com/fayland/perl-net-github/tree/master
-    my $github = Net::GitHub->new( owner => 'fayland', name => 'perl-net-github' );
+    my $github = Net::GitHub->new();
     
     # project
-    print $github->project->public_clone_url;
-    print Dumper(\$github->project->commits);
+    my $project = $github->project( owner => 'fayland', name => 'perl-net-github' );
+    print $project->public_clone_url;
+    print Dumper(\$project->commits);
+    
+    # user
+    my $user = $github->user( username => 'fayland' );
+    foreach my $repos ( @{ $user->repositories} ) {
+        print "$repos->{owner} + $repos->{name}\n";
+    }
+    
+    # search
+    my $result = $github->search( 'fayland' );
 
 =head1 DESCRIPTION
 
@@ -62,11 +73,15 @@ Net::GitHub is still in its infancy. backwards compatibility is not yet guarante
 
 =head1 METHODS
 
-=head2 $github->project
+=head2 project
 
 instance of L<Net::GitHub::Project>
 
-=head2 $github->search
+=head2 user
+
+instance of L<Net::GitHub::User>
+
+=head2 search
 
     $github->search('fayland');
 
