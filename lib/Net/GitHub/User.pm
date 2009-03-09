@@ -11,7 +11,7 @@ has 'username' => ( is => 'ro', required => 1, isa => 'Str' );
 
 has '__user' => (
     is => 'rw', isa => 'Net::GitHub::UserObj', lazy_build => 1,
-    handles => [qw/name repositories blog login location/],
+    handles => [qw/name repositories blog login location email company/],
 );
 sub _build___user {
     my $self = shift;
