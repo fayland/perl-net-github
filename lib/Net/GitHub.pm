@@ -75,9 +75,14 @@ Net::GitHub is still in its infancy. backwards compatibility is not yet guarante
 
 =head2 project
 
+    $github->project( owner => 'fayland', name => 'perl-net-github' );
+    $github->project( 'fayland', 'perl-net-github' );
+
 instance of L<Net::GitHub::Project>
 
 =head2 user
+
+    $github->user( 'fayland' );
 
 instance of L<Net::GitHub::User>
 

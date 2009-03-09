@@ -40,6 +40,16 @@ has 'source' => (
     handles => [qw/commits commit/],
 );
 
+sub BUILDARGS {
+    my $class = shift;
+
+    if ( scalar @_ == 2 ) {
+        return { owner => $_[0], name => $_[1] };
+    } else {
+        return $class->SUPER::BUILDARGS(@_);
+    }
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
@@ -56,6 +66,8 @@ Net::GitHub::Project - GitHub project
 
     # for http://github.com/fayland/perl-net-github/tree/master
     my $prj = Net::GitHub::Project->new( owner => 'fayland', name => 'perl-net-github' );
+    # or
+    # my $prj = Net::GitHub::Project->new( 'fayland', 'perl-net-github' );
     print $prj->public_clone_url;
     print Dumper(\$prj->commits);
 
