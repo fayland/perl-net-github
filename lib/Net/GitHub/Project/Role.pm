@@ -36,7 +36,7 @@ Net::GitHub::Project::Role - Common between Net::GitHub::Project::* libs
 
 =head1 DESCRIPTION
 
-=head1 METHODS
+=head1 ATTRIBUTES
 
 =over 4
 
@@ -47,6 +47,14 @@ Net::GitHub::Project::Role - Common between Net::GitHub::Project::* libs
 =item name
 
 'perl-net-github' of http://github.com/fayland/perl-net-github/tree/master
+
+=back
+
+=head1 METHODS
+
+=over 4
+
+=item args_to_pass
 
 =back
 

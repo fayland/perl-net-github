@@ -2,7 +2,7 @@ package Net::GitHub::Role;
 
 use Moose::Role;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
@@ -15,10 +15,11 @@ has 'debug' => ( is => 'rw', isa => 'Str', default => 0 );
 # login
 has 'email' => ( isa => 'Str', is => 'rw', default => '' );
 has 'password' => ( isa => 'Str', is => 'rw', default => '' );
+has 'login'  => ( is => 'rw', isa => 'Str', default => '' );
+has 'token' => ( is => 'rw', isa => 'Str', default => '' );
 
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v1/json/');
-has 'api_token' => ( is => 'rw', isa => 'Str', default => '' );
 
 has 'ua' => (
     isa     => 'WWW::Mechanize',
@@ -77,6 +78,20 @@ Net::GitHub::Role - Common between Net::GitHub::* libs
     with 'Net::GitHub::Role';
 
 =head1 DESCRIPTION
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item email
+
+=item password
+
+=item login
+
+=item token
+
+=back
 
 =head1 METHODS
 
