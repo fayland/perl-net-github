@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
-0.01    Date/time
+0.03    2009.3.
+        add login in Net::GitHub::Role
+
+0.01    2009.3.8
         First version, released on an unsuspecting world.
 
