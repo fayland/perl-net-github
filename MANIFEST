@@ -12,6 +12,7 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Net/GitHub.pm
 lib/Net/GitHub/Project.pm
+lib/Net/GitHub/Project/Role.pm
 lib/Net/GitHub/Project/Source.pm
 lib/Net/GitHub/Role.pm
 lib/Net/GitHub/Search.pm

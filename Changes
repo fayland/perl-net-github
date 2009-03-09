@@ -1,7 +1,8 @@
 Revision history for Net-GitHub
 
-0.03    2009.3.
+0.03    2009.3.9
         add login in Net::GitHub::Role
+	pod updates, bug fixes and API enhancement
 
 0.01    2009.3.8
         First version, released on an unsuspecting world.
