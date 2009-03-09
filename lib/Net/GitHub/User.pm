@@ -43,7 +43,9 @@ has 'repositories' => (
 );
 has 'blog' => ( is => 'rw' );
 has 'login' => ( is => 'rw' );
+has 'email' => ( is => 'rw' );
 has 'location' => ( is => 'rw' );
+has 'company' => ( is => 'rw' );
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
@@ -72,9 +74,13 @@ Net::GitHub::User - GitHub user
 
 =item name
 
+=item login
+
+=item email
+
 =item blog
 
-=item login
+=item company
 
 =item location
 
