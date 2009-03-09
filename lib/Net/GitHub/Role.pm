@@ -16,7 +16,7 @@ has 'debug' => ( is => 'rw', isa => 'Str', default => 0 );
 has 'login'  => ( is => 'rw', isa => 'Str', default => '' );
 has 'password' => ( isa => 'Str', is => 'rw', default => '' );
 has 'token' => ( is => 'rw', isa => 'Str', default => '' );
-has 'is_login' => ( is => 'rw', isa => 'Bool', default => 0 );
+has 'is_signin' => ( is => 'rw', isa => 'Bool', default => 0 );
 
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v1/json/');
@@ -61,10 +61,10 @@ sub get {
     }
 }
 
-sub login {
+sub signin {
     my $self = shift;
     
-    return 1 if $self->is_login;
+    return 1 if $self->is_signin;
     
     if ( scalar @_ == 2 ) {
         $self->login = $_[0];
@@ -136,9 +136,9 @@ instance of L<JSON::Any>
 
 wrap ua->get with success check
 
-=item login
+=item signin
 
-    $self->login( $login, $password );
+    $self->signin( $login, $password );
 
 login through L<https://github.com/login> by $self->ua
 

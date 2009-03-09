@@ -11,7 +11,7 @@ has 'username' => ( is => 'ro', required => 1, isa => 'Str' );
 
 has '__user' => (
     is => 'rw', isa => 'Net::GitHub::UserObj', lazy_build => 1,
-    handles => [qw/name repositories blog login location email company/],
+    handles => [qw/name repositories blog location email company/],
 );
 sub _build___user {
     my $self = shift;
@@ -42,7 +42,6 @@ has 'repositories' => (
     is => 'rw', isa => 'ArrayRef'
 );
 has 'blog' => ( is => 'rw' );
-has 'login' => ( is => 'rw' );
 has 'email' => ( is => 'rw' );
 has 'location' => ( is => 'rw' );
 has 'company' => ( is => 'rw' );
@@ -73,8 +72,6 @@ Net::GitHub::User - GitHub user
 =over 4
 
 =item name
-
-=item login
 
 =item email
 
