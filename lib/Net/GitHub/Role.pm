@@ -2,7 +2,7 @@ package Net::GitHub::Role;
 
 use Moose::Role;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
@@ -65,13 +65,8 @@ sub signin {
     my $self = shift;
     
     return 1 if $self->is_signin;
-    
-    if ( scalar @_ == 2 ) {
-        $self->login = $_[0];
-        $self->password = $_[1];
-    }
-    
-    croak "login(login, password)" unless $self->login and $self->password;
+
+    croak "login and password are required" unless $self->login and $self->password;
     
     my $mech = $self->ua;
     $mech->get( "https://github.com/login" );
@@ -86,7 +81,7 @@ sub signin {
 		}
     );
 
-    $self->is_login = 1;
+    $self->is_signin = 1;
     return 1;
 }
 
@@ -137,8 +132,6 @@ instance of L<JSON::Any>
 wrap ua->get with success check
 
 =item signin
-
-    $self->signin( $login, $password );
 
 login through L<https://github.com/login> by $self->ua
 

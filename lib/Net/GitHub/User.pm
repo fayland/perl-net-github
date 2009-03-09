@@ -2,7 +2,7 @@ package Net::GitHub::User;
 
 use Moose;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::Role';
@@ -54,7 +54,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::User - GitHub user
+Net::GitHub::User - GitHub User
 
 =head1 SYNOPSIS
 

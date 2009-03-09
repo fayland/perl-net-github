@@ -2,31 +2,27 @@ package Net::GitHub::Project;
 
 use Moose;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
+use Net::GitHub::Project::Info;
 use Net::GitHub::Project::Source;
+use Net::GitHub::Project::Downloads;
+use Net::GitHub::Project::Wiki;
 
 with 'Net::GitHub::Role';
 with 'Net::GitHub::Project::Role';
 
-# git://github.com/fayland/perl-net-github.git
-has 'public_clone_url' => (
+has 'info' => (
     is => 'ro',
+    isa => 'Net::GitHub::Project::Info',
     lazy => 1,
     default => sub {
         my $self = shift;
-        return 'git://github.com/' . $self->owner . '/' . $self->name . '.git';
-    }
-);
-# git@github.com:fayland/perl-net-github.git
-has 'your_clone_url' => (
-    is => 'ro',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        return 'git@github.com:' . $self->owner . '/' . $self->name . '.git';
-    }
+        return Net::GitHub::Project::Info->new( $self->args_to_pass );
+    },
+    handles => [qw/description homepage public_clone_url your_clone_url
+                owner_user info_from_owner_user/],
 );
 
 has 'source' => (
@@ -38,6 +34,27 @@ has 'source' => (
         return Net::GitHub::Project::Source->new( $self->args_to_pass );
     },
     handles => [qw/commits commit/],
+);
+
+has '_downloads' => (
+    is => 'ro',
+    isa => 'Net::GitHub::Project::Downloads',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::Project::Downloads->new( $self->args_to_pass );
+    },
+    handles => [qw/downloads/],
+);
+
+has 'wiki' => (
+    is => 'ro',
+    isa => 'Net::GitHub::Project::Wiki',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::Project::Wiki->new( $self->args_to_pass );
+    },
 );
 
 sub BUILDARGS {
@@ -58,7 +75,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Project - GitHub project
+Net::GitHub::Project - GitHub Project (Repository)
 
 =head1 SYNOPSIS
 
@@ -73,9 +90,17 @@ Net::GitHub::Project - GitHub project
 
 =head1 DESCRIPTION
 
-=head1 METHODS
+=head1 PARTS
+
+=head2 Net::GitHub::Project::Info
+
+handled by L<Net::GitHub::Project::Info>
 
 =over 4
+
+=item description
+
+=item homepage
 
 =item public_clone_url
 
@@ -85,13 +110,41 @@ Public Clone URL
 
 Your Clone URL
 
+=item owner_user
+
+instance of L<Net::GitHub::User> for $self->owner
+
+=item info_from_owner_user
+
+the repos I<HASHREF> from $self->owner_user->repositories which matches the owner and name.
+
+=back
+
+=head2 Net::GitHub::Project::Source
+
+handled by L<Net::GitHub::Project::Source>
+
+=over 4
+
 =item commits
 
 =item commit
 
-handled by L<Net::GitHub::Project::Source>
+=back
+
+=head2 Net::GitHub::Project::Downloads
+
+handled by L<Net::GitHub::Project::Downloads>
+
+=over 4
+
+=item downloads
 
 =back
+
+=head2 Net::GitHub::Project::Wiki
+
+instance of L<Net::GitHub::Project::Wiki>
 
 =head1 AUTHOR
 

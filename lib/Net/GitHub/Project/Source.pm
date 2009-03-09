@@ -2,7 +2,7 @@ package Net::GitHub::Project::Source;
 
 use Moose;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::Role';
@@ -13,7 +13,7 @@ sub commits {
     
     $branch_name ||= 'master';
     
-    my $url = $self->api_url . $self->owner . '/' . $self->name . "/commits/$branch_name";
+    my $url = $self->project_api_url . "commits/$branch_name";
     my $json = $self->get($url);
     my $commits = $self->json->jsonToObj($json);
     return $commits->{commits};
@@ -22,7 +22,7 @@ sub commits {
 sub commit {
     my ( $self, $id ) = @_;
     
-    my $url = $self->api_url . $self->owner . '/' . $self->name . "/commit/$id";
+    my $url = $self->project_api_url . "commit/$id";
     my $json = $self->get($url);
     my $commits = $self->json->jsonToObj($json);
     return $commits->{"commit"};
@@ -36,7 +36,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Project::Source - GitHub project Source Section
+Net::GitHub::Project::Source - GitHub Project Source Section
 
 =head1 SYNOPSIS
 

@@ -2,20 +2,22 @@ package Net::GitHub;
 
 use Moose;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
+
+use Net::GitHub::Project;
+use Net::GitHub::User;
+use Net::GitHub::Search;
 
 with 'Net::GitHub::Role';
 
 sub project {
     my $self = shift;
-    require Net::GitHub::Project;
     return Net::GitHub::Project->new( @_ );
 }
 
 sub user {
     my $self = shift;
-    require Net::GitHub::User;
     return Net::GitHub::User->new( @_ );
 }
 
@@ -24,7 +26,6 @@ has '_search' => (
     isa => 'Net::GitHub::Search',
     lazy => 1,
     default => sub {
-        require Net::GitHub::Search;
         return Net::GitHub::Search->new();
     },
     handles => ['search'],

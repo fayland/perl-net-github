@@ -2,12 +2,32 @@ package Net::GitHub::Project::Role;
 
 use Moose::Role;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 # http://github.com/fayland/perl-net-github/tree/master
 has 'owner' => ( isa => 'Str', is => 'rw', required => 1 );
 has 'name'  => ( isa => 'Str', is => 'rw', required => 1 );
+
+# url
+has 'project_url' => (
+    is => 'ro',
+    isa => 'Str',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return 'http://github.com/' . $self->owner . '/' . $self->name . '/';
+    },
+);
+has 'project_api_url' => (
+    is => 'ro',
+    isa => 'Str',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return 'http://github.com/api/v1/json/' . $self->owner . '/' . $self->name . '/';
+    },
+);
 
 sub args_to_pass {
     my $self = shift;
@@ -47,6 +67,14 @@ Net::GitHub::Project::Role - Common between Net::GitHub::Project::* libs
 =item name
 
 'perl-net-github' of http://github.com/fayland/perl-net-github/tree/master
+
+=item project_url
+
+like I<http://github.com/fayland/perl-net-github/>
+
+=item project_api_url
+
+like I<http://github.com/api/v1/json/fayland/perl-net-github/>
 
 =back
 
