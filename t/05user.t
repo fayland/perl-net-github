@@ -21,7 +21,7 @@ $mock->mock( 'get', sub {
 	}
 } );
 
-my $user = Net::GitHub::User->new( username => 'fayland' );
+my $user = Net::GitHub::User->new( 'fayland' );
 is $user->name, "Fayland Lam";
 is $user->blog, "http://www.fayland.org/";
 is $user->location, "China";

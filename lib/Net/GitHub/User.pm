@@ -22,6 +22,16 @@ sub _build___user {
     return Net::GitHub::UserObj->new($data->{user});
 }
 
+sub BUILDARGS {
+    my $class = shift;
+
+    if ( @_ == 1 && ! ref $_[0] ) {
+        return { username => $_[0] };
+    } else {
+        return $class->SUPER::BUILDARGS(@_);
+    }
+}
+
 package     # hide from PAUSE
     Net::GitHub::UserObj;
 
@@ -49,7 +59,7 @@ Net::GitHub::User - GitHub user
 
     use Net::GitHub::User;
 
-    my $user = Net::GitHub::User->new( username => 'fayland' );
+    my $user = Net::GitHub::User->new( 'fayland' );
     foreach my $repos ( @{ $user->repositories} ) {
         print "$repos->{owner} + $repos->{name}\n";
     }

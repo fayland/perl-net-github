@@ -53,7 +53,7 @@ Net::GitHub - Perl Interface for github.com
     print Dumper(\$project->commits);
     
     # user
-    my $user = $github->user( username => 'fayland' );
+    my $user = $github->user( 'fayland' );
     foreach my $repos ( @{ $user->repositories} ) {
         print "$repos->{owner} + $repos->{name}\n";
     }
