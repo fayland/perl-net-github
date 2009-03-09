@@ -2,21 +2,18 @@ package Net::GitHub::Project::Source;
 
 use Moose;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::Role';
 with 'Net::GitHub::Project::Role';
 
-has 'commits' => (
-    is  => 'rw',
-    isa => 'ArrayRef',
-    lazy_build => 1,
-);
-sub _build_commits {
-    my $self = shift;
+sub commits {
+    my ( $self, $branch_name ) = @_;
     
-    my $url = $self->api_url . $self->owner . '/' . $self->name . '/commits/master';
+    $branch_name ||= 'master';
+    
+    my $url = $self->api_url . $self->owner . '/' . $self->name . "/commits/$branch_name";
     my $json = $self->get($url);
     my $commits = $self->json->jsonToObj($json);
     return $commits->{commits};
@@ -63,7 +60,12 @@ Net::GitHub::Project::Source - GitHub project Source Section
 
 =item commits
 
-recent commits
+    $src->commits;
+    $src->commits( 'talks' );
+
+recent commits of a branch, default as 'master'.
+
+if you need a branch other than 'master' (like http://github.com/nothingmuch/kiokudb/tree/talks), you need pass 'talks' in.
 
 =item commit($id)
 
