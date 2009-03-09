@@ -73,6 +73,12 @@ Public Clone URL
 
 Your Clone URL
 
+=item commits
+
+=item commit
+
+handled by L<Net::GitHub::Project::Source>
+
 =back
 
 =head1 AUTHOR

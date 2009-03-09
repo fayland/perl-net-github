@@ -18,6 +18,7 @@ has 'password' => ( isa => 'Str', is => 'rw', default => '' );
 
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v1/json/');
+has 'api_token' => ( is => 'rw', isa => 'Str', default => '' );
 
 has 'ua' => (
     isa     => 'WWW::Mechanize',
