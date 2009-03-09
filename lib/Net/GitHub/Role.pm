@@ -13,10 +13,10 @@ use Data::Dumper;
 has 'debug' => ( is => 'rw', isa => 'Str', default => 0 );
 
 # login
-has 'email' => ( isa => 'Str', is => 'rw', default => '' );
-has 'password' => ( isa => 'Str', is => 'rw', default => '' );
 has 'login'  => ( is => 'rw', isa => 'Str', default => '' );
+has 'password' => ( isa => 'Str', is => 'rw', default => '' );
 has 'token' => ( is => 'rw', isa => 'Str', default => '' );
+has 'is_login' => ( is => 'rw', isa => 'Bool', default => 0 );
 
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v1/json/');
@@ -61,6 +61,35 @@ sub get {
     }
 }
 
+sub login {
+    my $self = shift;
+    
+    return 1 if $self->is_login;
+    
+    if ( scalar @_ == 2 ) {
+        $self->login = $_[0];
+        $self->password = $_[1];
+    }
+    
+    croak "login(login, password)" unless $self->login and $self->password;
+    
+    my $mech = $self->ua;
+    $mech->get( "https://github.com/login" );
+    croak "Couldn't recognize login page!\n" unless $mech->content =~ /Login/;
+
+    $mech->submit_form(
+		form_number => 1,
+		fields      => {
+			login     => $self->login,
+			password  => $self->password,
+			commit    => 'Log in',
+		}
+    );
+
+    $self->is_login = 1;
+    return 1;
+}
+
 no Moose::Role;
 
 1;
@@ -83,11 +112,9 @@ Net::GitHub::Role - Common between Net::GitHub::* libs
 
 =over 4
 
-=item email
+=item login
 
 =item password
-
-=item login
 
 =item token
 
@@ -108,6 +135,12 @@ instance of L<JSON::Any>
 =item get
 
 wrap ua->get with success check
+
+=item login
+
+    $self->login( $login, $password );
+
+login through L<https://github.com/login> by $self->ua
 
 =back
 
