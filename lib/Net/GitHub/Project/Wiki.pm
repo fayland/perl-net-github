@@ -14,20 +14,22 @@ sub new_page {
     $self->signin();
     
     # get http://github.com/fayland/perl-net-github/wikis/new
-    $self->get( $self->project_url . 'wikis/new' );
     my %fields = (
         'wiki[title]' => $page_title,
         'wiki[body]'  => $page_content,
     );
-    $self->form_with_fields(keys %fields);
-    # set action="/fayland/perl-net-github/wikis"
-    $self->current_form->action("/" . $self->owner . "/" . $self->name . "/wikis");
-    $mech->set_fields( %fields );
-    my $resp = $self->click( 'commit' );
+    my $ua = $self->ua;
+    $ua->get( $self->project_url . 'wikis/new' );
+    $ua->form_with_fields(keys %fields);
+    $ua->set_fields( %fields );
+    my $resp = $ua->click( 'commit' );
     
     unless ( $resp->is_success ) {
         croak $resp->as_string();
     }
+
+    use Data::Dumper;
+    print STDERR Dumper(\$resp);
     
     return 1;
 }

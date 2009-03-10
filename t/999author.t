@@ -12,14 +12,14 @@ BEGIN {
 use Net::GitHub::Project::Wiki;
 use Data::Dumper;
 
-my $github = Net::GitHub::Project::Wiki->new(
+my $wiki = Net::GitHub::Project::Wiki->new(
     owner => 'fayland',
     name  => 'perl-net-github',
     login => 'fayland',
     password => $ENV{TEST_NET_GITHUB_PASS}
 );
 
-new_page
+$wiki->new_page('Test2', 'FROM 999author.t');
 
 ok 1;
 
