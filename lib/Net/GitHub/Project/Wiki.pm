@@ -2,7 +2,7 @@ package Net::GitHub::Project::Wiki;
 
 use Moose;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -105,7 +105,7 @@ you must specify the login and password in B<new>
         login => 'fayland', password => 'passmein', # your real login/password
     );
 
-OR you must call B<login> before the I<method>
+OR you must call B<signin> before the I<method>
 
     $wiki->signin( 'login', 'password' );
 

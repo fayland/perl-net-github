@@ -2,7 +2,7 @@ package Net::GitHub::Project::Downloads;
 
 use Moose;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use HTML::TreeBuilder;
@@ -81,7 +81,9 @@ Net::GitHub::Project::Downloads - GitHub Project Downloads Section
 =item downloads
 
     foreach my $download ( @downloads ) {
-        print $download->{filename}, $download->{url}, $download->{description}, $download->{date}, $download->{size}, "\n";
+        print $download->{filename}, $download->{url},
+              $download->{description},
+              $download->{date}, $download->{size}, "\n";
     }
 
 =back
