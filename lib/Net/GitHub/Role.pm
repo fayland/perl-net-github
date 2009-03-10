@@ -76,11 +76,9 @@ sub signin {
     croak "Couldn't recognize login page!\n" unless $mech->content =~ /Login/;
 
     $mech->submit_form(
-		form_number => 1,
-		fields      => {
+		with_fields   => {
 			login     => $self->login,
 			password  => $self->password,
-			commit    => 'Log in',
 		}
     );
 
