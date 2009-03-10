@@ -8,6 +8,30 @@ our $AUTHORITY = 'cpan:FAYLAND';
 with 'Net::GitHub::Role';
 with 'Net::GitHub::Project::Role';
 
+sub new_page {
+    my ( $self, $page_title, $page_content ) = @_;
+    
+    $self->signin();
+    
+    # get http://github.com/fayland/perl-net-github/wikis/new
+    $self->get( $self->project_url . 'wikis/new' );
+    my %fields = (
+        'wiki[title]' => $page_title,
+        'wiki[body]'  => $page_content,
+    );
+    $self->form_with_fields(keys %fields);
+    # set action="/fayland/perl-net-github/wikis"
+    $self->current_form->action("/" . $self->owner . "/" . $self->name . "/wikis");
+    $mech->set_fields( %fields );
+    my $resp = $self->click( 'commit' );
+    
+    unless ( $resp->is_success ) {
+        croak $resp->as_string();
+    }
+    
+    return 1;
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 

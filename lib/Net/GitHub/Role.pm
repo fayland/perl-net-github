@@ -8,9 +8,6 @@ our $AUTHORITY = 'cpan:FAYLAND';
 use JSON::Any;
 use WWW::Mechanize;
 use Carp qw/croak/;
-use Data::Dumper;
-
-has 'debug' => ( is => 'rw', isa => 'Str', default => 0 );
 
 # login
 has 'login'  => ( is => 'rw', isa => 'Str', default => '' );
@@ -28,14 +25,36 @@ has 'ua' => (
     default => sub {
         my $self = shift;
         my $m    = WWW::Mechanize->new(
-			agent       => 'perl-net-github',
+			agent       => "perl-net-github $VERSION",
             cookie_jar  => {},
             stack_depth => 1,
+            autocheck   => 1,
             timeout     => 60,
         );
         return $m;
-    }
+    },
 );
+
+sub get {
+    my $self = shift;
+    
+    my $resp = $self->ua->get(@_);
+    unless ( $resp->is_success ) {
+        croak $resp->as_string();
+    }
+    return 1;
+}
+
+sub submit_form {
+    my $self = shift;
+    
+    my $resp = $self->ua->submit_form(@_);
+    unless ( $resp->is_success ) {
+        croak $resp->as_string();
+    }
+    return 1;
+}
+
 has 'json' => (
     is => 'ro',
     isa => 'JSON::Any',
@@ -44,22 +63,6 @@ has 'json' => (
         return JSON::Any->new;
     }
 );
-
-sub get {
-    my ( $self, $url ) = @_;
-
-    $self->ua->get($url);
-    if ( ! $self->ua->success() ) {
-        croak 'Server threw an error '
-          . $self->ua->response->status_line . ' for '
-          . $url;
-    } else {
-#        open(my $fh, '>', '/home/fayland/git/perl-net-github/t/mockdata/single_commit.json');
-#        print $fh $self->ua->content;
-#        close($fh);
-        return $self->ua->content;
-    }
-}
 
 sub signin {
     my $self = shift;
@@ -129,7 +132,9 @@ instance of L<JSON::Any>
 
 =item get
 
-wrap ua->get with success check
+=item submit_form
+
+handled by L<WWW::Mechanize>
 
 =item signin
 
