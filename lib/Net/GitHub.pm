@@ -49,9 +49,16 @@ Net::GitHub - Perl Interface for github.com
     my $github = Net::GitHub->new();
     
     # project
-    my $project = $github->project( owner => 'fayland', name => 'perl-net-github' );
-    print $project->public_clone_url;
-    print Dumper(\$project->commits);
+    my $prj = $github->project( owner => 'fayland', name => 'perl-net-github' );
+    print $prj->description;
+    print $prj->public_clone_url;
+    my @commits = $prj->commits;
+    foreach my $c ( @commits ) {
+        my $commit = $prj->commit( $c->{id} );
+    }
+    my @downloads = $prj->downloads;
+    $prj->signin( 'login', 'password' );
+    $prj->wiki->new_page( 'PageTitle', "Page Content\n\nLine 2\n" );
     
     # user
     my $user = $github->user( 'fayland' );

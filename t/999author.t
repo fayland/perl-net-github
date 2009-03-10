@@ -10,7 +10,6 @@ BEGIN {
 };
 
 use Net::GitHub::Project::Wiki;
-use Data::Dumper;
 
 my $wiki = Net::GitHub::Project::Wiki->new(
     owner => 'fayland',

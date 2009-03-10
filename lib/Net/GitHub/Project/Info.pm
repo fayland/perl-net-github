@@ -97,10 +97,10 @@ Net::GitHub::Project::Info - GitHub Project Info Section
 
     use Net::GitHub::Project::Info;
 
-    my $dl = Net::GitHub::Project::Info->new(
+    my $info = Net::GitHub::Project::Info->new(
         owner => 'fayland', name => 'perl-net-github'
     );
-
+    print $info->description;
 
 =head1 DESCRIPTION
 

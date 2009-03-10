@@ -84,9 +84,24 @@ Net::GitHub::Project - GitHub Project (Repository)
     # for http://github.com/fayland/perl-net-github/tree/master
     my $prj = Net::GitHub::Project->new( owner => 'fayland', name => 'perl-net-github' );
     # or
-    # my $prj = Net::GitHub::Project->new( 'fayland', 'perl-net-github' );
+    my $prj2 = Net::GitHub::Project->new( 'fayland', 'perl-net-github' );
+    
+    # Net::GitHub::Project::Info
+    print $prj->description;
     print $prj->public_clone_url;
-    print Dumper(\$prj->commits);
+    
+    # Net::GitHub::Project::Source
+    my @commits = $prj->commits;
+    foreach my $c ( @commits ) {
+        my $commit = $prj->commit( $c->{id} );
+    }
+    
+    # Net::GitHub::Project::Downloads
+    my @downloads = $prj->downloads;
+    
+    # Net::GitHub::Project::Wiki
+    $prj->signin( 'login', 'password' );
+    $prj->wiki->new_page( 'PageTitle', "Page Content\n\nLine 2\n" );
 
 =head1 DESCRIPTION
 
