@@ -27,12 +27,7 @@ sub new_page {
         croak $resp->as_string();
     }
 
-    my $match = lc($page_title);
-    if ( $resp->content =~ /\/$match/ ) {
-        return 1;
-    } else {
-        return 0;
-    }
+    return ( $resp->code == 302 ) ? 1 : 0;
 }
 
 no Moose;
@@ -56,9 +51,33 @@ Net::GitHub::Project::Wiki - GitHub Project Wiki Section
 
 =head1 DESCRIPTION
 
+
+=head1 B<login> required
+
+For the following "B<login> required", it means:
+
+you must specify the login and password in B<new>
+
+    my $wiki = Net::GitHub::Project::Wiki->new(
+        owner => 'fayland', name => 'perl-net-github',
+        login => 'fayland', password => 'passmein', # your real login/password
+    );
+
+OR you must call B<login> before the I<method>
+
+    $wiki->signin( 'login', 'password' );
+
 =head1 METHODS
 
 =over 4
+
+=item new_page
+
+    $wiki->new_page( 'PageTitle', "Page Content\nLine 2\n" );
+
+return 1 if page is created successfully.
+
+B<login> required.
 
 =back
 

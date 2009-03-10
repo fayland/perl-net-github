@@ -144,6 +144,8 @@ handled by L<WWW::Mechanize>
 
 login through L<https://github.com/login> by $self->ua
 
+return 1 if success
+
 =back
 
 =head1 AUTHOR

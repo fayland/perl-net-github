@@ -19,7 +19,7 @@ my $wiki = Net::GitHub::Project::Wiki->new(
     password => $ENV{TEST_NET_GITHUB_PASS}
 );
 
-$wiki->new_page('Test2', 'FROM 999author.t');
+$wiki->new_page('TestPage', "FROM 999author.t\n Line 2");
 
 ok 1;
 
