@@ -42,7 +42,7 @@ sub get {
     unless ( $resp->is_success ) {
         croak $resp->as_string();
     }
-    return 1;
+    return $resp->content();
 }
 
 sub submit_form {
