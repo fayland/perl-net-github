@@ -5,7 +5,6 @@ all_from 'lib/Net/GitHub.pm';
 author   'Fayland Lam <fayland@gmail.com>';
 license  'perl';
 
-requires 'Data::Dumper';
 requires 'URI::Escape';
 requires 'Moose' => '0.57';
 requires 'Crypt::SSLeay';

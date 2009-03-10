@@ -12,8 +12,11 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Net/GitHub.pm
 lib/Net/GitHub/Project.pm
+lib/Net/GitHub/Project/Downloads.pm
+lib/Net/GitHub/Project/Info.pm
 lib/Net/GitHub/Project/Role.pm
 lib/Net/GitHub/Project/Source.pm
+lib/Net/GitHub/Project/Wiki.pm
 lib/Net/GitHub/Role.pm
 lib/Net/GitHub/Search.pm
 lib/Net/GitHub/User.pm
@@ -27,8 +30,10 @@ t/03project.t
 t/04source.t
 t/05user.t
 t/06search.t
+t/07downloads.t
 t/999author.t
 t/mockdata/commits.json
+t/mockdata/downloads.html
 t/mockdata/search.json
 t/mockdata/single_commit.json
 t/mockdata/user.json

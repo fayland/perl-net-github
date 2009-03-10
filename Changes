@@ -1,9 +1,10 @@
 Revision history for Net-GitHub
 
-0.04    2009.3.
+0.04    2009.3.10
         use WWW::Mechanize::GZip
         add N::G::Project::Wiki and Downloads
-        Wiki new_page/edit_page
+        Wiki new_page/edit_page/edit_or_new
+	Downloads downloads
 
 0.03    2009.3.9
         add login in Net::GitHub::Role
