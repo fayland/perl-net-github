@@ -54,6 +54,21 @@ sub edit_page {
     return 1;
 }
 
+sub edit_or_new {
+    my $self = shift;
+    my ( $page_title, $page_content ) = @_;
+    
+    # http://wiki.github.com/fayland/perl-net-github/testpage2
+    my $wiki_url = 'http://wiki.github.com/' . 
+        $self->owner . '/' . $self->name . '/' . uri_escape($page_title);
+    my $resp = $self->ua->get( $wiki_url );
+    if ( $resp->code == 404 ) {
+        return $self->new_page(@_);
+    } else {
+        return $self->edit_page(@_);
+    }
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
@@ -108,6 +123,16 @@ B<login> required.
     $wiki->edit_page( 'PageTitle', "New Page Content\n\nLine 2\n" );
 
 return 1 if page is updated successfully.
+
+B<login> required.
+
+=item edit_or_new
+
+    $wiki->edit_or_new( 'PageTitle', "Page Content\n\nLine 2\n" );
+
+fallback to new_page if page is not created yet, or else, fallback to edit_page.
+
+B<login> required.
 
 =back
 
