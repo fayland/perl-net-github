@@ -1,8 +1,13 @@
 Revision history for Net-GitHub
 
+0.04    2009.3.
+        use WWW::Mechanize::GZip
+        add N::G::Project::Wiki and Downloads
+        Wiki new_page/edit_page
+
 0.03    2009.3.9
         add login in Net::GitHub::Role
-	pod updates, bug fixes and API enhancement
+        pod updates, bug fixes and API enhancement
 
 0.01    2009.3.8
         First version, released on an unsuspecting world.

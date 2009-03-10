@@ -103,6 +103,12 @@ return 1 if page is created successfully.
 
 B<login> required.
 
+=item edit_page
+
+    $wiki->edit_page( 'PageTitle', "New Page Content\n\nLine 2\n" );
+
+return 1 if page is updated successfully.
+
 =back
 
 =head1 AUTHOR

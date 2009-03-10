@@ -9,7 +9,7 @@ requires 'Data::Dumper';
 requires 'URI::Escape';
 requires 'Moose' => '0.57';
 requires 'Crypt::SSLeay';
-requires 'WWW::Mechanize';
+requires 'WWW::Mechanize::GZip';
 requires 'JSON::Any';
 #requires 'HTML::TokeParser::Simple';
 
