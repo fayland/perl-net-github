@@ -84,12 +84,15 @@ Net::GitHub::Project::Wiki - GitHub Project Wiki Section
     use Net::GitHub::Project::Wiki;
 
     my $wiki = Net::GitHub::Project::Wiki->new(
-        owner => 'fayland', name => 'perl-net-github'
+        owner => 'fayland', name => 'perl-net-github',
+        login => 'fayland', password => 'passmein', # your real login/password
     );
-
+    
+    $wiki->new_page( 'PageTitle', "Page Content\n\nLine 2\n" );
+    $wiki->edit_page( 'PageTitle', "New Page Content\n\nLine 2\n" );
+    $wiki->edit_or_new( 'PageTitle', "Page Content\n\nLine 2\n" );
 
 =head1 DESCRIPTION
-
 
 =head1 B<login> required
 
