@@ -28,9 +28,11 @@ sub new_page {
     }
 
     my $match = lc($page_title);
-    if ( $resp->content =~ /
-    
-    return 1;
+    if ( $resp->content =~ /\/$match/ ) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 no Moose;
