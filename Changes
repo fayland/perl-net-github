@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.05    2009.3.11
+        pod fix
+
 0.04    2009.3.10
         use WWW::Mechanize::GZip
         add N::G::Project::Wiki and Downloads
