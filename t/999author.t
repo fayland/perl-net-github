@@ -19,7 +19,8 @@ my $wiki = Net::GitHub::Project::Wiki->new(
     password => $ENV{TEST_NET_GITHUB_PASS}
 );
 
-$wiki->new_page('TestPage', "FROM 999author.t\n Line 2");
+my $st = $wiki->edit_page('TestPage', "FROM 999author.t\n\n\nLine 2");
+diag("return $st");
 
 ok 1;
 

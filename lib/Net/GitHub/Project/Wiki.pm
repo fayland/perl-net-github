@@ -5,6 +5,8 @@ use Moose;
 our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
+use URI::Escape;
+
 with 'Net::GitHub::Role';
 with 'Net::GitHub::Project::Role';
 
@@ -19,6 +21,27 @@ sub new_page {
         with_fields => {
             'wiki[title]' => $page_title,
             'wiki[body]'  => $page_content,
+        },
+        button => 'commit'
+    );
+
+    unless ( $resp->is_success ) {
+        croak $resp->as_string();
+    }
+
+    return ( $resp->code == 302 ) ? 1 : 0;
+}
+
+sub edit_page {
+    my ( $self, $old_title, $new_content ) = @_;
+    
+    # http://github.com/fayland/perl-net-github/wikis/testpage/edit
+    $old_title = lc($old_title);
+    my $c = $self->get( $self->project_url . 'wikis/' . uri_escape($old_title) . '/edit' );
+    return 0 unless $c =~ /wiki\[body\]/s;
+    my $resp = $self->submit_form(
+        with_fields => {
+            'wiki[body]'  => $new_content,
         },
         button => 'commit'
     );
@@ -73,7 +96,7 @@ OR you must call B<login> before the I<method>
 
 =item new_page
 
-    $wiki->new_page( 'PageTitle', "Page Content\nLine 2\n" );
+    $wiki->new_page( 'PageTitle', "Page Content\n\nLine 2\n" );
 
 return 1 if page is created successfully.
 
