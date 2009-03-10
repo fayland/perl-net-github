@@ -29,7 +29,7 @@ sub new_page {
         croak $resp->as_string();
     }
 
-    return ( $resp->code == 302 ) ? 1 : 0;
+    return ( $resp->content =~ /$page_title/s ) ? 1 : 0;
 }
 
 sub edit_page {
