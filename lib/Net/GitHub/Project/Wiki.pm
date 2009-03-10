@@ -51,8 +51,7 @@ sub edit_page {
     unless ( $resp->is_success ) {
         croak $resp->as_string();
     }
-
-    return ( $resp->code == 302 ) ? 1 : 0;
+    return 1;
 }
 
 no Moose;

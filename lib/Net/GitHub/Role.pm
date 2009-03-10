@@ -6,7 +6,7 @@ our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
-use WWW::Mechanize;
+use WWW::Mechanize::GZip;
 use Carp qw/croak/;
 
 # login
@@ -24,7 +24,7 @@ has 'ua' => (
     lazy    => 1,
     default => sub {
         my $self = shift;
-        my $m    = WWW::Mechanize->new(
+        my $m    = WWW::Mechanize::GZip->new(
 			agent       => "perl-net-github $VERSION",
             cookie_jar  => {},
             stack_depth => 1,
