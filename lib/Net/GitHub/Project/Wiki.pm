@@ -35,6 +35,8 @@ sub new_page {
 sub edit_page {
     my ( $self, $old_title, $new_content ) = @_;
     
+    $self->signin();
+    
     # http://github.com/fayland/perl-net-github/wikis/testpage/edit
     $old_title = lc($old_title);
     my $c = $self->get( $self->project_url . 'wikis/' . uri_escape($old_title) . '/edit' );
