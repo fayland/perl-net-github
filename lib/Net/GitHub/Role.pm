@@ -52,7 +52,7 @@ sub submit_form {
     unless ( $resp->is_success ) {
         croak $resp->as_string();
     }
-    return 1;
+    return $resp;
 }
 
 has 'json' => (
