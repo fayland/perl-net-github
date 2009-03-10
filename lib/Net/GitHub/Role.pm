@@ -84,7 +84,7 @@ sub signin {
 		}
     );
 
-    $self->is_signin = 1;
+    $self->is_signin(1);
     return 1;
 }
 
