@@ -71,19 +71,25 @@ sub signin {
 
     croak "login and password are required" unless $self->login and $self->password;
     
-    my $mech = $self->ua;
-    $mech->get( "https://github.com/login" );
-    croak "Couldn't recognize login page!\n" unless $mech->content =~ /Login/;
+    my $ua = $self->ua;
+    $ua->get( "https://github.com/login" );
+    croak "Couldn't recognize login page!\n" unless $ua->content =~ /Login/;
 
-    $mech->submit_form(
+    $ua->submit_form(
 		with_fields   => {
 			login     => $self->login,
 			password  => $self->password,
 		}
     );
-
-    $self->is_signin(1);
-    return 1;
+    
+    # github_user = null
+    if ( $ua->content() =~ /github_user\s+\=\s+null/s ) {
+        croak "Incorrect login or password." if $ua->content =~ /Login/;
+        return 0;
+    } else {
+        $self->is_signin(1);
+        return 1;
+    }
 }
 
 no Moose::Role;
