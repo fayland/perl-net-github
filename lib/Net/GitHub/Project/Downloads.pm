@@ -5,6 +5,8 @@ use Moose;
 our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
+use HTML::TreeBuilder;
+
 with 'Net::GitHub::Role';
 with 'Net::GitHub::Project::Role';
 
@@ -17,6 +19,13 @@ sub _build_downloads {
     my $self = shift;
     
     my $content = $self->get( $self->project_url . 'downloads' );
+    
+    my $tree = HTML::TreeBuilder->new;
+    $tree->parse_content($content);
+    $tree->elementify;
+
+    
+    $tree = $tree->delete;
 }
 
 no Moose;

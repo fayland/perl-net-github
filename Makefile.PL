@@ -11,7 +11,7 @@ requires 'Moose' => '0.57';
 requires 'Crypt::SSLeay';
 requires 'WWW::Mechanize::GZip';
 requires 'JSON::Any';
-#requires 'HTML::TokeParser::Simple';
+requires 'HTML::TreeBuilder';
 
 build_requires 'Test::More';
 test_requires 'Test::MockModule';
