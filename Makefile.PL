@@ -5,6 +5,8 @@ all_from 'lib/Net/GitHub.pm';
 author   'Fayland Lam <fayland@gmail.com>';
 license  'perl';
 
+repository 'http://github.com/fayland/perl-net-github/tree/master';
+
 requires 'URI::Escape';
 requires 'Moose' => '0.57';
 requires 'Crypt::SSLeay';
