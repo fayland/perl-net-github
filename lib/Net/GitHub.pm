@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Moose;
 
-our $VERSION = '0.06';
+our $VERSION = '0.06_01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 has 'version' => ( isa => 'Int', is => 'ro', default => 2 );
