@@ -9,16 +9,22 @@ use URI::Escape;
 
 with 'Net::GitHub::V2::Role';
 
-sub network_meta {
-    my ( $self, $owner, $repo ) = @_;
+sub meta {
+    my ( $self ) = @_;
+    
+    my $owner = $self->owner;
+    my $repo  = $self->repo;
     
     my $url  = "http://github.com/$owner/$repo/network_meta";
     my $json = $self->get($url);
     return $self->json->jsonToObj($json);
 }
 
-sub network_data_chunk {
-    my ( $self, $owner, $repo, $net_hash ) = @_;
+sub data_chunk {
+    my ( $self, $net_hash ) = @_;
+    
+    my $owner = $self->owner;
+    my $repo  = $self->repo;
     
     my $url  = "http://github.com/$owner/$repo/network_data_chunk?nethash=$nethash";
     my $json = $self->get($url);
@@ -39,8 +45,9 @@ Net::GitHub::Network - Secret Network API
 
     use Net::GitHub::Network;
 
-    my $repos = Net::GitHub::Network->new();
-
+    my $network = Net::GitHub::Network->new( owner => 'fayland', repo => 'perl-net-github' );
+    my $meta = $network->meta;
+    my $data_chunk = $network->data_chunk( $net_hash );;
 
 =head1 DESCRIPTION
 
@@ -48,6 +55,9 @@ L<http://develop.github.com/p/network.html>
 
 =head1 METHODS
 
+=head2 meta
+
+=head2 data_chunk
 
 =head1 AUTHOR
 

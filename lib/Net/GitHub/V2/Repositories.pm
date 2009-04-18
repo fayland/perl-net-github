@@ -18,11 +18,16 @@ sub search {
 sub show {
     my ( $self, $owner, $repo ) = @_;
     
+    $owner ||= $self->owner;
+    $repo  ||= $self->repo;
+    
     return $self->get_json_to_obj( "repos/show/$owner/$repo" );
 }
 
 sub list {
     my ( $self, $owner ) = @_;
+    
+    $owner ||= $self->owner;
     
     return $self->get_json_to_obj( "repos/show/$owner" );
 }

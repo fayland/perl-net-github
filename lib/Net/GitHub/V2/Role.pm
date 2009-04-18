@@ -9,6 +9,10 @@ use JSON::Any;
 use WWW::Mechanize::GZip;
 use Carp qw/croak/;
 
+# repo stuff
+has 'owner' => ( isa => 'Str', is => 'rw', required => 1 );
+has 'repo'  => ( isa => 'Str', is => 'rw', required => 1 );
+
 # login
 has 'login'  => ( is => 'rw', isa => 'Str', default => '' );
 has 'token' => ( is => 'rw', isa => 'Str', default => '' );
@@ -81,6 +85,15 @@ sub get_json_to_obj_authed {
     return $data;
 }
 
+sub args_to_pass {
+    my $self = shift;
+    my $ret;
+    foreach my $col ('owner', 'repo' ) {
+        $ret->{$col} = $self->$col;
+    }
+    return $ret;
+}
+
 no Moose::Role;
 
 1;
@@ -88,14 +101,14 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Role - Common between Net::GitHub::* libs
+Net::GitHub::V2::Role - Common between Net::GitHub::V2::* libs
 
 =head1 SYNOPSIS
 
-    package Net::GitHub::XXX;
+    package Net::GitHub::V2::XXX;
     
     use Moose;
-    with 'Net::GitHub::Role';
+    with 'Net::GitHub::V2::Role';
 
 =head1 DESCRIPTION
 
