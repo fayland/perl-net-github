@@ -62,6 +62,11 @@ has 'object' => (
         my $self = shift;
         return Net::GitHub::V2::Object->new( $self->args_to_pass );
     },
+    handles => {
+        obj_tree => 'tree',
+        obj_blob => 'blob',
+        obj_raw  => 'raw',
+    }
 );
 
 has 'network' => (
@@ -72,6 +77,10 @@ has 'network' => (
         my $self = shift;
         return Net::GitHub::V2::Network->new( $self->args_to_pass );
     },
+    handles => {
+        network_meta => 'meta',
+        network_data_chunk => 'data_chunk',
+    }
 );
 
 no Moose;
@@ -85,6 +94,17 @@ __END__
 Net::GitHub::V2 - Perl Interface for github.com (V2)
 
 =head1 SYNOPSIS
+
+Prefer:
+
+    use Net::GitHub;
+    
+    my $github = Net::GitHub->new(
+        version => 2, # optional, default as 2
+        owner => 'fayland', repo => 'perl-net-github'
+    );
+
+Or:
 
     use Net::GitHub::V2;
 
@@ -136,16 +156,16 @@ L<Net::GitHub::V2::Issues>
 
 =head2 object
 
-    my $tree = $github->object->tree( $tree_sha1 );
-    my $blob = $github->object->blob( $tree_sha1, 'lib/Net/GitHub.pm' );
-    my $raw  = $github->object->raw( $sha1 );
+    my $tree = $github->obj_tree( $tree_sha1 ); # alias object->tree
+    my $blob = $github->obj_blob( $tree_sha1, 'lib/Net/GitHub.pm' ); # alias object->blob
+    my $raw  = $github->obj_raw( $sha1 ); # alias object->raw
 
 L<Net::GitHub::V2::Object>
 
 =head2 network
 
-    $github->network->meta;
-    $github->network->data_chunk( $net_hash );
+    $github->network_meta; # alias ->network->meta
+    $github->network_data_chunk( $net_hash ); # alias network->data_chunk
 
 L<Net::GitHub::Network>
 
