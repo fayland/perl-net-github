@@ -16,6 +16,18 @@ has 'obj' => (
             'repos', 'user', 'commit', 'issue',
                                      'object', 'obj_tree', 'obj_blob', 'obj_raw',
                                      'network', 'network_meta', 'network_data_chunk'],
+
+#    handles => sub {
+#        my ( $self, $meta ) = @_;
+#        if ( $meta->get_attribute('version') == 1 ) {
+#            return map { $_ => $_ } ('project', 'user', 'search');
+#        } else {
+#            return map { $_ => $_ } ('repos', 'user', 'commit', 'issue',
+#                                     'object', 'obj_tree', 'obj_blob', 'obj_raw',
+#                                     'network', 'network_meta', 'network_data_chunk');
+#        }
+#    }
+
 );
 
 sub BUILDARGS {
@@ -36,24 +48,6 @@ sub _build_obj {
         return Net::GitHub::V2->new($args);
     }
 }
-
-
-=pod
-
-    handles => sub {
-        my ( $self, $meta ) = @_;
-        if ( $meta->get_attribute('version') == 1 ) {
-            return map { $_ => $_ } ('project', 'user', 'search');
-        } else {
-            return map { $_ => $_ } ('repos', 'user', 'commit', 'issue',
-                                     'object', 'obj_tree', 'obj_blob', 'obj_raw',
-                                     'network', 'network_meta', 'network_data_chunk');
-        }
-    }
-
-);
-
-=cut
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
