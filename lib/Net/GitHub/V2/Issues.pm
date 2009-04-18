@@ -62,7 +62,8 @@ sub edit {
     
     return $self->get_json_to_obj_authed( "issues/edit/$owner/$repo/$id",
         title => $title,
-        body  => $body
+        body  => $body,
+        'issue'
     );
 }
 
@@ -105,7 +106,7 @@ Net::GitHub::V2::Issues - GitHub Issues API
 
 L<http://develop.github.com/p/issues.html>
 
-For those B<(authentication required)> below, you must set login and token (in L<https://github.com/account>
+For those B<(authentication required)> below, you must set login and token (in L<https://github.com/account>)
 
     my $issue = Net::GitHub::V2::Issues->new(
         owner => 'fayland', repo => 'perl-net-github',

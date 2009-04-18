@@ -42,56 +42,60 @@ sub followers {
     
     my $user = $self->owner;
     
-    return $self->get_json_to_obj( "/user/show/$user/followers" );
+    return $self->get_json_to_obj( "/user/show/$user/followers", 'users' );
 }
 sub following {
     my ( $self ) = @_;
     
     my $user = $self->owner;
     
-    return $self->get_json_to_obj( "/user/show/$user/following" );
+    return $self->get_json_to_obj( "/user/show/$user/following", 'users' );
 }
 sub follow {
     my ( $self, $user ) = @_;
-    return $self->get_json_to_obj_authed( "/user/follow/$user" );
+    return $self->get_json_to_obj_authed( "/user/follow/$user", 'users' );
 }
 sub unfollow {
     my ( $self, $user ) = @_;
-    return $self->get_json_to_obj_authed( "/user/unfollow/$user" );
+    return $self->get_json_to_obj_authed( "/user/unfollow/$user", 'users' );
 }
 
 sub pub_keys {
     my ( $self ) = @_;
-    return $self->get_json_to_obj_authed( "/user/keys" );
+    return $self->get_json_to_obj_authed( "/user/keys", 'public_keys' );
 }
 sub add_pub_key {
     my ( $self, $name, $key ) = @_;
     return $self->get_json_to_obj_authed( "/user/key/add",
         name => $name,
-        key  => $key
+        key  => $key,
+        'public_keys'
     );
 }
 sub remove_pub_key {
     my ( $self, $id ) = @_;
     return $self->get_json_to_obj_authed( "/user/key/remove ",
         id => $id,
+        'public_keys'
     );
 }
 
 sub emails {
     my ( $self ) = @_;
-    return $self->get_json_to_obj_authed( "/user/emails" );
+    return $self->get_json_to_obj_authed( "/user/emails", 'emails' );
 }
 sub add_email {
     my ( $self, $email ) = @_;
     return $self->get_json_to_obj_authed( "/user/email/add",
         email => $email,
+        'emails'
     );
 }
 sub remove_email {
     my ( $self, $email ) = @_;
     return $self->get_json_to_obj_authed( "/user/email/remove",
         email => $email,
+        'emails'
     );
 } 
 
@@ -117,7 +121,7 @@ Net::GitHub::V2::Users - GitHub Users API
 
 L<http://develop.github.com/p/users.html>
 
-For those B<(authentication required)> below, you must set login and token (in L<https://github.com/account>
+For those B<(authentication required)> below, you must set login and token (in L<https://github.com/account>)
 
     my $user = Net::GitHub::V2::Users->new(
         owner => 'fayland', repo => 'perl-net-github',

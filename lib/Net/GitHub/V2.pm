@@ -77,10 +77,7 @@ has 'network' => (
         my $self = shift;
         return Net::GitHub::V2::Network->new( $self->args_to_pass );
     },
-    handles => {
-        network_meta => 'net_meta',
-        network_data_chunk => 'data_chunk',
-    }
+    handles => ['network_meta', 'network_data_chunk']
 );
 
 no Moose;
@@ -115,7 +112,7 @@ Or:
 
 L<http://develop.github.com/>
 
-For those B<(authentication required)>, you must set login and token (in L<https://github.com/account>
+For those B<(authentication required)>, you must set login and token (in L<https://github.com/account>)
 
     my $github = Net::GitHub::V2->new(
         owner => 'fayland', repo => 'perl-net-github',
@@ -164,8 +161,8 @@ L<Net::GitHub::V2::Object>
 
 =head2 network
 
-    $github->network_meta; # alias ->network->net_meta
-    $github->network_data_chunk( $net_hash ); # alias network->data_chunk
+    $github->network_meta; # alias ->network->network_meta
+    $github->network_data_chunk( $net_hash ); # alias network->network_data_chunk
 
 L<Net::GitHub::Network>
 

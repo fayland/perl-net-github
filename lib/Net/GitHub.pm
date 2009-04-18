@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Moose;
 
-our $VERSION = '0.06_01';
+our $VERSION = '0.06_02';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 has 'version' => ( isa => 'Int', is => 'ro', default => 2 );
@@ -36,7 +36,6 @@ sub BUILDARGS {
     $args = ( scalar @_ == 1 ) ? { %{ $_[0] } } : { @_ };
     return $class->SUPER::BUILDARGS(@_);
 }
-
 
 sub _build_obj {
     my $self = shift;

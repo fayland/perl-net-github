@@ -38,7 +38,7 @@ sub watch {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/watch/$owner/$repo" );
+    return $self->get_json_to_obj_authed( "repos/watch/$owner/$repo", 'repository' );
 }
 sub unwatch {
     my ( $self ) = @_;
@@ -46,7 +46,7 @@ sub unwatch {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/unwatch/$owner/$repo" );
+    return $self->get_json_to_obj_authed( "repos/unwatch/$owner/$repo", 'repository' );
 }
 
 sub fork {
@@ -89,14 +89,14 @@ sub set_private {
     
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/set/private/$repo" );
+    return $self->get_json_to_obj_authed( "repos/set/private/$repo", 'repository' );
 }
 sub set_public {
     my ( $self ) = @_;
     
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/set/public/$repo" );
+    return $self->get_json_to_obj_authed( "repos/set/public/$repo", 'repository' );
 }
 
 sub deploy_keys {
@@ -113,7 +113,8 @@ sub add_deploy_key {
     
     return $self->get_json_to_obj_authed( "repos/key/$repo/add",
         title => $title,
-        key   => $key
+        key   => $key,
+        'public_keys'
     );
 }
 sub remove_deploy_key {
@@ -123,6 +124,7 @@ sub remove_deploy_key {
     
     return $self->get_json_to_obj_authed( "repos/key/$repo/remove",
         id => $id,
+        'public_keys'
     );
 }
 
@@ -132,21 +134,21 @@ sub collaborators {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/show/$owner/$repo/collaborators" );
+    return $self->get_json_to_obj_authed( "repos/show/$owner/$repo/collaborators", 'collaborators' );
 }
 sub add_collaborator {
     my ( $self, $user ) = @_;
     
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/collaborators/$repo/add/$user" );
+    return $self->get_json_to_obj_authed( "repos/collaborators/$repo/add/$user", 'collaborators' );
 }
 sub remove_collaborator {
     my ( $self, $user ) = @_;
     
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/collaborators/$repo/remove/$user" );
+    return $self->get_json_to_obj_authed( "repos/collaborators/$repo/remove/$user", 'collaborators' );
 }
 
 sub network {
