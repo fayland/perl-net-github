@@ -78,7 +78,7 @@ has 'network' => (
         return Net::GitHub::V2::Network->new( $self->args_to_pass );
     },
     handles => {
-        network_meta => 'meta',
+        network_meta => 'net_meta',
         network_data_chunk => 'data_chunk',
     }
 );
@@ -164,7 +164,7 @@ L<Net::GitHub::V2::Object>
 
 =head2 network
 
-    $github->network_meta; # alias ->network->meta
+    $github->network_meta; # alias ->network->net_meta
     $github->network_data_chunk( $net_hash ); # alias network->data_chunk
 
 L<Net::GitHub::Network>

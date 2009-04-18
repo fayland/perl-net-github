@@ -1,4 +1,4 @@
-package Net::GitHub::V2;
+package Net::GitHub;
 
 use Moose;
 
@@ -6,6 +6,41 @@ our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 has 'version' => ( isa => 'Int', is => 'ro', default => 2 );
+
+has '_obj' => (
+    is   => 'ro',
+    isa  => 'Object',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        if ( $self->version == 1 ) {
+            require Net::GitHub::V1;
+            return Net::GitHub::V1->new(@_);
+        } else {
+            require Net::GitHub::V2;
+            return Net::GitHub::V2->new(@_);
+        }
+    },
+    handles => ['api_url']
+);
+
+
+=pod
+
+    handles => sub {
+        my ( $self, $meta ) = @_;
+        if ( $meta->get_attribute('version') == 1 ) {
+            return map { $_ => $_ } ('project', 'user', 'search');
+        } else {
+            return map { $_ => $_ } ('repos', 'user', 'commit', 'issue',
+                                     'object', 'obj_tree', 'obj_blob', 'obj_raw',
+                                     'network', 'network_meta', 'network_data_chunk');
+        }
+    }
+
+);
+
+=cut
 
 no Moose;
 __PACKAGE__->meta->make_immutable;

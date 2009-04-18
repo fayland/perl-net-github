@@ -40,7 +40,7 @@ sub get {
     my $self = shift;
     
     my $resp = $self->ua->get(@_);
-    croak $res->as_string() unless ( $res->is_success );
+    croak $resp->as_string() unless ( $resp->is_success );
     return $resp->content();
 }
 
@@ -79,10 +79,10 @@ sub get_json_to_obj_authed {
     
     require HTTP::Request::Common;
     my $res = $self->ua->request(
-        HTTP::Request::Common::POST( $uri, [
+        HTTP::Request::Common::POST( $url, [
             'login' => $self->login,
             'token' => $self->token,
-            @_;
+            @_,
         ] ),
     );
     croak $res->as_string() unless ( $res->is_success );
