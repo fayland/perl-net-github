@@ -1,6 +1,6 @@
 #!perl -T
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 use Net::GitHub;
 
@@ -9,6 +9,7 @@ my $v2 = Net::GitHub->new(
     owner => 'fayland', repo => 'perl-net-github'
 );
 ok( $v2->can('repos') );
+ok( ! $v2->can('search') );
 is $v2->api_url, 'http://github.com/api/v2/json/';
 
 my $v1 = Net::GitHub->new(
@@ -17,4 +18,5 @@ my $v1 = Net::GitHub->new(
 );
 
 ok( $v1->can('search') );
+ok( ! $v1->can('repos') );
 is $v1->api_url, 'http://github.com/api/v1/json/';

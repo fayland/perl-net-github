@@ -2,50 +2,26 @@ package Net::GitHub;
 
 use Moose;
 
-our $VERSION = '0.06_02';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-has 'version' => ( isa => 'Int', is => 'ro', default => 2 );
-our $args;
-
-has 'obj' => (
-    is   => 'ro',
-    isa  => 'Object',
-    lazy_build => 1,
-    handles => ['api_url', 'project', 'search',
-            'repos', 'user', 'commit', 'issue',
-                                     'object', 'obj_tree', 'obj_blob', 'obj_raw',
-                                     'network', 'network_meta', 'network_data_chunk'],
-
-#    handles => sub {
-#        my ( $self, $meta ) = @_;
-#        if ( $meta->get_attribute('version') == 1 ) {
-#            return map { $_ => $_ } ('project', 'user', 'search');
-#        } else {
-#            return map { $_ => $_ } ('repos', 'user', 'commit', 'issue',
-#                                     'object', 'obj_tree', 'obj_blob', 'obj_raw',
-#                                     'network', 'network_meta', 'network_data_chunk');
-#        }
-#    }
-
-);
-
-sub BUILDARGS {
+sub new {
     my $class = shift;
+    my $params = $class->BUILDARGS(@_);
 
-    $args = ( scalar @_ == 1 ) ? { %{ $_[0] } } : { @_ };
-    return $class->SUPER::BUILDARGS(@_);
-}
-
-sub _build_obj {
-    my $self = shift;
-    if ( $self->version == 1 ) {
+    my $obj;
+    if ( $params->{version} == 1 ) {
         require Net::GitHub::V1;
-        return Net::GitHub::V1->new($args);
+        $obj = Net::GitHub::V1->new($params);
     } else {
         require Net::GitHub::V2;
-        return Net::GitHub::V2->new($args);
+        $obj = Net::GitHub::V2->new($params);
     }
+
+    return $class->meta->new_object(
+        __INSTANCE__ => $obj,
+        @_,
+    );
 }
 
 no Moose;
