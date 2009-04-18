@@ -6,23 +6,36 @@ our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 has 'version' => ( isa => 'Int', is => 'ro', default => 2 );
+our $args;
 
-has '_obj' => (
+has 'obj' => (
     is   => 'ro',
     isa  => 'Object',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        if ( $self->version == 1 ) {
-            require Net::GitHub::V1;
-            return Net::GitHub::V1->new(@_);
-        } else {
-            require Net::GitHub::V2;
-            return Net::GitHub::V2->new(@_);
-        }
-    },
-    handles => ['api_url']
+    lazy_build => 1,
+    handles => ['project', 'search',
+            'repos', 'user', 'commit', 'issue',
+                                     'object', 'obj_tree', 'obj_blob', 'obj_raw',
+                                     'network', 'network_meta', 'network_data_chunk'],
 );
+
+sub BUILDARGS {
+    my $class = shift;
+
+    $args = ( scalar @_ == 1 ) ? { %{ $_[0] } } : { @_ };
+    return $class->SUPER::BUILDARGS(@_);
+}
+
+
+sub _build_obj {
+    my $self = shift;
+    if ( $self->version == 1 ) {
+        require Net::GitHub::V1;
+        return Net::GitHub::V1->new($args);
+    } else {
+        require Net::GitHub::V2;
+        return Net::GitHub::V2->new($args);
+    }
+}
 
 
 =pod

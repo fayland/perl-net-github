@@ -8,16 +8,11 @@ my $v2 = Net::GitHub->new(
     version => 2, # optional, default as 2
     owner => 'fayland', repo => 'perl-net-github'
 );
-
-diag( $v2->api_url );
-ok(1);
-#ok( $v2->can('repos') );
+ok( $v2->can('repos') );
 
 my $v1 = Net::GitHub->new(
-    version =>1, # optional, default as 2
-    owner => 'fayland', repo => 'perl-net-github'
+    version => 1,
+    owner => 'fayland', name => 'perl-net-github'
 );
 
-diag( $v1->api_url );
-ok(1);
-#ok( $v1->can('search') );
+ok( $v1->can('search') );
