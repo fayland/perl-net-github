@@ -1,16 +1,3 @@
-        handles => sub {
-            my ( $self, $meta ) = @_;
-            if ( $meta->get_attribute('version') == 1 ) {
-                return map { $_ => $_ } ('project', 'user', 'search');
-            } else {
-                return map { $_ => $_ } ('repos', 'user', 'commit', 'issue',
-                                         'object', 'obj_tree', 'obj_blob', 'obj_raw',
-                                         'network', 'network_meta', 'network_data_chunk');
-            }
-        }
-
-    );
-
 NAME
     Net::GitHub - Perl Interface for github.com
 
