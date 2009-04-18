@@ -2,7 +2,7 @@ package Net::GitHub::V1::Project::Downloads;
 
 use Moose;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use HTML::TreeBuilder;
@@ -60,7 +60,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V1::Project::Downloads - GitHub Project Downloads Section
+Net::GitHub::V1::Project::Downloads - GitHub Project Downloads Section (V1)
 
 =head1 SYNOPSIS
 

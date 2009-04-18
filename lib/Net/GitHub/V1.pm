@@ -2,7 +2,7 @@ package Net::GitHub::V1;
 
 use Moose;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Net::GitHub::V1::Project;
@@ -39,7 +39,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V1 - Perl Interface for github.com
+Net::GitHub::V1 - (DEPERCATED, use V2) Perl Interface for github.com (V1)
 
 =head1 SYNOPSIS
 

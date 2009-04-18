@@ -2,7 +2,7 @@ package Net::GitHub::V1::Project;
 
 use Moose;
 
-our $VERSION = '0.04';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Net::GitHub::V1::Project::Info;
@@ -75,7 +75,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V1::Project - GitHub Project (Repository)
+Net::GitHub::V1::Project - GitHub Project (Repository) (V1)
 
 =head1 SYNOPSIS
 

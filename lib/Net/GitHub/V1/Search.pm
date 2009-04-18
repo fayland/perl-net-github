@@ -2,7 +2,7 @@ package Net::GitHub::V1::Search;
 
 use Moose;
 
-our $VERSION = '0.01';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -26,7 +26,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V1::Search - GitHub Search
+Net::GitHub::V1::Search - GitHub Search (V1)
 
 =head1 SYNOPSIS
 

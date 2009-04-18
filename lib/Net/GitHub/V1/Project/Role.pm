@@ -2,7 +2,7 @@ package Net::GitHub::V1::Project::Role;
 
 use Moose::Role;
 
-our $VERSION = '0.04';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 # http://github.com/fayland/perl-net-github/tree/master

@@ -2,7 +2,7 @@ package Net::GitHub::V1::Project::Wiki;
 
 use Moose;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -77,7 +77,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V1::Project::Wiki - GitHub Project Wiki Section
+Net::GitHub::V1::Project::Wiki - GitHub Project Wiki Section (V1)
 
 =head1 SYNOPSIS
 

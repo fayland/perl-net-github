@@ -5,6 +5,7 @@ use Moose;
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
+has 'version' => ( isa => 'Int', is => 'ro', default => 1 );
 
 no Moose;
 __PACKAGE__->meta->make_immutable;

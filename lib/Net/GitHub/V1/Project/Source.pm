@@ -2,7 +2,7 @@ package Net::GitHub::V1::Project::Source;
 
 use Moose;
 
-our $VERSION = '0.04';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V1::Role';
@@ -36,7 +36,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V1::Project::Source - GitHub Project Source Section
+Net::GitHub::V1::Project::Source - GitHub Project Source Section (V1)
 
 =head1 SYNOPSIS
 

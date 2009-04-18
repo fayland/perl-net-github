@@ -2,7 +2,7 @@ package Net::GitHub::V1::Project::Info;
 
 use Moose;
 
-our $VERSION = '0.04';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Net::GitHub::V1::User; # get Rrepository description/homepage
@@ -91,7 +91,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V1::Project::Info - GitHub Project Info Section
+Net::GitHub::V1::Project::Info - GitHub Project Info Section (V1)
 
 =head1 SYNOPSIS
 
