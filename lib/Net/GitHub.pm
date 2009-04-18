@@ -1,4 +1,4 @@
-package Net::GitHub;
+package Net::GitHub::V2;
 
 use Moose;
 
@@ -21,7 +21,7 @@ Net::GitHub - Perl Interface for github.com
 
     use Net::GitHub;
 
-    
+    my $github = Net::GitHub->new( version => 2 );
 
 =head1 DESCRIPTION
 
@@ -29,30 +29,8 @@ L<http://github.com> is a popular git host.
 
 Please feel free to fork L<http://github.com/fayland/perl-net-github/tree/master>, fix or contribute some code. :)
 
-=head1 ALPHA WARNING
-
-Net::GitHub is still in its infancy. backwards compatibility is not yet guaranteed.
-
 =head1 METHODS
 
-=head2 project
-
-    $github->project( owner => 'fayland', name => 'perl-net-github' );
-    $github->project( 'fayland', 'perl-net-github' );
-
-instance of L<Net::GitHub::Project>
-
-=head2 user
-
-    $github->user( 'fayland' );
-
-instance of L<Net::GitHub::User>
-
-=head2 search
-
-    $github->search('fayland');
-
-handled by L<Net::GitHub::Search>
 
 =head1 Git URL
 

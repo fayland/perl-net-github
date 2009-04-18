@@ -36,12 +36,9 @@ sub get {
     my $self = shift;
     
     my $resp = $self->ua->get(@_);
-    unless ( $resp->is_success ) {
-        croak $resp->as_string();
-    }
+    croak $res->as_string() unless ( $res->is_success );
     return $resp->content();
 }
-
 
 has 'json' => (
     is => 'ro',
@@ -52,6 +49,37 @@ has 'json' => (
     }
 );
 
+sub get_json_to_obj {
+    my ( $self, $pending_url ) = @_;
+    
+    my $url  = $self->api_url . $pending_url;
+    my $json = $self->get($url);
+    my $data = $self->json->jsonToObj($json);
+    return $data;
+}
+
+sub get_json_to_obj_authed {
+    my $self = shift;
+    my $pending_url = shift;
+    
+    croak 'login and token are required' unless ( $self->login and $self->token );
+    
+    my $url  = $self->api_url . $pending_url;
+    
+    require HTTP::Request::Common;
+    my $res = $self->ua->request(
+        HTTP::Request::Common::POST( $uri, [
+            'login' => $self->login,
+            'token' => $self->token,
+            @_;
+        ] ),
+    );
+    croak $res->as_string() unless ( $res->is_success );
+    
+    my $json = $res->content();
+    my $data = $self->json->jsonToObj($json);
+    return $data;
+}
 
 no Moose::Role;
 
