@@ -21,16 +21,16 @@ Net::GitHub - Perl Interface for github.com
 
     use Net::GitHub;
 
-    my $github = Net::GitHub->new( version => 2 );
+    my $github = Net::GitHub->new(); # Net::GitHub::V2, default
+    
+    # DEPERCATED, for backwards
+    my $github = Net::GitHub->new( version => 1 ); # Net::GitHub::V1
 
 =head1 DESCRIPTION
 
 L<http://github.com> is a popular git host.
 
 Please feel free to fork L<http://github.com/fayland/perl-net-github/tree/master>, fix or contribute some code. :)
-
-=head1 METHODS
-
 
 =head1 Git URL
 

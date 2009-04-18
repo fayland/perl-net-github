@@ -4,29 +4,10 @@ NAME
 SYNOPSIS
         use Net::GitHub;
 
-        # for http://github.com/fayland/perl-net-github/tree/master
-        my $github = Net::GitHub->new();
-    
-        # project
-        my $prj = $github->project( owner => 'fayland', name => 'perl-net-github' );
-        print $prj->description;
-        print $prj->public_clone_url;
-        my @commits = $prj->commits;
-        foreach my $c ( @commits ) {
-            my $commit = $prj->commit( $c->{id} );
-        }
-        my @downloads = $prj->downloads;
-        $prj->signin( 'login', 'password' );
-        $prj->wiki->new_page( 'PageTitle', "Page Content\n\nLine 2\n" );
-    
-        # user
-        my $user = $github->user( 'fayland' );
-        foreach my $repos ( @{ $user->repositories} ) {
-            print "$repos->{owner} + $repos->{name}\n";
-        }
-    
-        # search
-        my $result = $github->search( 'fayland' );
+        my $github = Net::GitHub->new( version => 2 ); # Net::GitHub::V2
+        
+    # DEPERCATED, for backwards
+        my $github = Net::GitHub->new( version => 1 ); # Net::GitHub::V1
 
 DESCRIPTION
     <http://github.com> is a popular git host.
@@ -34,27 +15,6 @@ DESCRIPTION
     Please feel free to fork
     <http://github.com/fayland/perl-net-github/tree/master>, fix or
     contribute some code. :)
-
-ALPHA WARNING
-    Net::GitHub is still in its infancy. backwards compatibility is not yet
-    guaranteed.
-
-METHODS
-  project
-        $github->project( owner => 'fayland', name => 'perl-net-github' );
-        $github->project( 'fayland', 'perl-net-github' );
-
-    instance of Net::GitHub::Project
-
-  user
-        $github->user( 'fayland' );
-
-    instance of Net::GitHub::User
-
-  search
-        $github->search('fayland');
-
-    handled by Net::GitHub::Search
 
 Git URL
     <http://github.com/fayland/perl-net-github/tree/master>
