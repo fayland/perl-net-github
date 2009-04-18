@@ -34,7 +34,7 @@ sub update {
         push @values, ( "values[$key]", $up{$key} );
     }
     
-    return $self->get_json_to_obj_authed( "user/$user", @values );
+    return $self->get_json_to_obj_authed( "user/$user", @values, 'user' );
 }
 
 sub followers {

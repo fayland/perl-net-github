@@ -65,7 +65,8 @@ sub create {
         name => $name,
         description => $desc,
         homepage => $homepage,
-        public => $is_public
+        public => $is_public,
+        'repository'
     );
 }
 
