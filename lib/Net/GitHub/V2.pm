@@ -39,10 +39,18 @@ Net::GitHub::V2 - Perl Interface for github.com (V2)
     use Net::GitHub::V2;
 
     # for http://github.com/fayland/perl-net-github/tree/master
-    my $github = Net::GitHub::V2->new();
-    
+    my $github = Net::GitHub::V2->new( owner => 'fayland', repo => 'perl-net-github' );
 
 =head1 DESCRIPTION
+
+L<http://develop.github.com/>
+
+For those B<(authentication required)>, you must set login and token (in L<https://github.com/account>
+
+    my $github = Net::GitHub::V2->new(
+        owner => 'fayland', repo => 'perl-net-github',
+        login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
+    );
 
 =head1 METHODS
 
