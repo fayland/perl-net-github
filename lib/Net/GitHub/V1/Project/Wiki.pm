@@ -1,4 +1,4 @@
-package Net::GitHub::Project::Wiki;
+package Net::GitHub::V1::Project::Wiki;
 
 use Moose;
 
@@ -7,8 +7,8 @@ our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
 
-with 'Net::GitHub::Role';
-with 'Net::GitHub::Project::Role';
+with 'Net::GitHub::V1::Role';
+with 'Net::GitHub::V1::Project::Role';
 
 sub new_page {
     my ( $self, $page_title, $page_content ) = @_;
@@ -77,13 +77,13 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Project::Wiki - GitHub Project Wiki Section
+Net::GitHub::V1::Project::Wiki - GitHub Project Wiki Section
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::Project::Wiki;
+    use Net::GitHub::V1::Project::Wiki;
 
-    my $wiki = Net::GitHub::Project::Wiki->new(
+    my $wiki = Net::GitHub::V1::Project::Wiki->new(
         owner => 'fayland', name => 'perl-net-github',
         login => 'fayland', password => 'passmein', # your real login/password
     );
@@ -100,7 +100,7 @@ For the following "B<login> required", it means:
 
 you must specify the login and password in B<new>
 
-    my $wiki = Net::GitHub::Project::Wiki->new(
+    my $wiki = Net::GitHub::V1::Project::Wiki->new(
         owner => 'fayland', name => 'perl-net-github',
         login => 'fayland', password => 'passmein', # your real login/password
     );

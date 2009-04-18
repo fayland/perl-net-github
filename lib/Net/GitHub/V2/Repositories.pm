@@ -1,8 +1,8 @@
-package Net::GitHub::Search;
+package Net::GitHub::V2::Repositories;
 
 use Moose;
 
-our $VERSION = '0.01';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -12,7 +12,16 @@ with 'Net::GitHub::Role';
 sub search {
     my ( $self, $word ) = @_;
     
-    my $url = $self->api_url . 'search/' . uri_escape($word);
+    my $url = $self->api_url . 'repos/search/' . uri_escape($word);
+    my $json = $self->get($url);
+    my $data = $self->json->jsonToObj($json);
+    return $data;
+}
+
+sub show {
+    my ( $self, $owner, $repo ) = @_;
+    
+    my $url = $self->api_url . 'repos/show/' . $owner . '/' . $repo;
     my $json = $self->get($url);
     my $data = $self->json->jsonToObj($json);
     return $data;
@@ -26,14 +35,14 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Search - GitHub Search
+Net::GitHub::Repositories - GitHub Repositories API
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::Search;
+    use Net::GitHub::Repositories;
 
-    my $search = Net::GitHub::Search->new();
-    my $result = $search->search('fayland');
+    my $repos = Net::GitHub::Repositories->new();
+    my $result = $repos->search('fayland');
     foreach my $repos ( @{ $result->{repositories} } ) {
         print "$repos->{description}\n";
     }
@@ -42,13 +51,6 @@ Net::GitHub::Search - GitHub Search
 
 =head1 METHODS
 
-=over 4
-
-=item search
-
-use L<http://github.com/guides/the-github-api> to get JSON result
-
-=back
 
 =head1 AUTHOR
 

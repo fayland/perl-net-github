@@ -1,16 +1,16 @@
-package Net::GitHub::User;
+package Net::GitHub::V1::User;
 
 use Moose;
 
 our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-with 'Net::GitHub::Role';
+with 'Net::GitHub::V1::Role';
 
 has 'username' => ( is => 'ro', required => 1, isa => 'Str' );
 
 has '__user' => (
-    is => 'rw', isa => 'Net::GitHub::UserObj', lazy_build => 1,
+    is => 'rw', isa => 'Net::GitHub::V1::UserObj', lazy_build => 1,
     handles => [qw/name repositories blog location email company/],
 );
 sub _build___user {
@@ -19,7 +19,7 @@ sub _build___user {
     my $url = $self->api_url . $self->username;
     my $json = $self->get($url);
     my $data = $self->json->jsonToObj($json);
-    return Net::GitHub::UserObj->new($data->{user});
+    return Net::GitHub::V1::UserObj->new($data->{user});
 }
 
 sub BUILDARGS {
@@ -33,7 +33,7 @@ sub BUILDARGS {
 }
 
 package     # hide from PAUSE
-    Net::GitHub::UserObj;
+    Net::GitHub::V1::UserObj;
 
 use Moose;
 
@@ -54,13 +54,13 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::User - GitHub User
+Net::GitHub::V1::User - GitHub User
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::User;
+    use Net::GitHub::V1::User;
 
-    my $user = Net::GitHub::User->new( 'fayland' );
+    my $user = Net::GitHub::V1::User->new( 'fayland' );
     foreach my $repos ( @{ $user->repositories} ) {
         print "$repos->{owner} + $repos->{name}\n";
     }

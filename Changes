@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.06    2009.4.18
+        http://github.com/api/v2/ (API are changed)
+
 0.05    2009.3.11
         pod fix
 
@@ -7,7 +10,7 @@ Revision history for Net-GitHub
         use WWW::Mechanize::GZip
         add N::G::Project::Wiki and Downloads
         Wiki new_page/edit_page/edit_or_new
-	Downloads downloads
+	    Downloads downloads
 
 0.03    2009.3.9
         add login in Net::GitHub::Role

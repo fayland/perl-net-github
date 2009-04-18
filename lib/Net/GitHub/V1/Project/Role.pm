@@ -1,4 +1,4 @@
-package Net::GitHub::Project::Role;
+package Net::GitHub::V1::Project::Role;
 
 use Moose::Role;
 
@@ -45,14 +45,14 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Project::Role - Common between Net::GitHub::Project::* libs
+Net::GitHub::V1::Project::Role - Common between Net::GitHub::V1::Project::* libs
 
 =head1 SYNOPSIS
 
-    package Net::GitHub::Project::XXX;
+    package Net::GitHub::V1::Project::XXX;
     
     use Moose;
-    with 'Net::GitHub::Project::Role';
+    with 'Net::GitHub::V1::Project::Role';
 
 =head1 DESCRIPTION
 

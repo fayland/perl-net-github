@@ -7,13 +7,13 @@ use Test::MockModule;
 use FindBin qw/$Bin/;
 use File::Slurp;
 
-use Net::GitHub::Search;
+use Net::GitHub::V1::Search;
 
 # mock data
 my $filec1 = "$Bin/mockdata/search.json";
 my $c1 = read_file($filec1);
 
-my $mock = Test::MockModule->new('Net::GitHub::Search');
+my $mock = Test::MockModule->new('Net::GitHub::V1::Search');
 $mock->mock( 'get', sub {
 	( undef, my $url ) = @_;
 	if ( $url eq 'http://github.com/api/v1/json/search/fayland' ) {
@@ -21,7 +21,7 @@ $mock->mock( 'get', sub {
 	}
 } );
 
-my $search = Net::GitHub::Search->new();
+my $search = Net::GitHub::V1::Search->new();
 my $ret = $search->search('fayland');
 is $ret->{repositories}->[0]->{name}, "fayland";
 is $ret->{repositories}->[0]->{username}, "fayland";

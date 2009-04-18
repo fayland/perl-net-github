@@ -1,12 +1,12 @@
-package Net::GitHub::Project::Source;
+package Net::GitHub::V1::Project::Source;
 
 use Moose;
 
 our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-with 'Net::GitHub::Role';
-with 'Net::GitHub::Project::Role';
+with 'Net::GitHub::V1::Role';
+with 'Net::GitHub::V1::Project::Role';
 
 sub commits {
     my ( $self, $branch_name ) = @_;
@@ -36,13 +36,13 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Project::Source - GitHub Project Source Section
+Net::GitHub::V1::Project::Source - GitHub Project Source Section
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::Project::Source;
+    use Net::GitHub::V1::Project::Source;
 
-    my $src = Net::GitHub::Project::Source->new(
+    my $src = Net::GitHub::V1::Project::Source->new(
         owner => 'fayland', name => 'perl-net-github'
     );
     

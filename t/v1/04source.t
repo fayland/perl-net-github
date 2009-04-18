@@ -7,7 +7,7 @@ use Test::MockModule;
 use FindBin qw/$Bin/;
 use File::Slurp;
 
-use Net::GitHub::Project::Source;
+use Net::GitHub::V1::Project::Source;
 
 # mock data
 my $filec1 = "$Bin/mockdata/commits.json";
@@ -15,7 +15,7 @@ my $c1 = read_file($filec1);
 my $filec2 = "$Bin/mockdata/single_commit.json";
 my $c2 = read_file($filec2);
 
-my $mock = Test::MockModule->new('Net::GitHub::Project::Source');
+my $mock = Test::MockModule->new('Net::GitHub::V1::Project::Source');
 $mock->mock( 'get', sub {
 	( undef, my $url ) = @_;
 	if ( $url eq 'http://github.com/api/v1/json/fayland/perl-net-github/commits/master' ) {
@@ -26,7 +26,7 @@ $mock->mock( 'get', sub {
 } );
 
 
-my $src = Net::GitHub::Project::Source->new( owner => 'fayland', name => 'perl-net-github' );
+my $src = Net::GitHub::V1::Project::Source->new( owner => 'fayland', name => 'perl-net-github' );
 is scalar @{$src->commits}, 13;
 is_deeply $src->commits->[-6], {
     'committer' => {

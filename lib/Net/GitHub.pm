@@ -2,34 +2,9 @@ package Net::GitHub;
 
 use Moose;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-use Net::GitHub::Project;
-use Net::GitHub::User;
-use Net::GitHub::Search;
-
-with 'Net::GitHub::Role';
-
-sub project {
-    my $self = shift;
-    return Net::GitHub::Project->new( @_ );
-}
-
-sub user {
-    my $self = shift;
-    return Net::GitHub::User->new( @_ );
-}
-
-has '_search' => (
-    is => 'rw',
-    isa => 'Net::GitHub::Search',
-    lazy => 1,
-    default => sub {
-        return Net::GitHub::Search->new();
-    },
-    handles => ['search'],
-);
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
@@ -45,29 +20,7 @@ Net::GitHub - Perl Interface for github.com
 
     use Net::GitHub;
 
-    # for http://github.com/fayland/perl-net-github/tree/master
-    my $github = Net::GitHub->new();
     
-    # project
-    my $prj = $github->project( owner => 'fayland', name => 'perl-net-github' );
-    print $prj->description;
-    print $prj->public_clone_url;
-    my @commits = $prj->commits;
-    foreach my $c ( @commits ) {
-        my $commit = $prj->commit( $c->{id} );
-    }
-    my @downloads = $prj->downloads;
-    $prj->signin( 'login', 'password' );
-    $prj->wiki->new_page( 'PageTitle', "Page Content\n\nLine 2\n" );
-    
-    # user
-    my $user = $github->user( 'fayland' );
-    foreach my $repos ( @{ $user->repositories} ) {
-        print "$repos->{owner} + $repos->{name}\n";
-    }
-    
-    # search
-    my $result = $github->search( 'fayland' );
 
 =head1 DESCRIPTION
 

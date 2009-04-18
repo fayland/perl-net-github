@@ -1,14 +1,14 @@
-package Net::GitHub::Project::Info;
+package Net::GitHub::V1::Project::Info;
 
 use Moose;
 
 our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-use Net::GitHub::User; # get Rrepository description/homepage
+use Net::GitHub::V1::User; # get Rrepository description/homepage
 
-with 'Net::GitHub::Role';
-with 'Net::GitHub::Project::Role';
+with 'Net::GitHub::V1::Role';
+with 'Net::GitHub::V1::Project::Role';
 
 has 'public_clone_url' => (
     is => 'ro',
@@ -34,7 +34,7 @@ has 'owner_user' => (
     is => 'rw',
     lazy => 1,
     default => sub {
-        return Net::GitHub::User->new( shift->owner );
+        return Net::GitHub::V1::User->new( shift->owner );
     }
 );
 has 'info_from_owner_user' => (
@@ -91,13 +91,13 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Project::Info - GitHub Project Info Section
+Net::GitHub::V1::Project::Info - GitHub Project Info Section
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::Project::Info;
+    use Net::GitHub::V1::Project::Info;
 
-    my $info = Net::GitHub::Project::Info->new(
+    my $info = Net::GitHub::V1::Project::Info->new(
         owner => 'fayland', name => 'perl-net-github'
     );
     print $info->description;
@@ -122,7 +122,7 @@ Your Clone URL
 
 =item owner_user
 
-instance of L<Net::GitHub::User> for $self->owner
+instance of L<Net::GitHub::V1::User> for $self->owner
 
 =item watcher_num
 

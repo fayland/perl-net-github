@@ -7,13 +7,13 @@ use Test::MockModule;
 use FindBin qw/$Bin/;
 use File::Slurp;
 
-use Net::GitHub::User;
+use Net::GitHub::V1::User;
 
 # mock data
 my $filec1 = "$Bin/mockdata/user.json";
 my $c1 = read_file($filec1);
 
-my $mock = Test::MockModule->new('Net::GitHub::User');
+my $mock = Test::MockModule->new('Net::GitHub::V1::User');
 $mock->mock( 'get', sub {
 	( undef, my $url ) = @_;
 	if ( $url eq 'http://github.com/api/v1/json/fayland' ) {
@@ -21,7 +21,7 @@ $mock->mock( 'get', sub {
 	}
 } );
 
-my $user = Net::GitHub::User->new( 'fayland' );
+my $user = Net::GitHub::V1::User->new( 'fayland' );
 is $user->name, "Fayland Lam";
 is $user->blog, "http://www.fayland.org/";
 is $user->location, "China";

@@ -1,25 +1,25 @@
-package Net::GitHub::Project;
+package Net::GitHub::V1::Project;
 
 use Moose;
 
 our $VERSION = '0.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-use Net::GitHub::Project::Info;
-use Net::GitHub::Project::Source;
-use Net::GitHub::Project::Downloads;
-use Net::GitHub::Project::Wiki;
+use Net::GitHub::V1::Project::Info;
+use Net::GitHub::V1::Project::Source;
+use Net::GitHub::V1::Project::Downloads;
+use Net::GitHub::V1::Project::Wiki;
 
-with 'Net::GitHub::Role';
-with 'Net::GitHub::Project::Role';
+with 'Net::GitHub::V1::Role';
+with 'Net::GitHub::V1::Project::Role';
 
 has 'info' => (
     is => 'ro',
-    isa => 'Net::GitHub::Project::Info',
+    isa => 'Net::GitHub::V1::Project::Info',
     lazy => 1,
     default => sub {
         my $self = shift;
-        return Net::GitHub::Project::Info->new( $self->args_to_pass );
+        return Net::GitHub::V1::Project::Info->new( $self->args_to_pass );
     },
     handles => [qw/description homepage public_clone_url your_clone_url
                 owner_user info_from_owner_user/],
@@ -27,33 +27,33 @@ has 'info' => (
 
 has 'source' => (
     is => 'ro',
-    isa => 'Net::GitHub::Project::Source',
+    isa => 'Net::GitHub::V1::Project::Source',
     lazy => 1,
     default => sub {
         my $self = shift;
-        return Net::GitHub::Project::Source->new( $self->args_to_pass );
+        return Net::GitHub::V1::Project::Source->new( $self->args_to_pass );
     },
     handles => [qw/commits commit/],
 );
 
 has '_downloads' => (
     is => 'ro',
-    isa => 'Net::GitHub::Project::Downloads',
+    isa => 'Net::GitHub::V1::Project::Downloads',
     lazy => 1,
     default => sub {
         my $self = shift;
-        return Net::GitHub::Project::Downloads->new( $self->args_to_pass );
+        return Net::GitHub::V1::Project::Downloads->new( $self->args_to_pass );
     },
     handles => [qw/downloads/],
 );
 
 has 'wiki' => (
     is => 'ro',
-    isa => 'Net::GitHub::Project::Wiki',
+    isa => 'Net::GitHub::V1::Project::Wiki',
     lazy => 1,
     default => sub {
         my $self = shift;
-        return Net::GitHub::Project::Wiki->new( $self->args_to_pass );
+        return Net::GitHub::V1::Project::Wiki->new( $self->args_to_pass );
     },
 );
 
@@ -75,31 +75,31 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Project - GitHub Project (Repository)
+Net::GitHub::V1::Project - GitHub Project (Repository)
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::Project;
+    use Net::GitHub::V1::Project;
 
     # for http://github.com/fayland/perl-net-github/tree/master
-    my $prj = Net::GitHub::Project->new( owner => 'fayland', name => 'perl-net-github' );
+    my $prj = Net::GitHub::V1::Project->new( owner => 'fayland', name => 'perl-net-github' );
     # or
-    my $prj2 = Net::GitHub::Project->new( 'fayland', 'perl-net-github' );
+    my $prj2 = Net::GitHub::V1::Project->new( 'fayland', 'perl-net-github' );
     
-    # Net::GitHub::Project::Info
+    # Net::GitHub::V1::Project::Info
     print $prj->description;
     print $prj->public_clone_url;
     
-    # Net::GitHub::Project::Source
+    # Net::GitHub::V1::Project::Source
     my @commits = $prj->commits;
     foreach my $c ( @commits ) {
         my $commit = $prj->commit( $c->{id} );
     }
     
-    # Net::GitHub::Project::Downloads
+    # Net::GitHub::V1::Project::Downloads
     my @downloads = $prj->downloads;
     
-    # Net::GitHub::Project::Wiki
+    # Net::GitHub::V1::Project::Wiki
     $prj->signin( 'login', 'password' );
     $prj->wiki->new_page( 'PageTitle', "Page Content\n\nLine 2\n" );
 
@@ -107,9 +107,9 @@ Net::GitHub::Project - GitHub Project (Repository)
 
 =head1 PARTS
 
-=head2 Net::GitHub::Project::Info
+=head2 Net::GitHub::V1::Project::Info
 
-handled by L<Net::GitHub::Project::Info>
+handled by L<Net::GitHub::V1::Project::Info>
 
 =over 4
 
@@ -127,7 +127,7 @@ Your Clone URL
 
 =item owner_user
 
-instance of L<Net::GitHub::User> for $self->owner
+instance of L<Net::GitHub::V1::User> for $self->owner
 
 =item info_from_owner_user
 
@@ -135,9 +135,9 @@ the repos I<HASHREF> from $self->owner_user->repositories which matches the owne
 
 =back
 
-=head2 Net::GitHub::Project::Source
+=head2 Net::GitHub::V1::Project::Source
 
-handled by L<Net::GitHub::Project::Source>
+handled by L<Net::GitHub::V1::Project::Source>
 
 =over 4
 
@@ -147,9 +147,9 @@ handled by L<Net::GitHub::Project::Source>
 
 =back
 
-=head2 Net::GitHub::Project::Downloads
+=head2 Net::GitHub::V1::Project::Downloads
 
-handled by L<Net::GitHub::Project::Downloads>
+handled by L<Net::GitHub::V1::Project::Downloads>
 
 =over 4
 
@@ -157,9 +157,9 @@ handled by L<Net::GitHub::Project::Downloads>
 
 =back
 
-=head2 Net::GitHub::Project::Wiki
+=head2 Net::GitHub::V1::Project::Wiki
 
-instance of L<Net::GitHub::Project::Wiki>
+instance of L<Net::GitHub::V1::Project::Wiki>
 
 =head1 AUTHOR
 
