@@ -2,17 +2,67 @@ package Net::GitHub::V2;
 
 use Moose;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Net::GitHub::V2::Repositories;
-use Net::GitHub::V2::Commits;
-use Net::GitHub::V2::Network;
 use Net::GitHub::V2::Users;
-use Net::GitHub::V2::Object;
+use Net::GitHub::V2::Commits;
 use Net::GitHub::V2::Issues;
+use Net::GitHub::V2::Object;
+use Net::GitHub::V2::Network;
 
 with 'Net::GitHub::V2::Role';
+
+has 'repos' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V2::Repositories',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V2::Repositories->new( $self->args_to_pass );
+    },
+);
+
+has 'user' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V2::Users',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V2::Users->new( $self->args_to_pass );
+    },
+);
+
+has 'commit' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V2::Commits',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V2::Commits->new( $self->args_to_pass );
+    },
+);
+
+has 'issue' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V2::Issues',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V2::Issues->new( $self->args_to_pass );
+    },
+);
+
+has 'object' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V2::Object',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V2::Object->new( $self->args_to_pass );
+    },
+);
 
 has 'network' => (
     is => 'rw',
@@ -53,6 +103,44 @@ For those B<(authentication required)>, you must set login and token (in L<https
     );
 
 =head1 METHODS
+
+=head2 repos
+
+    $github->repos->create( 'sandbox3', 'Sandbox desc', 'http://fayland.org/', 1 );
+    $github->repos->show();
+
+L<Net::GitHub::V2::Repositories>
+
+=head2 user
+
+    my $followers = $github->user->followers();
+    $github->user->update( name => 'Fayland Lam' );
+
+L<Net::GitHub::V2::Users>
+
+=head2 commit
+
+    my $commits = $github->commit->branch();
+    my $commits = $github->commit->file( 'master', 'lib/Net/GitHub.pm' );
+    my $co_detail = $github->commit->show( $sha1 );
+
+L<Net::GitHub::V2::Commits>
+
+=head2 issue
+
+    my $issues = $github->issue->list('open');
+    my $issue  = $github->issue->open( 'Bug title', 'Bug detail' );
+    $github->issue->close( $number );
+
+L<Net::GitHub::V2::Issues>
+
+=head2 object
+
+    my $tree = $github->object->tree( $tree_sha1 );
+    my $blob = $github->object->blob( $tree_sha1, 'lib/Net/GitHub.pm' );
+    my $raw  = $github->object->raw( $sha1 );
+
+L<Net::GitHub::V2::Object>
 
 =head2 network
 

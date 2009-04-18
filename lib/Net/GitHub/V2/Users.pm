@@ -12,24 +12,44 @@ with 'Net::GitHub::V2::Role';
 sub search {
     my ( $self, $word ) = @_;
     
-    return $self->get_json_to_obj( 'user/search/' . uri_escape($word) );
+    return $self->get_json_to_obj( 'user/search/' . uri_escape($word), 'users' );
 }
 
 sub show {
-    my ( $self, $user ) = @_;
+    my ( $self, $owner ) = @_;
     
-    return $self->get_json_to_obj( "user/show/$user" );
+    $owner ||= $self->owner;
+    
+    return $self->get_json_to_obj( "user/show/$owner", 'user' );
 }
 
 sub update {
-    my $self = shift;
-    my $user = shift;
-    return $self->get_json_to_obj_authed( "user/$user", @_ );
+    my ( $self, %up ) = @_;
+    
+    my $user = $self->owner;
+    
+    # with format values[key] = value
+    my @values;
+    foreach my $key ( keys %up ) {
+        push @values, ( "values[$key]", $up{$key} );
+    }
+    
+    return $self->get_json_to_obj_authed( "user/$user", @values );
 }
 
 sub followers {
-    my ( $self, $user ) = @_;
+    my ( $self ) = @_;
+    
+    my $user = $self->owner;
+    
     return $self->get_json_to_obj( "/user/show/$user/followers" );
+}
+sub following {
+    my ( $self ) = @_;
+    
+    my $user = $self->owner;
+    
+    return $self->get_json_to_obj( "/user/show/$user/following" );
 }
 sub follow {
     my ( $self, $user ) = @_;
@@ -68,10 +88,10 @@ sub add_email {
         email => $email,
     );
 }
-sub remove_pub_key {
-    my ( $self, $id ) = @_;
-    return $self->get_json_to_obj_authed( "/user/email/remove ",
-        id => $id,
+sub remove_email {
+    my ( $self, $email ) = @_;
+    return $self->get_json_to_obj_authed( "/user/email/remove",
+        email => $email,
     );
 } 
 
@@ -83,21 +103,94 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Users - GitHub Users API
+Net::GitHub::V2::Users - GitHub Users API
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::Users;
+    use Net::GitHub::V2::Users;
 
-    my $repos = Net::GitHub::Users->new();
-
+    my $user = Net::GitHub::V2::Users->new(
+        owner => 'fayland', repo => 'perl-net-github'
+    );
 
 =head1 DESCRIPTION
 
 L<http://develop.github.com/p/users.html>
 
+For those B<(authentication required)> below, you must set login and token (in L<https://github.com/account>
+
+    my $user = Net::GitHub::V2::Users->new(
+        owner => 'fayland', repo => 'perl-net-github',
+        login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
+    );
+
 =head1 METHODS
 
+=over 4
+
+=item search
+
+    my $results = $user->search( 'fayland' );
+
+user searching
+
+=item show
+
+    my $uinfo = $user->show(); # owner in ->new
+    my $uinfo = $user->show( 'nothingmuch' );
+
+get extended information on users
+
+=item update
+
+    $user->update(
+        name  => 'Another Name',
+        email => 'Another@email.com',
+    );
+
+update your users information (authentication required)
+
+=item followers
+
+=item following
+
+    my $followers = $user->followers; # owner in ->new
+    my $following = $user->following;
+
+=item follow
+
+=item unfollow
+
+    $user->follow( 'nothingmuch' );
+    $user->unfollow( 'nothingmuch' );
+
+follow or unfollow users (authentication required)
+
+=item pub_keys
+
+=item add_pub_key
+
+=item remove_pub_key
+
+    $user->add_pub_key( 'keyname', $key );
+    my $pub_keys = $user->pub_keys;
+    $user->remove_pub_key( $key_id ); # from $pub_keys
+
+Public Key Management (authentication required)
+
+=item emails
+
+=item add_email
+
+=item remove_email
+
+    $user->add_email( 'another@email.com' );
+    my $emails = $user->emails;
+    $user->remove_email( 'another@email.com' );
+
+Email Address Management (authentication required)
+
+=back
 
 =head1 AUTHOR
 

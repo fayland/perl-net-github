@@ -12,7 +12,7 @@ with 'Net::GitHub::V2::Role';
 sub search {
     my ( $self, $word ) = @_;
     
-    return $self->get_json_to_obj( 'repos/search/' . uri_escape($word) );
+    return $self->get_json_to_obj( 'repos/search/' . uri_escape($word), 'repositories' );
 }
 
 sub show {
@@ -21,7 +21,7 @@ sub show {
     $owner ||= $self->owner;
     $repo  ||= $self->repo;
     
-    return $self->get_json_to_obj( "repos/show/$owner/$repo" );
+    return $self->get_json_to_obj( "repos/show/$owner/$repo", 'repository' );
 }
 
 sub list {
@@ -29,7 +29,7 @@ sub list {
     
     $owner ||= $self->owner;
     
-    return $self->get_json_to_obj( "repos/show/$owner" );
+    return $self->get_json_to_obj( "repos/show/$owner", 'repositories' );
 }
 
 sub watch {
@@ -55,7 +55,7 @@ sub fork {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/fork/$owner/$repo" );
+    return $self->get_json_to_obj_authed( "repos/fork/$owner/$repo", 'repository' );
 }
 
 sub create {
@@ -104,7 +104,7 @@ sub deploy_keys {
     
     my $repo = $self->repo;
     
-    return $self->get_json_to_obj_authed( "repos/keys/$repo" );
+    return $self->get_json_to_obj_authed( "repos/keys/$repo", 'public_keys' );
 }
 sub add_deploy_key {
     my ( $self, $title, $key ) = @_;
@@ -155,7 +155,7 @@ sub network {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj( "repos/show/$owner/$repo/network" );
+    return $self->get_json_to_obj( "repos/show/$owner/$repo/network", 'network' );
 }
 
 sub tags {
@@ -164,7 +164,7 @@ sub tags {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj( "repos/show/$owner/$repo/tags" );
+    return $self->get_json_to_obj( "repos/show/$owner/$repo/tags", 'tags' );
 }
 sub branches {
     my ( $self ) = @_;
@@ -172,7 +172,7 @@ sub branches {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj( "repos/show/$owner/$repo/branches" );
+    return $self->get_json_to_obj( "repos/show/$owner/$repo/branches", 'branches' );
 }
 
 no Moose;
@@ -183,13 +183,13 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Repositories - GitHub Repositories API
+Net::GitHub::V2::Repositories - GitHub Repositories API
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::Repositories;
+    use Net::GitHub::V2::Repositories;
 
-    my $repos = Net::GitHub::Repositories->new(
+    my $repos = Net::GitHub::V2::Repositories->new(
         owner => 'fayland', repo => 'perl-net-github'
     );
 
@@ -199,7 +199,7 @@ L<http://develop.github.com/p/repo.html>
 
 For those B<(authentication required)> below, you must set login and token (in L<https://github.com/account>
 
-    my $repos = Net::GitHub::Repositories->new(
+    my $repos = Net::GitHub::V2::Repositories->new(
         owner => 'fayland', repo => 'perl-net-github',
         login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
     );
@@ -273,7 +273,7 @@ set a public repository private or make a private repo public (authentication re
 
     $repos->add_deploy_key( 'title', $key );
     my $pub_keys = $repos->deploy_keys();
-    $repos->remove_deploy_key( $pub_keys->public_keys->[0]->{id} );
+    $repos->remove_deploy_key( $pub_keys->[0]->{id} );
 
 list, add and remove your deploy keys (authentication required)
 
@@ -288,6 +288,18 @@ list, add and remove your deploy keys (authentication required)
     $repos->remove_collaborator( 'steven' );
 
 list, add and remove the collaborators on your project (authentication required)
+
+=item network
+
+    my $network = $repos->network();
+
+=item tags
+
+    my $tags = $repos->tags();
+
+=item branches
+
+    my $branches = $repos->branches();
 
 =back
 

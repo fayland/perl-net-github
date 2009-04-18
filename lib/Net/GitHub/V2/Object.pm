@@ -10,18 +10,30 @@ use URI::Escape;
 with 'Net::GitHub::V2::Role';
 
 sub tree {
-    my ( $self, $owner, $repo, $tree_sha1 ) = @_;
-    return $self->get_json_to_obj( "tree/show/$owner/$repo/$tree_sha1" );
+    my ( $self, $tree_sha1 ) = @_;
+    
+    my $owner = $self->owner;
+    my $repo  = $self->repo;
+    
+    return $self->get_json_to_obj( "tree/show/$owner/$repo/$tree_sha1", 'tree' );
 }
 
 sub blob {
-    my ( $self, $owner, $repo, $tree_sha1, $path ) = @_;
-    return $self->get_json_to_obj( "blob/show/$owner/$repo/$tree_sha1/$path" );
+    my ( $self, $tree_sha1, $path ) = @_;
+    
+    my $owner = $self->owner;
+    my $repo  = $self->repo;
+    
+    return $self->get_json_to_obj( "blob/show/$owner/$repo/$tree_sha1/$path", 'blob' );
 }
 
 sub raw {
-    my ( $self, $owner, $repo, $tree_sha1 ) = @_;
-    return $self->get( "blob/show/$owner/$repo/$tree_sha1" );
+    my ( $self, $sha1 ) = @_;
+    
+    my $owner = $self->owner;
+    my $repo  = $self->repo;
+    
+    return $self->get( "blob/show/$owner/$repo/$sha1" );
 }
 
 no Moose;
@@ -32,14 +44,15 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::Object - Git Object API
+Net::GitHub::V2::Object - Git Object API
 
 =head1 SYNOPSIS
 
-    use Net::GitHub::Object;
+    use Net::GitHub::V2::Object;
 
-    my $repos = Net::GitHub::Object->new();
-
+    my $obj = Net::GitHub::V2::Object->new(
+        owner => 'fayland', repo => 'perl-net-github'
+    );
 
 =head1 DESCRIPTION
 
@@ -47,6 +60,27 @@ L<http://develop.github.com/p/object.html>
 
 =head1 METHODS
 
+=over 4
+
+=item tree
+
+    my $tree = $obj->tree( $tree_sha1 );
+
+get the contents of a tree by tree sha
+
+=item blob
+
+    my $blob = $obj->blob( $tree_sha1, 'lib/Net/GitHub.pm' );
+
+get the data about a blob by tree sha and path
+
+=item raw
+
+    my $raw = $obj->raw( $sha1 );
+
+get the contents of a blob (can be tree, file or commits)
+
+=back
 
 =head1 AUTHOR
 

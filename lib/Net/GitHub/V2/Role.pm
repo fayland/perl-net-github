@@ -10,8 +10,8 @@ use WWW::Mechanize::GZip;
 use Carp qw/croak/;
 
 # repo stuff
-has 'owner' => ( isa => 'Str', is => 'rw', required => 1 );
-has 'repo'  => ( isa => 'Str', is => 'rw', required => 1 );
+has 'owner' => ( isa => 'Str', is => 'ro', required => 1 );
+has 'repo'  => ( isa => 'Str', is => 'ro', required => 1 );
 
 # login
 has 'login'  => ( is => 'rw', isa => 'Str', default => '' );
@@ -54,11 +54,13 @@ has 'json' => (
 );
 
 sub get_json_to_obj {
-    my ( $self, $pending_url ) = @_;
+    my ( $self, $pending_url, $key ) = @_;
     
     my $url  = $self->api_url . $pending_url;
     my $json = $self->get($url);
     my $data = $self->json->jsonToObj($json);
+    
+    return $data->{$key} if ( $key and exists $data->{$key} );
     return $data;
 }
 
@@ -69,6 +71,11 @@ sub get_json_to_obj_authed {
     croak 'login and token are required' unless ( $self->login and $self->token );
     
     my $url  = $self->api_url . $pending_url;
+    
+    my $key; # return $key from json obj
+    if ( scalar @_ % 2 ) {
+        $key = pop @_;
+    }
     
     require HTTP::Request::Common;
     my $res = $self->ua->request(
@@ -82,6 +89,8 @@ sub get_json_to_obj_authed {
     
     my $json = $res->content();
     my $data = $self->json->jsonToObj($json);
+    
+    return $data->{$key} if ( $key and exists $data->{$key} );
     return $data;
 }
 
@@ -137,6 +146,10 @@ instance of L<JSON::Any>
 =item get
 
 handled by L<WWW::Mechanize>
+
+=item get_json_to_obj
+
+=item get_json_to_obj_authed
 
 =back
 
