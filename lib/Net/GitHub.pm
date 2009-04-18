@@ -12,7 +12,7 @@ has 'obj' => (
     is   => 'ro',
     isa  => 'Object',
     lazy_build => 1,
-    handles => ['project', 'search',
+    handles => ['api_url', 'project', 'search',
             'repos', 'user', 'commit', 'issue',
                                      'object', 'obj_tree', 'obj_blob', 'obj_raw',
                                      'network', 'network_meta', 'network_data_chunk'],
