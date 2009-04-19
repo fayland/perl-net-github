@@ -2,7 +2,7 @@ package Net::GitHub::V2::Role;
 
 use Moose::Role;
 
-our $VERSION = '0.06';
+our $VERSION = '0.08';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
@@ -97,7 +97,7 @@ sub get_json_to_obj_authed {
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('owner', 'repo' ) {
+    foreach my $col ('owner', 'repo', 'login', 'token') {
         $ret->{$col} = $self->$col;
     }
     return $ret;

@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.08    2009.4.19
+        bug fix
+
 0.07    2009.4.19
         make 'owner' and 'repo' is => 'rw' for App::GitHub
 
