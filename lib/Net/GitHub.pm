@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Moose;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -10,7 +10,7 @@ sub new {
     my $params = $class->BUILDARGS(@_);
 
     my $obj;
-    if ( $params->{version} == 1 ) {
+    if ( exists $params->{version} and $params->{version} == 1 ) {
         require Net::GitHub::V1;
         $obj = Net::GitHub::V1->new($params);
     } else {

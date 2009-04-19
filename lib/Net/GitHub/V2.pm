@@ -2,7 +2,7 @@ package Net::GitHub::V2;
 
 use Moose;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Net::GitHub::V2::Repositories;

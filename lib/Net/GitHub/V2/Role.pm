@@ -10,8 +10,8 @@ use WWW::Mechanize::GZip;
 use Carp qw/croak/;
 
 # repo stuff
-has 'owner' => ( isa => 'Str', is => 'ro', required => 1 );
-has 'repo'  => ( isa => 'Str', is => 'ro', required => 1 );
+has 'owner' => ( isa => 'Str', is => 'rw', required => 1 );
+has 'repo'  => ( isa => 'Str', is => 'rw', required => 1 );
 
 # login
 has 'login'  => ( is => 'rw', isa => 'Str', default => '' );
