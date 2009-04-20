@@ -2,10 +2,22 @@ package Net::GitHub::V2::Issues;
 
 use Moose;
 
-our $VERSION = '0.06';
+our $VERSION = '0.09';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V2::Role';
+
+use URI::Escape;
+
+sub search {
+    my ( $self, $state, $word ) = @_;
+    
+    my $owner = $self->owner;
+    my $repo  = $self->repo;
+    my $url   = "issues/search/$owner/$repo/$state/" . uri_escape($word);
+    
+    return $self->get_json_to_obj( $url, 'issues' );
+}
 
 sub list {
     my ( $self, $state ) = @_;
@@ -84,6 +96,18 @@ sub remove_label {
     return $self->get_json_to_obj_authed( "issues/label/remove/$owner/$repo/$label/$id", 'labels' );
 }
 
+sub comment {
+    my ( $self, $id, $text ) = @_;
+    
+    my $owner = $self->owner;
+    my $repo  = $self->repo;
+    
+    return $self->get_json_to_obj_authed( "issues/comment/$owner/$repo/$id",
+        comment => $text,
+        'comment'
+    );
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
@@ -116,6 +140,12 @@ For those B<(authentication required)> below, you must set login and token (in L
 =head1 METHODS
 
 =over 4
+
+=item search
+
+    my $issues = $issue->search('open', 'test');
+
+search issues
 
 =item list
 
@@ -172,6 +202,12 @@ edit an existing issue (authentication required)
     my $labels = $issue->remove_label( $number, $label );
 
 add/remove a label (authentication required)
+
+=item comment
+
+    my $comment = $issue->comment( $number, 'this is amazing' );
+
+comment on issues
 
 =back
 
