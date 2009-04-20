@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.10    2009.4.21
+        owner/repo/login/token are 'ro' to avoid bug
+
 0.09    2009.4.21
         issues pod tweak by c9s
         search issues and comment issues (new API)

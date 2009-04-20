@@ -2,7 +2,7 @@ package Net::GitHub::V2::Role;
 
 use Moose::Role;
 
-our $VERSION = '0.08';
+our $VERSION = '0.10';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
@@ -10,12 +10,12 @@ use WWW::Mechanize::GZip;
 use Carp qw/croak/;
 
 # repo stuff
-has 'owner' => ( isa => 'Str', is => 'rw', required => 1 );
-has 'repo'  => ( isa => 'Str', is => 'rw', required => 1 );
+has 'owner' => ( isa => 'Str', is => 'ro', required => 1 );
+has 'repo'  => ( isa => 'Str', is => 'ro', required => 1 );
 
 # login
-has 'login'  => ( is => 'rw', isa => 'Str', default => '' );
-has 'token' => ( is => 'rw', isa => 'Str', default => '' );
+has 'login'  => ( is => 'ro', isa => 'Str', default => '' );
+has 'token' => ( is => 'ro', isa => 'Str', default => '' );
 
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v2/json/');
