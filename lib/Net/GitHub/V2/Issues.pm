@@ -122,7 +122,20 @@ For those B<(authentication required)> below, you must set login and token (in L
     my $issues = $issue->list('open');
     my $issues = $issue->list('closed');
 
-see a list of issues for a project
+see a list of issues for a project.
+
+each issue is a hash reference which contains:
+
+    'number' => 2,
+    'position' => '1',
+    'state' => 'open',
+    'body' => 'Bug Detail',
+    'created_at' => '2009/04/20 10:00:45 -0700',
+    'updated_at' => '2009/04/20 10:00:45 -0700',
+    'user' => 'foobar',
+    'title' => 'Bug Title',
+    'votes' => 0
+
 
 =item view
 
