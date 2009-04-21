@@ -2,7 +2,7 @@ package Net::GitHub::V2::Role;
 
 use Moose::Role;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
@@ -57,7 +57,10 @@ sub get_json_to_obj {
     my ( $self, $pending_url, $key ) = @_;
     
     my $url  = $self->api_url . $pending_url;
-    my $json = $self->get($url);
+    my $resp = $self->ua->get($url);
+    return { error => '404 Not Found' } if $resp->code == 404;
+    return { error => $resp->as_string() } unless ( $resp->is_success );
+    my $json = $resp->content();
     my $data = $self->json->jsonToObj($json);
     
     return $data->{$key} if ( $key and exists $data->{$key} );
@@ -85,7 +88,8 @@ sub get_json_to_obj_authed {
             @_,
         ] ),
     );
-    croak $res->as_string() unless ( $res->is_success );
+    return { error => '404 Not Found' } if $res->code == 404;
+    return { error => $res->as_string() } unless ( $res->is_success );
     
     my $json = $res->content();
     my $data = $self->json->jsonToObj($json);

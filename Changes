@@ -1,7 +1,14 @@
 Revision history for Net-GitHub
 
+0.12
+        Commits.pm sub file default branch as 'master'
+
+0.11    2009.4.21
+        deal with 404
+
 0.10    2009.4.21
         owner/repo/login/token are 'ro' to avoid bug
+        fix user->update
 
 0.09    2009.4.21
         issues pod tweak by c9s
