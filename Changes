@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.12
+        Commits.pm sub file default branch as 'master'
+
 0.11    2009.4.21
         deal with 404
 

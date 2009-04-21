@@ -2,7 +2,7 @@ package Net::GitHub::V2::Commits;
 
 use Moose;
 
-our $VERSION = '0.06';
+our $VERSION = '0.12';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -22,6 +22,11 @@ sub branch {
 sub file {
     my ( $self, $branch, $path ) = @_;
     
+    unless ( $path ) {
+        $path = $branch;
+        $branch = 'master';
+    }
+
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
@@ -68,11 +73,12 @@ L<http://develop.github.com/p/commits.html>
 
 list commits for a branch
 
-=item file
+=item file($branch, $file)
 
     my $commits = $commit->file( 'master', 'lib/Net/GitHub.pm' );
+    my $commits = $commit->file( 'lib/Net/GitHub.pm' ); # the same as above
 
-get all the commits that modified the file
+get all the commits that modified the file (default $branch to 'master')
 
 =item show
 
