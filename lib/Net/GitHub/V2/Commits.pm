@@ -84,7 +84,7 @@ get all the commits that modified the file (default $branch to 'master')
 
     my $co_detail = $commit->show( '0e2e9d452f807f4b7138ae707e84577c10891d0c' );
 
-get a the changes introduced on a specific commit
+get the changes introduced on a specific commit
 
 =back
 
