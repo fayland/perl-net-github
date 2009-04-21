@@ -74,6 +74,9 @@ Read L<Net::GitHub::V2> for more details.
     my $co_detail = $github->commit->show( $sha1 );
     
     my $issues = $github->issue->list('open');
+
+list method returns array reference of L<Net::Github::V2::Issues>.
+
     my $issue  = $github->issue->open( 'Bug title', 'Bug detail' );
     $github->issue->close( $number );
     
