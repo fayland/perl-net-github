@@ -1,7 +1,8 @@
 Revision history for Net-GitHub
 
-0.12
+0.12    2009.05.01
         Commits.pm sub file default branch as 'master'
+        Strip the leading '/' from paths provided to get_json_to_obj* methods (bingos)
 
 0.11    2009.4.21
         deal with 404
