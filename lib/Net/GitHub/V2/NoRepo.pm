@@ -99,15 +99,6 @@ sub get_json_to_obj_authed {
     return $data;
 }
 
-sub args_to_pass {
-    my $self = shift;
-    my $ret;
-    foreach my $col ('owner', 'login', 'token') {
-        $ret->{$col} = $self->$col;
-    }
-    return $ret;
-}
-
 no Moose::Role;
 
 1;

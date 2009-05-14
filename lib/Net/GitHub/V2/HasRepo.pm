@@ -17,7 +17,7 @@ sub args_to_pass {
         $ret->{$col} = $self->$col;
     }
     return $ret;
-}
+};
 
 no Moose::Role;
 
