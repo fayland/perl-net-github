@@ -51,7 +51,7 @@ A repo name.
 
 =head1 METHODS
 
-Same as L<Net::GitHub::V2::NoRepo>, with C<repo> and C<args_to_pass>.
+Same as L<Net::GitHub::V2::NoRepo>, C<args_to_pass>.
 
 =head1 AUTHOR
 
