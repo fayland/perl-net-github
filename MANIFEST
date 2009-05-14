@@ -23,11 +23,12 @@ lib/Net/GitHub/V1/Search.pm
 lib/Net/GitHub/V1/User.pm
 lib/Net/GitHub/V2.pm
 lib/Net/GitHub/V2/Commits.pm
+lib/Net/GitHub/V2/HasRepo.pm
 lib/Net/GitHub/V2/Issues.pm
 lib/Net/GitHub/V2/Network.pm
+lib/Net/GitHub/V2/NoRepo.pm
 lib/Net/GitHub/V2/Object.pm
 lib/Net/GitHub/V2/Repositories.pm
-lib/Net/GitHub/V2/Role.pm
 lib/Net/GitHub/V2/Users.pm
 Makefile.PL
 MANIFEST			This list of files
