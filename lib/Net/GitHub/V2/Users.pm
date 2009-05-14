@@ -2,7 +2,7 @@ package Net::GitHub::V2::Users;
 
 use Moose;
 
-our $VERSION = '0.11';
+our $VERSION = '0.14';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -114,7 +114,7 @@ Net::GitHub::V2::Users - GitHub Users API
     use Net::GitHub::V2::Users;
 
     my $user = Net::GitHub::V2::Users->new(
-        owner => 'fayland', repo => 'perl-net-github'
+        owner => 'fayland'
     );
 
 =head1 DESCRIPTION
@@ -124,7 +124,7 @@ L<http://develop.github.com/p/users.html>
 For those B<(authentication required)> below, you must set login and token (in L<https://github.com/account>)
 
     my $user = Net::GitHub::V2::Users->new(
-        owner => 'fayland', repo => 'perl-net-github',
+        owner => 'fayland',
         login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
     );
 

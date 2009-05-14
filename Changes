@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.14    2009.05.15
+        Users pod fix
+
 0.13    2009.05.15
         Refactor the role system to be finer-grained based upon whether a class
         needs repo access or not. (Chris Nehren)
