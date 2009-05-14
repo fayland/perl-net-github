@@ -5,10 +5,6 @@ use Moose::Role;
 our $VERSION = '0.13';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-use JSON::Any;
-use WWW::Mechanize::GZip;
-use Carp qw/croak/;
-
 with 'Net::GitHub::V2::NoRepo';
 
 # repo stuff

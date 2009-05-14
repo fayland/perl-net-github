@@ -1,5 +1,9 @@
 Revision history for Net-GitHub
 
+0.13    2009.05.15
+        Refactor the role system to be finer-grained based upon whether a class
+        needs repo access or not. (Chris Nehren)
+
 0.12    2009.05.01
         Commits.pm sub file default branch as 'master'
         Strip the leading '/' from paths provided to get_json_to_obj* methods (bingos)

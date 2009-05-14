@@ -2,7 +2,7 @@ package Net::GitHub::V2::NoRepo;
 
 use Moose::Role;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
