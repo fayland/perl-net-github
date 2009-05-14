@@ -17,7 +17,7 @@ sub args_to_pass {
         $ret->{$col} = $self->$col;
     }
     return $ret;
-};
+}
 
 no Moose::Role;
 
@@ -51,7 +51,7 @@ A repo name.
 
 =head1 METHODS
 
-Same as L<Net::GitHub::V2::NoRepo>, overloads C<args_to_pass>.
+Same as L<Net::GitHub::V2::NoRepo>, with C<repo> and C<args_to_pass>.
 
 =head1 AUTHOR
 
