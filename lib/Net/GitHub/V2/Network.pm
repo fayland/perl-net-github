@@ -2,12 +2,12 @@ package Net::GitHub::V2::Network;
 
 use Moose;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
 
-with 'Net::GitHub::V2::Role';
+with 'Net::GitHub::V2::HasRepo';
 
 sub network_meta {
     my ( $self ) = @_;

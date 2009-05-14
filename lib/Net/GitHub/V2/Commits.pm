@@ -2,12 +2,12 @@ package Net::GitHub::V2::Commits;
 
 use Moose;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
 
-with 'Net::GitHub::V2::Role';
+with 'Net::GitHub::V2::HasRepo';
 
 sub branch {
     my ( $self, $branch ) = @_;

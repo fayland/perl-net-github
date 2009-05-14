@@ -2,7 +2,7 @@ package Net::GitHub::V2;
 
 use Moose;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Net::GitHub::V2::Repositories;
@@ -12,7 +12,7 @@ use Net::GitHub::V2::Issues;
 use Net::GitHub::V2::Object;
 use Net::GitHub::V2::Network;
 
-with 'Net::GitHub::V2::Role';
+with 'Net::GitHub::V2::HasRepo';
 
 has 'repos' => (
     is => 'rw',

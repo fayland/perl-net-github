@@ -1,4 +1,4 @@
-package Net::GitHub::V2::Role;
+package Net::GitHub::V2::NoRepo;
 
 use Moose::Role;
 
@@ -11,7 +11,6 @@ use Carp qw/croak/;
 
 # repo stuff
 has 'owner' => ( isa => 'Str', is => 'ro', required => 1 );
-has 'repo'  => ( isa => 'Str', is => 'ro', required => 1 );
 
 # login
 has 'login'  => ( is => 'ro', isa => 'Str', default => '' );
@@ -103,7 +102,7 @@ sub get_json_to_obj_authed {
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('owner', 'repo', 'login', 'token') {
+    foreach my $col ('owner', 'login', 'token') {
         $ret->{$col} = $self->$col;
     }
     return $ret;
@@ -116,14 +115,14 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V2::Role - Common between Net::GitHub::V2::* libs
+Net::GitHub::V2::NoRepo - Base role for Net::GitHub::V2, no repo access 
 
 =head1 SYNOPSIS
 
     package Net::GitHub::V2::XXX;
     
     use Moose;
-    with 'Net::GitHub::V2::Role';
+    with 'Net::GitHub::V2::NoRepo';
 
 =head1 DESCRIPTION
 
@@ -162,6 +161,9 @@ handled by L<WWW::Mechanize>
 =head1 AUTHOR
 
 Fayland Lam, C<< <fayland at gmail.com> >>
+
+Chris Nehren C<< apeiron@cpan.org >> refactored Net::GitHub::V2::Role to be
+smarter about requiring a repo.
 
 =head1 COPYRIGHT & LICENSE
 

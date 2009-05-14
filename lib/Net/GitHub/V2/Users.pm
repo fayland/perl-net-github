@@ -2,12 +2,12 @@ package Net::GitHub::V2::Users;
 
 use Moose;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
 
-with 'Net::GitHub::V2::Role';
+with 'Net::GitHub::V2::NoRepo';
 
 sub search {
     my ( $self, $word ) = @_;

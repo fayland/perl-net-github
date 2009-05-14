@@ -2,10 +2,10 @@ package Net::GitHub::V2::Issues;
 
 use Moose;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-with 'Net::GitHub::V2::Role';
+with 'Net::GitHub::V2::HasRepo';
 
 use URI::Escape;
 
