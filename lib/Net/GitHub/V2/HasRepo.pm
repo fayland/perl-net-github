@@ -5,7 +5,7 @@ use Moose::Role;
 our $VERSION = '0.13';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-with 'Net::GitHub::V2::NoRepo';
+with 'Net::GitHub::V2::NoRepo' => { excludes => [ 'args_to_pass' ] };;
 
 # repo stuff
 has 'repo'  => ( isa => 'Str', is => 'ro', required => 1 );
@@ -51,7 +51,7 @@ A repo name.
 
 =head1 METHODS
 
-Same as L<Net::GitHub::V2::NoRepo>, C<args_to_pass>.
+Same as L<Net::GitHub::V2::NoRepo>, expect C<args_to_pass>.
 
 =head1 AUTHOR
 
