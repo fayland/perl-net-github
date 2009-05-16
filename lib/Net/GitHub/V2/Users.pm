@@ -2,7 +2,7 @@ package Net::GitHub::V2::Users;
 
 use Moose;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -97,7 +97,15 @@ sub remove_email {
         email => $email,
         'emails'
     );
-} 
+}
+
+# the same as Net::GitHub::V2::Repositories sub list
+sub list {
+    my ( $self, $owner ) = @_;
+
+    $owner ||= $self->owner;
+    return $self->get_json_to_obj( "repos/show/$owner", 'repositories' );
+}
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
@@ -137,6 +145,13 @@ For those B<(authentication required)> below, you must set login and token (in L
     my $results = $user->search( 'fayland' );
 
 user searching
+
+=item list
+
+    my $repositories = $user->list(); # show the owner in ->new
+    my $repositories = $user->list('nothingmuch');
+    
+list out all the repositories for a user
 
 =item show
 
