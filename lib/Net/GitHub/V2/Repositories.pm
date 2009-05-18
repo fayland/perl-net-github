@@ -7,7 +7,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
 
-with 'Net::GitHub::V2::Role';
+with 'Net::GitHub::V2::HasRepo';
 
 sub search {
     my ( $self, $word ) = @_;
