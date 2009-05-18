@@ -2,7 +2,7 @@ package Net::GitHub::V2::Repositories;
 
 use Moose;
 
-our $VERSION = '0.06';
+our $VERSION = '0.16';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;

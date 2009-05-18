@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.16    2009.05.19
+        fix the role (Chris Nehren)
+
 0.15    2009.05.16
         Refactored role support. (Chris Nehren)
         Copy $repo->list to $user->list where it makes more sense (and doesn't
