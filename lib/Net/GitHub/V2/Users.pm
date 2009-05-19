@@ -2,7 +2,7 @@ package Net::GitHub::V2::Users;
 
 use Moose;
 
-our $VERSION = '0.15';
+our $VERSION = '0.17';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -34,7 +34,8 @@ sub update {
         push @values, ( "values[$key]", $up{$key} );
     }
     
-    return $self->get_json_to_obj_authed( "user/show/$user", @values, 'user' );
+    my $url = $self->api_url_https . "user/show/$user";
+    return $self->get_json_to_obj_authed( $url, @values, 'user' );
 }
 
 sub followers {

@@ -2,7 +2,7 @@ package Net::GitHub::V2::Issues;
 
 use Moose;
 
-our $VERSION = '0.10';
+our $VERSION = '0.17';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V2::HasRepo';
@@ -85,7 +85,8 @@ sub add_label {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "issues/label/add/$owner/$repo/$label/$id", 'labels' );
+    my $url = $self->api_url_https . "issues/label/add/$owner/$repo/$label/$id";
+    return $self->get_json_to_obj_authed( $url, 'labels' );
 }
 sub remove_label {
     my ( $self, $id, $label ) = @_;
@@ -93,7 +94,8 @@ sub remove_label {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "issues/label/remove/$owner/$repo/$label/$id", 'labels' );
+    my $url = $self->api_url_https . "issues/label/remove/$owner/$repo/$label/$id";
+    return $self->get_json_to_obj_authed( $url, 'labels' );
 }
 
 sub comment {
@@ -102,7 +104,8 @@ sub comment {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    return $self->get_json_to_obj_authed( "issues/comment/$owner/$repo/$id",
+    my $url = $self->api_url_https . "issues/comment/$owner/$repo/$id"
+    return $self->get_json_to_obj_authed( $url,
         comment => $text,
         'comment'
     );

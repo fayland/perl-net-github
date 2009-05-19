@@ -2,7 +2,7 @@ package Net::GitHub::V2::NoRepo;
 
 use Moose::Role;
 
-our $VERSION = '0.13';
+our $VERSION = '0.17';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
@@ -18,6 +18,7 @@ has 'token' => ( is => 'ro', isa => 'Str', default => '' );
 
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v2/json/');
+has 'api_url_https' => ( is => 'ro', default => 'https://github.com/api/v2/json/');
 
 has 'ua' => (
     isa     => 'WWW::Mechanize',
@@ -74,8 +75,9 @@ sub get_json_to_obj_authed {
     croak 'login and token are required' unless ( $self->login and $self->token );
     
     $pending_url =~ s!^/!!; # Strip leading '/'
-    my $url  = $self->api_url . $pending_url;
-    
+    my $url  = ( $pending_url =~ /^https?\:/ ) ? $pending_url :
+        $self->api_url . $pending_url;
+
     my $key; # return $key from json obj
     if ( scalar @_ % 2 ) {
         $key = pop @_;

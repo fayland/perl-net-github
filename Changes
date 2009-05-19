@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.17    2009.05.19
+        use 'https' for user->update, issue->comment etc.
+
 0.16    2009.05.19
         fix the role (Chris Nehren)
 
