@@ -104,7 +104,7 @@ sub comment {
     my $owner = $self->owner;
     my $repo  = $self->repo;
     
-    my $url = $self->api_url_https . "issues/comment/$owner/$repo/$id"
+    my $url = $self->api_url_https . "issues/comment/$owner/$repo/$id";
     return $self->get_json_to_obj_authed( $url,
         comment => $text,
         'comment'
