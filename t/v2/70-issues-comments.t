@@ -33,13 +33,13 @@ is_deeply(
         {
             id      => 15860,
             author  => 'sunnavy',
-            date    => 'Sun Jun 07 01:25:22 -0700 2009',
+            date    => '2009/06/07 01:25:22 -0700',
             content => '1st comment',
         },
         {
             id      => 16373,
             author  => 'sunnavy',
-            date    => 'Mon Jun 08 18:28:42 -0700 2009',
+            date    => '2009/06/08 18:28:42 -0700',
             content => '2nd comment',
         }
     ],

@@ -129,7 +129,13 @@ sub comments {
             my ($id) = $c->attr('id') =~ /comment_(\d+)/;
             my $meta    = $c->look_down( class => 'meta' );
             my $author  = $meta->find_by_tag_name('b')->as_text;
-            my $date    = $meta->look_down( class => 'date' )->as_text;
+            my $date =
+              $meta->look_down( class => 'date' )
+              ->look_down( class => 'relatize' )->attr('title');
+            # hack $date to make it consistent with official api
+            $date =~ s!-!/!g;
+            $date .= ' -0700';
+
             my $content = $c->look_down( class => 'body' )->as_text;
             push @comments,
               {
@@ -259,7 +265,7 @@ return an arrayref containing a list of comments, each comment is a hashref like
     {
         id      => 12345,
         author  => 'foo',
-        date    => 'Mon Jun 08 18:28:42 -0700 2009',
+        date    => '2009/06/08 18:28:42 -0700',
         content => 'blalba',
     }
 
