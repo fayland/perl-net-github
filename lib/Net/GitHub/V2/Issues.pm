@@ -111,6 +111,41 @@ sub comment {
     );
 }
 
+sub comments {
+    my ( $self, $id ) = @_;
+    my $owner   = $self->owner;
+    my $repo    = $self->repo;
+    my $content = $self->get("http://github.com/$owner/$repo/issues#issue/$id");
+    require HTML::TreeBuilder;
+    my $tree = HTML::TreeBuilder->new;
+    $tree->parse_content($content);
+    $tree->elementify;
+    my $comments_region = $tree->look_down( class => "comments commentstyle" );
+    if ($comments_region) {
+        my @comments_tree =
+          $comments_region->look_down( class => 'comment wikistyle' );
+        my @comments;
+        for my $c (@comments_tree) {
+            my ($id) = $c->attr('id') =~ /comment_(\d+)/;
+            my $meta    = $c->look_down( class => 'meta' );
+            my $author  = $meta->find_by_tag_name('b')->as_text;
+            my $date    = $meta->look_down( class => 'date' )->as_text;
+            my $content = $c->look_down( class => 'body' )->as_text;
+            push @comments,
+              {
+                id      => $id,
+                author  => $author,
+                date    => $date,
+                content => $content,
+              };
+        }
+        return \@comments;
+    }
+    else {
+        return [];
+    }
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
@@ -211,6 +246,22 @@ add/remove a label (authentication required)
     my $comment = $issue->comment( $number, 'this is amazing' );
 
 comment on issues
+
+=item comments
+
+note: this is not the official api of github, it's done by scrapping ;)
+
+    my $comments = $issue->comments( $number );
+    return an arrayref containing a list of comments, each comment is
+    a hashref like
+
+{
+    id      => 12345,
+    author  => 'foo',
+    date    => 'Mon Jun 08 18:28:42 -0700 2009',
+    content => 'blalba',
+}
+    if no comments, return []
 
 =back
 
