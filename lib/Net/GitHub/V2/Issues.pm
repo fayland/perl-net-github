@@ -249,19 +249,21 @@ comment on issues
 
 =item comments
 
-note: this is not the official api of github, it's done by scrapping ;)
+note: this is not the official api of github, in fact,
+      it's done by scrapping.
 
     my $comments = $issue->comments( $number );
-    return an arrayref containing a list of comments, each comment is
-    a hashref like
 
-{
-    id      => 12345,
-    author  => 'foo',
-    date    => 'Mon Jun 08 18:28:42 -0700 2009',
-    content => 'blalba',
-}
-    if no comments, return []
+return an arrayref containing a list of comments, each comment is a hashref like
+
+    {
+        id      => 12345,
+        author  => 'foo',
+        date    => 'Mon Jun 08 18:28:42 -0700 2009',
+        content => 'blalba',
+    }
+
+if no comments, return []
 
 =back
 
