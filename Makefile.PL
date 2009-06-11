@@ -17,6 +17,7 @@ requires 'HTML::TreeBuilder';
 build_requires 'Test::More';
 test_requires 'Test::MockModule';
 test_requires 'File::Slurp';
+tests('t/*.t t/*/*.t');
 
 auto_install;
 
