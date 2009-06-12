@@ -28,6 +28,7 @@ has 'ua' => (
 			agent       => "perl-net-github $VERSION",
             cookie_jar  => {},
             stack_depth => 1,
+            keep_alive  => 4,
             timeout     => 60,
         );
         return $m;
