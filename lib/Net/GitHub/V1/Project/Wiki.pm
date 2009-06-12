@@ -1,6 +1,6 @@
 package Net::GitHub::V1::Project::Wiki;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -69,7 +69,7 @@ sub edit_or_new {
     }
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;

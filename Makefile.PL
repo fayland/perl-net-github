@@ -8,7 +8,7 @@ license  'perl';
 repository 'http://github.com/fayland/perl-net-github/tree/master';
 
 requires 'URI::Escape';
-requires 'Moose' => '0.57';
+requires 'Any::Moose';
 requires 'Crypt::SSLeay';
 requires 'WWW::Mechanize::GZip';
 requires 'JSON::Any';

@@ -1,6 +1,6 @@
 package Net::GitHub::V2::Issues;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.17';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -154,7 +154,7 @@ sub comments {
     }
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;

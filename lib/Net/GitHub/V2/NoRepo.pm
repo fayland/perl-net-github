@@ -1,6 +1,6 @@
 package Net::GitHub::V2::NoRepo;
 
-use Moose::Role;
+use Any::Moose 'Role';
 
 our $VERSION = '0.17';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -110,7 +110,7 @@ sub args_to_pass {
     return $ret;
 }
 
-no Moose::Role;
+no Any::Moose;
 
 1;
 __END__
@@ -123,7 +123,7 @@ Net::GitHub::V2::NoRepo - Base role for Net::GitHub::V2, no repo access
 
     package Net::GitHub::V2::XXX;
     
-    use Moose;
+    use Any::Moose;
     with 'Net::GitHub::V2::NoRepo';
 
 =head1 DESCRIPTION

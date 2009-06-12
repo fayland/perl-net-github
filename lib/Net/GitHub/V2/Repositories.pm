@@ -1,6 +1,6 @@
 package Net::GitHub::V2::Repositories;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.16';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -178,7 +178,7 @@ sub branches {
     return $self->get_json_to_obj( "repos/show/$owner/$repo/branches", 'branches' );
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;

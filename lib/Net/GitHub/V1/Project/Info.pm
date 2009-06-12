@@ -1,6 +1,6 @@
 package Net::GitHub::V1::Project::Info;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -83,7 +83,7 @@ has 'watcher_num' => (
     },
 );
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;

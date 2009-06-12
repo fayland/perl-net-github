@@ -1,6 +1,6 @@
 package Net::GitHub::V1;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -31,7 +31,7 @@ has '_search' => (
     handles => ['search'],
 );
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
@@ -102,7 +102,7 @@ L<http://github.com/fayland/perl-net-github/tree/master>
 
 =head1 SEE ALSO
 
-L<Moose>
+L<Any::Moose>
 
 =head1 AUTHOR
 
