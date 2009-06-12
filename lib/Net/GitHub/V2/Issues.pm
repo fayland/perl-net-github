@@ -120,6 +120,8 @@ sub comments {
     my $tree = HTML::TreeBuilder->new;
     $tree->parse_content($content);
     $tree->elementify;
+    $tree = $tree->look_down( id => "issue_$id" );
+    return unless $tree;
     my $comments_region = $tree->look_down( class => "comments commentstyle" );
     if ($comments_region) {
         my @comments_tree =
@@ -270,6 +272,7 @@ return an arrayref containing a list of comments, each comment is a hashref like
     }
 
 if no comments, return []
+if the issue doesn't exist, return undef
 
 =back
 
