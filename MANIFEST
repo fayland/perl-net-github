@@ -36,6 +36,7 @@ META.yml
 README
 t/00-load.t
 t/01-v12.t
+t/02-load-v2.t
 t/pod.t
 t/v1/02basic.t
 t/v1/03project.t
@@ -48,3 +49,6 @@ t/v1/mockdata/downloads.html
 t/v1/mockdata/search.json
 t/v1/mockdata/single_commit.json
 t/v1/mockdata/user.json
+t/v2/70-issues-comments.t
+t/v2/mockdata/70-issues-comments.html
+t/v2/mockdata/70-issues-comments_zero.html

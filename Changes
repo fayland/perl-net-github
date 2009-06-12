@@ -1,5 +1,7 @@
 Revision history for Net-GitHub
 
+        Switch to Any::Moose from Moose (Jesse Vincent)
+
 0.17    2009.05.19
         use 'https' for user->update, issue->comment etc.
 
