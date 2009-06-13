@@ -272,7 +272,6 @@ return an arrayref containing a list of comments, each comment is a hashref like
     }
 
 if no comments, return []
-if the issue doesn't exist, return undef
 
 =back
 

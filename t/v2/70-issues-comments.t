@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use FindBin qw/$Bin/;
 use Net::GitHub::V2::Issues;
 use Test::MockModule;
@@ -22,6 +22,7 @@ $mock->mock(
         my ( $self, $url ) = @_;
         return read_file($has_comments) if $url =~ /1$/;
         return read_file($no_comments)  if $url =~ /2$/;
+        return read_file($no_comments)  if $url =~ /3$/;
     }
 );
 
@@ -48,3 +49,6 @@ is_deeply(
 
 $comments = $issue->comments(2);
 is_deeply( $comments, [], '0 comments' );
+
+$comments = $issue->comments(3);
+is_deeply( $comments, [], 'non-exist issue returns [] too' );
