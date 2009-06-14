@@ -2,7 +2,7 @@ package Net::GitHub::V2::Issues;
 
 use Any::Moose;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V2::HasRepo';
@@ -278,6 +278,8 @@ if no comments, return []
 =head1 AUTHOR
 
 Fayland Lam, C<< <fayland at gmail.com> >>
+
+sunnavy  C<< <sunnavy@bestpractical.com> >>
 
 =head1 COPYRIGHT & LICENSE
 
