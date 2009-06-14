@@ -1,6 +1,6 @@
 package Net::GitHub::V2;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.08';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -80,7 +80,7 @@ has 'network' => (
     handles => ['network_meta', 'network_data_chunk']
 );
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
@@ -168,7 +168,7 @@ L<Net::GitHub::Network>
 
 =head1 SEE ALSO
 
-L<Moose>
+L<Any::Moose>
 
 =head1 AUTHOR
 

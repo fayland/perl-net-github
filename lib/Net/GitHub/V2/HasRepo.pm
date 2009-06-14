@@ -1,6 +1,6 @@
 package Net::GitHub::V2::HasRepo;
 
-use Moose::Role;
+use Any::Moose 'Role';
 
 our $VERSION = '0.13';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -19,7 +19,7 @@ sub args_to_pass {
     return $ret;
 }
 
-no Moose::Role;
+no Any::Moose;
 
 1;
 __END__
@@ -32,7 +32,7 @@ Net::GitHub::V2::HasRepo - Role for Net::GitHub::V2 for classes that use repos
 
     package Net::GitHub::V2::XXX;
     
-    use Moose;
+    use Any::Moose;
     with 'Net::GitHub::V2::HasRepo';
 
 =head1 DESCRIPTION

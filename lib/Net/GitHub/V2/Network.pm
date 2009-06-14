@@ -1,6 +1,6 @@
 package Net::GitHub::V2::Network;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.07';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -33,7 +33,7 @@ sub network_data_chunk {
     return $self->json->jsonToObj($json);
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;

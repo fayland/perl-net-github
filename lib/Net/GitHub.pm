@@ -1,8 +1,8 @@
 package Net::GitHub;
 
-use Moose;
+use Any::Moose;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -12,19 +12,16 @@ sub new {
     my $obj;
     if ( exists $params->{version} and $params->{version} == 1 ) {
         require Net::GitHub::V1;
-        $obj = Net::GitHub::V1->new($params);
+        return Net::GitHub::V1->new($params);
     } else {
         require Net::GitHub::V2;
-        $obj = Net::GitHub::V2->new($params);
+        return Net::GitHub::V2->new($params);
     }
 
-    return $class->meta->new_object(
-        __INSTANCE__ => $obj,
-        @_,
-    );
+    #return $class->meta->new_object( __INSTANCE__ => $obj, @_,);
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
 
 1;
@@ -96,7 +93,7 @@ L<http://github.com/fayland/perl-net-github/tree/master>
 
 =head1 SEE ALSO
 
-L<Moose>
+L<Any::Moose>
 
 =head1 AUTHOR
 

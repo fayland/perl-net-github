@@ -1,6 +1,6 @@
 package Net::GitHub::V1::Role;
 
-use Moose::Role;
+use Any::Moose 'Role';
 
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -28,6 +28,7 @@ has 'ua' => (
 			agent       => "perl-net-github $VERSION",
             cookie_jar  => {},
             stack_depth => 1,
+            keep_alive  => 4,
             timeout     => 60,
         );
         return $m;
@@ -91,7 +92,7 @@ sub signin {
     }
 }
 
-no Moose::Role;
+no Any::Moose;
 
 1;
 __END__
@@ -104,7 +105,7 @@ Net::GitHub::V1::Role - Common between Net::GitHub::V1::* libs
 
     package Net::GitHub::V1::XXX;
     
-    use Moose;
+    use Any::Moose;
     with 'Net::GitHub::V1::Role';
 
 =head1 DESCRIPTION

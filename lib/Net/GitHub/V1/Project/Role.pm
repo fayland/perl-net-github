@@ -1,6 +1,6 @@
 package Net::GitHub::V1::Project::Role;
 
-use Moose::Role;
+use Any::Moose 'Role';
 
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -38,7 +38,7 @@ sub args_to_pass {
     return $ret;
 }
 
-no Moose::Role;
+no Any::Moose;
 
 1;
 __END__
@@ -51,7 +51,7 @@ Net::GitHub::V1::Project::Role - Common between Net::GitHub::V1::Project::* libs
 
     package Net::GitHub::V1::Project::XXX;
     
-    use Moose;
+    use Any::Moose;
     with 'Net::GitHub::V1::Project::Role';
 
 =head1 DESCRIPTION

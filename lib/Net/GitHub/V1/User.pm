@@ -1,6 +1,6 @@
 package Net::GitHub::V1::User;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -35,7 +35,7 @@ sub BUILDARGS {
 package     # hide from PAUSE
     Net::GitHub::V1::UserObj;
 
-use Moose;
+use Any::Moose;
 
 has 'name' => ( is => 'rw' );
 has 'repositories' => (
@@ -46,7 +46,7 @@ has 'email' => ( is => 'rw' );
 has 'location' => ( is => 'rw' );
 has 'company' => ( is => 'rw' );
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;

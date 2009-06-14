@@ -1,6 +1,6 @@
 package Net::GitHub::V1::Project::Source;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -28,7 +28,7 @@ sub commit {
     return $commits->{"commit"};
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;

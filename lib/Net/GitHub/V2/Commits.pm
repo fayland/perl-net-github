@@ -1,6 +1,6 @@
 package Net::GitHub::V2::Commits;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.13';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -42,7 +42,7 @@ sub show {
     return $self->get_json_to_obj( "commits/show/$owner/$repo/$sha1", 'commit' );
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;

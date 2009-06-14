@@ -1,6 +1,6 @@
 package Net::GitHub::V1::Project::Downloads;
 
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.06';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -52,7 +52,7 @@ sub _build_downloads {
     return \@downloads;
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
 1;
