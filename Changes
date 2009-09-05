@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.19    2009.09.05
+        Bugfix: Send delete token to GitHub, not obj hash (spang)
+
 0.18    2009.06.14
         Switch to Any::Moose from Moose (Jesse Vincent)
         Issue comments (sunnavy)

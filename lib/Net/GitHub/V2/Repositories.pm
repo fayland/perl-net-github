@@ -2,7 +2,7 @@ package Net::GitHub::V2::Repositories;
 
 use Any::Moose;
 
-our $VERSION = '0.16';
+our $VERSION = '0.19';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -75,13 +75,14 @@ sub delete {
     
     my $repo  = $self->repo;
     
-    my $delete_token = $self->get_json_to_obj_authed( "repos/delete/$repo" );
+    my $delete_response
+        = $self->get_json_to_obj_authed( "repos/delete/$repo" );
     if ( $opts->{confirm} ) {
         return $self->get_json_to_obj_authed( "repos/delete/$repo",
-            delete_token => $delete_token
+            delete_token => $delete_response->{'delete_token'},
         );
     } else {
-        return $delete_token;
+        return $delete_response;
     }
 }
 
