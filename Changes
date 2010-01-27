@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.20    2010.01.27
+        add languages support to repositories api (franckcuny)
+
 0.19    2009.09.05
         Bugfix: Send delete token to GitHub, not obj hash (spang)
 
