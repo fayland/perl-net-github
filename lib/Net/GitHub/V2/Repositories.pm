@@ -2,7 +2,7 @@ package Net::GitHub::V2::Repositories;
 
 use Any::Moose;
 
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -11,56 +11,56 @@ with 'Net::GitHub::V2::HasRepo';
 
 sub search {
     my ( $self, $word ) = @_;
-    
+
     return $self->get_json_to_obj( 'repos/search/' . uri_escape($word), 'repositories' );
 }
 
 sub show {
     my ( $self, $owner, $repo ) = @_;
-    
+
     $owner ||= $self->owner;
     $repo  ||= $self->repo;
-    
+
     return $self->get_json_to_obj( "repos/show/$owner/$repo", 'repository' );
 }
 
 sub list {
     my ( $self, $owner ) = @_;
-    
+
     $owner ||= $self->owner;
-    
+
     return $self->get_json_to_obj( "repos/show/$owner", 'repositories' );
 }
 
 sub watch {
     my ( $self ) = @_;
-    
+
     my $owner = $self->owner;
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/watch/$owner/$repo", 'repository' );
 }
 sub unwatch {
     my ( $self ) = @_;
-    
+
     my $owner = $self->owner;
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/unwatch/$owner/$repo", 'repository' );
 }
 
 sub fork {
     my ( $self ) = @_;
-    
+
     my $owner = $self->owner;
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/fork/$owner/$repo", 'repository' );
 }
 
 sub create {
     my ( $self, $name, $desc, $homepage, $is_public ) = @_;
-    
+
     return $self->get_json_to_obj_authed( 'repos/create',
         name => $name,
         description => $desc,
@@ -72,9 +72,9 @@ sub create {
 
 sub delete {
     my ( $self, $opts ) = @_;
-    
+
     my $repo  = $self->repo;
-    
+
     my $delete_response
         = $self->get_json_to_obj_authed( "repos/delete/$repo" );
     if ( $opts->{confirm} ) {
@@ -88,31 +88,31 @@ sub delete {
 
 sub set_private {
     my ( $self ) = @_;
-    
+
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/set/private/$repo", 'repository' );
 }
 sub set_public {
     my ( $self ) = @_;
-    
+
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/set/public/$repo", 'repository' );
 }
 
 sub deploy_keys {
     my ( $self ) = @_;
-    
+
     my $repo = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/keys/$repo", 'public_keys' );
 }
 sub add_deploy_key {
     my ( $self, $title, $key ) = @_;
-    
+
     my $repo = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/key/$repo/add",
         title => $title,
         key   => $key,
@@ -121,9 +121,9 @@ sub add_deploy_key {
 }
 sub remove_deploy_key {
     my ( $self, $id ) = @_;
-    
+
     my $repo = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/key/$repo/remove",
         id => $id,
         'public_keys'
@@ -132,50 +132,59 @@ sub remove_deploy_key {
 
 sub collaborators {
     my ( $self ) = @_;
-    
+
     my $owner = $self->owner;
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/show/$owner/$repo/collaborators", 'collaborators' );
 }
 sub add_collaborator {
     my ( $self, $user ) = @_;
-    
+
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/collaborators/$repo/add/$user", 'collaborators' );
 }
 sub remove_collaborator {
     my ( $self, $user ) = @_;
-    
+
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj_authed( "repos/collaborators/$repo/remove/$user", 'collaborators' );
 }
 
 sub network {
     my ( $self ) = @_;
-    
+
     my $owner = $self->owner;
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj( "repos/show/$owner/$repo/network", 'network' );
+}
+
+sub languages {
+    my ($self) = @_;
+    my $owner  = $self->owner;
+    my $repo   = $self->repo;
+
+    return $self->get_json_to_obj_authed( "repos/show/$owner/$repo/languages",
+        "languages" );
 }
 
 sub tags {
     my ( $self ) = @_;
-    
+
     my $owner = $self->owner;
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj( "repos/show/$owner/$repo/tags", 'tags' );
 }
 sub branches {
     my ( $self ) = @_;
-    
+
     my $owner = $self->owner;
     my $repo  = $self->repo;
-    
+
     return $self->get_json_to_obj( "repos/show/$owner/$repo/branches", 'branches' );
 }
 
@@ -222,14 +231,14 @@ Search Repositories
 
     my $repos_in_detail = $repos->show(); # show the owner+repo in ->new
     my $repos_in_detail = $repos->show('fayland', 'foorum'); # another
-    
+
 To look at more in-depth information for a repository
 
 =item list
 
     my $repositories = $repos->list(); # show the owner in ->new
     my $repositories = $repos->list('nothingmuch');
-    
+
 list out all the repositories for a user
 
 =item watch
@@ -296,6 +305,12 @@ list, add and remove the collaborators on your project (authentication required)
 =item network
 
     my $network = $repos->network();
+
+=item languages
+
+List the languages used in a particular repository. Values are in bytes calculated.
+
+    my $languages = $repos->languages();
 
 =item tags
 
