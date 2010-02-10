@@ -164,7 +164,7 @@ L<Net::GitHub::V2::Object>
     $github->network_meta; # alias ->network->network_meta
     $github->network_data_chunk( $net_hash ); # alias network->network_data_chunk
 
-L<Net::GitHub::Network>
+L<Net::GitHub::V2::Network>
 
 =head1 SEE ALSO
 
