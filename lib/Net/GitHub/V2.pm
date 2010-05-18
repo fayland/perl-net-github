@@ -95,7 +95,7 @@ Net::GitHub::V2 - Perl Interface for github.com (V2)
 Prefer:
 
     use Net::GitHub;
-    
+
     my $github = Net::GitHub->new(
         version => 2, # optional, default as 2
         owner => 'fayland', repo => 'perl-net-github'
@@ -112,7 +112,7 @@ Or:
 
 L<http://develop.github.com/>
 
-For those B<(authentication required)>, you must set login and token (in L<https://github.com/account>)
+For those B<(authentication required)>, you must set login and token (in L<https://github.com/account>). If no login and token are provided, your B<.gitconfig> will be loaded: if the github.user and github.token keys are defined, they will be used.
 
     my $github = Net::GitHub::V2->new(
         owner => 'fayland', repo => 'perl-net-github',
