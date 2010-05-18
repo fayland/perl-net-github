@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.20';
+our $VERSION = '0.21';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -38,12 +38,12 @@ Net::GitHub - Perl Interface for github.com
     my $github = Net::GitHub->new(  # Net::GitHub::V2, default
         owner => 'fayland', repo => 'perl-net-github'
     );
-    
+
     # DEPERCATED, for backwards
     my $github = Net::GitHub->new(  # Net::GitHub::V1
         version => 1,
         owner => 'fayland', name => 'perl-net-github'
-    ); 
+    );
 
 =head1 DESCRIPTION
 
@@ -59,30 +59,30 @@ Read L<Net::GitHub::V2> for more details.
         owner => 'fayland', repo  => 'perl-net-github',
         login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
     );
-    
+
     # L<Net::GitHub::V2::Repositories>
     $github->repos->create( 'sandbox3', 'Sandbox desc', 'http://fayland.org/', 1 );
     $github->repos->show();
-    
+
     # L<Net::GitHub::V2::Users>
     my $followers = $github->user->followers();
     $github->user->update( name => 'Fayland Lam' );
-    
+
     # L<Net::GitHub::V2::Commits>
     my $commits = $github->commit->branch();
     my $commits = $github->commit->file( 'master', 'lib/Net/GitHub.pm' );
     my $co_detail = $github->commit->show( $sha1 );
-    
+
     # L<Net::GitHub::V2::Issues>
     my $issues = $github->issue->list('open');
     my $issue  = $github->issue->open( 'Bug title', 'Bug detail' );
     $github->issue->close( $number );
-    
+
     # L<Net::GitHub::V2::Object>
     my $tree = $github->obj_tree( $tree_sha1 );
     my $blob = $github->obj_blob( $tree_sha1, 'lib/Net/GitHub.pm' );
     my $raw  = $github->obj_raw( $sha1 );
-    
+
     # L<Net::GitHub::V2::Network>
     $github->network_meta;
     $github->network_data_chunk( $net_hash );
