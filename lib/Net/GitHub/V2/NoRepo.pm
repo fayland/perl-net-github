@@ -147,6 +147,8 @@ Net::GitHub::V2::NoRepo - Base role for Net::GitHub::V2, no repo access
 
 =head1 DESCRIPTION
 
+If login and token are not given to new, the module will look in the B<.gitconfig> file if they are defined (see L<http://github.com/blog/180-local-github-config>).
+
 =head1 ATTRIBUTES
 
 =over 4
