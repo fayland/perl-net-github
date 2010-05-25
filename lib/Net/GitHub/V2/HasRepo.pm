@@ -14,7 +14,7 @@ sub args_to_pass {
     my $self = shift;
     my $ret;
     foreach my $col ('owner', 'repo', 'login', 'token') {
-        $ret->{$col} = $self->$col;
+        $ret->{$col} = $self->$col if defined $self->$col;
     }
     return $ret;
 }
