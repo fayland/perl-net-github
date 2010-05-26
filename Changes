@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.22    2010.05.26
+        token and login are really optional (franck cuny)
+
 0.21    2010.05.18
         try to load user and token from .gitconfig if not specified in
         new (franck cuny)
