@@ -15,10 +15,10 @@ my $c1 = read_file($filec1);
 
 my $mock = Test::MockModule->new('Net::GitHub::V1::Project::Downloads');
 $mock->mock( 'get', sub {
-	( undef, my $url ) = @_;
-	if ( $url eq 'http://github.com/fayland/perl-net-github/downloads' ) {
-		return $c1;
-	}
+    ( undef, my $url ) = @_;
+    if ( $url eq 'http://github.com/fayland/perl-net-github/downloads' ) {
+        return $c1;
+    }
 } );
 
 my $dl = Net::GitHub::V1::Project::Downloads->new( owner => 'fayland', name => 'perl-net-github' );
