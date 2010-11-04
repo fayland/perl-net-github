@@ -2,10 +2,10 @@ package Net::GitHub::V2::HasRepo;
 
 use Any::Moose 'Role';
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-with 'Net::GitHub::V2::NoRepo' => { excludes => [ 'args_to_pass' ] };;
+with 'Net::GitHub::V2::NoRepo' => { -excludes => [ 'args_to_pass' ] };;
 
 # repo stuff
 has 'repo'  => ( isa => 'Str', is => 'ro', required => 1 );
@@ -14,7 +14,7 @@ sub args_to_pass {
     my $self = shift;
     my $ret;
     foreach my $col ('owner', 'repo', 'login', 'token') {
-        $ret->{$col} = $self->$col;
+        $ret->{$col} = $self->$col if defined $self->$col;
     }
     return $ret;
 }

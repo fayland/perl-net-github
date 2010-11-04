@@ -15,10 +15,10 @@ my $c1 = read_file($filec1);
 
 my $mock = Test::MockModule->new('Net::GitHub::V1::User');
 $mock->mock( 'get', sub {
-	( undef, my $url ) = @_;
-	if ( $url eq 'http://github.com/api/v1/json/fayland' ) {
-		return $c1;
-	}
+    ( undef, my $url ) = @_;
+    if ( $url eq 'http://github.com/api/v1/json/fayland' ) {
+        return $c1;
+    }
 } );
 
 my $user = Net::GitHub::V1::User->new( 'fayland' );

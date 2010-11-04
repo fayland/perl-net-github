@@ -17,12 +17,12 @@ my $c2 = read_file($filec2);
 
 my $mock = Test::MockModule->new('Net::GitHub::V1::Project::Source');
 $mock->mock( 'get', sub {
-	( undef, my $url ) = @_;
-	if ( $url eq 'http://github.com/api/v1/json/fayland/perl-net-github/commits/master' ) {
-		return $c1;
-	} elsif ( $url eq 'http://github.com/api/v1/json/fayland/perl-net-github/commit/725d3f6e8094e533f768710ce96504f7e2b67420' ) {
-	    return $c2;
-	}
+    ( undef, my $url ) = @_;
+    if ( $url eq 'http://github.com/api/v1/json/fayland/perl-net-github/commits/master' ) {
+        return $c1;
+    } elsif ( $url eq 'http://github.com/api/v1/json/fayland/perl-net-github/commit/725d3f6e8094e533f768710ce96504f7e2b67420' ) {
+        return $c2;
+    }
 } );
 
 

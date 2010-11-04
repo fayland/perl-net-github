@@ -1,7 +1,17 @@
 Revision history for Net-GitHub
 
+0.23    2010.11.04
+        Moose has deprected 'excludes', '-excludes' is preferred (datamuc)
+
+0.22    2010.05.26
+        token and login are really optional (franck cuny)
+
+0.21    2010.05.18
+        try to load user and token from .gitconfig if not specified in
+        new (franck cuny)
+
 0.20    2010.01.27
-        add languages support to repositories api (franckcuny)
+        add languages support to repositories api (franck cuny)
 
 0.19    2009.09.05
         Bugfix: Send delete token to GitHub, not obj hash (spang)
