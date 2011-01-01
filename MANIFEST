@@ -1,4 +1,5 @@
 Changes
+examples/organizations.pl
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
@@ -28,6 +29,7 @@ lib/Net/GitHub/V2/Issues.pm
 lib/Net/GitHub/V2/Network.pm
 lib/Net/GitHub/V2/NoRepo.pm
 lib/Net/GitHub/V2/Object.pm
+lib/Net/GitHub/V2/Organizations.pm
 lib/Net/GitHub/V2/Repositories.pm
 lib/Net/GitHub/V2/Users.pm
 Makefile.PL
