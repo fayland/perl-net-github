@@ -2,11 +2,13 @@ package Net::GitHub::V2::NoRepo;
 
 use Any::Moose 'Role';
 
-our $VERSION = '0.17';
+our $VERSION = '0.24';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use JSON::Any;
 use WWW::Mechanize::GZip;
+use MIME::Base64;
+use HTTP::Request::Common;
 use Carp qw/croak/;
 
 # repo stuff
@@ -88,8 +90,25 @@ before get_json_to_obj_authed => sub {
 };
 
 sub get_json_to_obj_authed {
+    push @_, 'POST';
+    _get_json_to_obj_authed(@_);
+}
+
+sub get_json_to_obj_authed_PUT {
+    push @_, 'PUT';
+    _get_json_to_obj_authed(@_);
+}
+
+sub get_json_to_obj_authed_DELETE {
+    push @_, 'DELETE';
+    _get_json_to_obj_authed(@_);
+}
+
+sub _get_json_to_obj_authed {
     my $self = shift;
     my $pending_url = shift;
+    
+    my $request_method = pop @_; # can be DELETE or PUT
 
     croak 'login and token are required' unless ( $self->has_login and $self->has_token );
 
@@ -102,16 +121,16 @@ sub get_json_to_obj_authed {
         $key = pop @_;
     }
 
-    require HTTP::Request::Common;
-    my $res = $self->ua->request(
-        HTTP::Request::Common::POST( $url, [
-            'login' => $self->login,
-            'token' => $self->token,
-            @_,
-        ] ),
-    );
+    my $req = $request_method eq 'DELETE' ? HTTP::Request::Common::DELETE( $url, [ @_ ] ) :
+              $request_method eq 'PUT'    ? HTTP::Request::Common::PUT( $url, [ @_ ] ) :
+                                            HTTP::Request::Common::POST( $url, [ @_ ] );
+    
+    # "schacon/token:6ef8395fecf207165f1a82178ae1b984"
+    my $auth_basic = $self->login . '/token:' . $self->token;
+    $req->header('Authorization', 'Basic ' . encode_base64($auth_basic));
+    
+    my $res = $self->ua->request($req);
     return { error => '404 Not Found' } if $res->code == 404;
-    return { error => $res->as_string() } unless ( $res->is_success );
 
     my $json = $res->content();
     my $data = $self->json->jsonToObj($json);

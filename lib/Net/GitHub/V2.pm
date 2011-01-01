@@ -11,6 +11,7 @@ use Net::GitHub::V2::Commits;
 use Net::GitHub::V2::Issues;
 use Net::GitHub::V2::Object;
 use Net::GitHub::V2::Network;
+use Net::GitHub::V2::Organizations;
 
 with 'Net::GitHub::V2::HasRepo';
 
@@ -78,6 +79,16 @@ has 'network' => (
         return Net::GitHub::V2::Network->new( $self->args_to_pass );
     },
     handles => ['network_meta', 'network_data_chunk']
+);
+
+has 'organization' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V2::Organizations',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V2::Organizations->new( $self->args_to_pass );
+    },
 );
 
 no Any::Moose;
@@ -165,6 +176,13 @@ L<Net::GitHub::V2::Object>
     $github->network_data_chunk( $net_hash ); # alias network->network_data_chunk
 
 L<Net::GitHub::V2::Network>
+
+=head2 organization
+
+    my $organization = $github->organization->organizations('github');
+    my $teams = $github->organization->teams('PerlChina');
+
+L<Net::GitHub::V2::Organizations>    
 
 =head1 SEE ALSO
 

@@ -1,5 +1,9 @@
 Revision history for Net-GitHub
 
+0.24    2011.01.01
+        Organizations API (fayland)
+        update Auth to 'Basic Auth' (fayland)
+
 0.23    2010.11.04
         Moose has deprected 'excludes', '-excludes' is preferred (datamuc)
 

@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -86,6 +86,10 @@ Read L<Net::GitHub::V2> for more details.
     # L<Net::GitHub::V2::Network>
     $github->network_meta;
     $github->network_data_chunk( $net_hash );
+    
+    # L<Net::GitHub::V2::Organizations>
+    $github->organization->organizations('github');
+    $github->organization->teams('PerlChina');
 
 =head1 Git URL
 

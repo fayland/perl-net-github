@@ -7,6 +7,7 @@ license  'perl';
 
 repository 'http://github.com/fayland/perl-net-github/tree/master';
 
+requires 'MIME::Base64';
 requires 'URI::Escape';
 requires 'Any::Moose';
 requires 'Crypt::SSLeay';
