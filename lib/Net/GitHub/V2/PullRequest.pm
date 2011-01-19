@@ -2,8 +2,8 @@ package Net::GitHub::V2::PullRequest;
 
 use Any::Moose;
 
-our $VERSION = '0.20';
-our $AUTHORITY = 'cpan:FAYLAND';
+our $VERSION = '0.25';
+our $AUTHORITY = 'cpan:DOY';
 
 with 'Net::GitHub::V2::HasRepo';
 
@@ -82,7 +82,7 @@ Jesse Luehrs C<doy at tozt dot net>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009 Fayland Lam, all rights reserved.
+Copyright 2011 Fayland Lam, Jesse Luehrs all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
