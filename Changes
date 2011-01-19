@@ -1,5 +1,7 @@
 Revision history for Net-GitHub
 
+        partial implementation of Pull Request API (doy)
+
 0.24    2011.01.01
         Organizations API (fayland)
         update Auth to 'Basic Auth' (fayland)

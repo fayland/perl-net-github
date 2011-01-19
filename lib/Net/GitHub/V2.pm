@@ -12,6 +12,7 @@ use Net::GitHub::V2::Issues;
 use Net::GitHub::V2::Object;
 use Net::GitHub::V2::Network;
 use Net::GitHub::V2::Organizations;
+use Net::GitHub::V2::PullRequest;
 
 with 'Net::GitHub::V2::HasRepo';
 
@@ -88,6 +89,16 @@ has 'organization' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V2::Organizations->new( $self->args_to_pass );
+    },
+);
+
+has 'pull_request' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V2::PullRequest',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V2::PullRequest->new( $self->args_to_pass );
     },
 );
 
@@ -183,6 +194,12 @@ L<Net::GitHub::V2::Network>
     my $teams = $github->organization->teams('PerlChina');
 
 L<Net::GitHub::V2::Organizations>    
+
+=head2 pull_request
+
+    my $pull = $github->pull_request->pull_request();
+
+L<Net::GitHub::V2::PullRequest>
 
 =head1 SEE ALSO
 
