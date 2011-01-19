@@ -4,13 +4,9 @@ inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
 inc/Module/Install/Base.pm
-inc/Module/Install/Can.pm
-inc/Module/Install/Fetch.pm
 inc/Module/Install/Include.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
-inc/Module/Install/Win32.pm
-inc/Module/Install/WriteAll.pm
 lib/Net/GitHub.pm
 lib/Net/GitHub/V1.pm
 lib/Net/GitHub/V1/Project.pm
@@ -30,6 +26,7 @@ lib/Net/GitHub/V2/Network.pm
 lib/Net/GitHub/V2/NoRepo.pm
 lib/Net/GitHub/V2/Object.pm
 lib/Net/GitHub/V2/Organizations.pm
+lib/Net/GitHub/V2/PullRequest.pm
 lib/Net/GitHub/V2/Repositories.pm
 lib/Net/GitHub/V2/Users.pm
 Makefile.PL
