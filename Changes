@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.26    2011.01.20
+        fix Makefile.PL
+
 0.25    2011.01.19
         partial implementation of Pull Request API (doy)
 
