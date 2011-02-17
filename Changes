@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.27    2011.02.17
+        requires HTTP::Request::Common; (RT 65787 by JQUELIN)
+
 0.26    2011.01.20
         fix Makefile.PL
 

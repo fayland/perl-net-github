@@ -14,6 +14,7 @@ requires 'Crypt::SSLeay';
 requires 'WWW::Mechanize::GZip';
 requires 'JSON::Any';
 requires 'HTML::TreeBuilder';
+requires 'HTTP::Request::Common';
 
 build_requires 'Test::More';
 test_requires 'Test::MockModule';
