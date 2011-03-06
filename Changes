@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.28    2011.03.06
+        use official GitHub API request instead of screen-scraping for 'comments' issues by spang (Christine Spang)
+
 0.27    2011.02.17
         requires HTTP::Request::Common; (RT 65787 by JQUELIN)
 

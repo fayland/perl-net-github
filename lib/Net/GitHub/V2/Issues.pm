@@ -2,7 +2,7 @@ package Net::GitHub::V2::Issues;
 
 use Any::Moose;
 
-our $VERSION = '0.18';
+our $VERSION = '0.28';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V2::HasRepo';
