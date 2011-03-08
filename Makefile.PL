@@ -13,6 +13,7 @@ requires 'Any::Moose';
 requires 'Crypt::SSLeay';
 requires 'WWW::Mechanize::GZip';
 requires 'JSON::Any';
+requires 'JSON::XS'; # avoid "Couldn't find a JSON package. Need XS, JSON, or DWIW"
 requires 'HTML::TreeBuilder';
 requires 'HTTP::Request::Common';
 
