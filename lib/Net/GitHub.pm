@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.28';
+our $VERSION = '0.29';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -105,7 +105,7 @@ Fayland Lam, C<< <fayland at gmail.com> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009 Fayland Lam, all rights reserved.
+Copyright 2009-2011 Fayland Lam, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

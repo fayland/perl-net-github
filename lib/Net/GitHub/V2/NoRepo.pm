@@ -8,7 +8,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 use JSON::Any;
 use WWW::Mechanize::GZip;
 use MIME::Base64;
-use HTTP::Request::Common;
+use HTTP::Request::Common ();
 use Carp qw/croak/;
 
 # repo stuff
@@ -17,6 +17,9 @@ has 'owner' => ( isa => 'Str', is => 'ro', required => 1 );
 # login
 has 'login' => (is => 'rw', isa => 'Str', predicate => 'has_login',);
 has 'token' => (is => 'rw', isa => 'Str', predicate => 'has_token',);
+
+# always send Authorization header, useful for private respo
+has 'always_Authorization' => ( is => 'rw', isa => 'Bool', default => 0 );
 
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v2/json/');
@@ -58,6 +61,11 @@ has 'json' => (
 
 sub get_json_to_obj {
     my ( $self, $pending_url, $key ) = @_;
+    
+    if ( $self->always_Authorization ) {
+        push @_, 'GET';
+        return _get_json_to_obj_authed(@_);
+    }
 
     $pending_url =~ s!^/!!; # Strip leading '/'
     my $url  = $self->api_url . $pending_url;
@@ -142,7 +150,7 @@ sub _get_json_to_obj_authed {
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('owner', 'login', 'token') {
+    foreach my $col ('owner', 'login', 'token', 'always_Authorization') {
         $ret->{$col} = $self->$col;
     }
     return $ret;
@@ -175,6 +183,10 @@ If login and token are not given to new, the module will look in the B<.gitconfi
 =item login
 
 =item token
+
+=item always_Authorization
+
+always send 'Authorization' header, useful to get private respo etc.
 
 =back
 

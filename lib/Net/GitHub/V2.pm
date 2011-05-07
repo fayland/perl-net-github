@@ -141,6 +141,14 @@ For those B<(authentication required)>, you must set login and token (in L<https
         login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
     );
 
+If you want to work with private repo, you can set B<always_Authorization>:
+
+    my $github = Net::GitHub::V2->new(
+        owner => 'fayland', repo => 'perl-net-github',
+        login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
+        always_Authorization => 1,
+    );
+
 =head1 METHODS
 
 =head2 repos
@@ -211,7 +219,7 @@ Fayland Lam, C<< <fayland at gmail.com> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009 Fayland Lam, all rights reserved.
+Copyright 2009-2011 Fayland Lam, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.29    2011.05.07
+        always_Authorization for private respo
+
 0.28    2011.03.06
         use official GitHub API request instead of screen-scraping for 'comments' issues by spang (Christine Spang)
 
