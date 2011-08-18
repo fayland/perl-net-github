@@ -21,6 +21,9 @@ has 'token' => (is => 'rw', isa => 'Str', predicate => 'has_token',);
 # always send Authorization header, useful for private respo
 has 'always_Authorization' => ( is => 'rw', isa => 'Bool', default => 0 );
 
+# simplifies error handling
+has 'throw_errors' => ( is => 'rw', isa => 'Bool', default => 0 );
+
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v2/json/');
 has 'api_url_https' => ( is => 'ro', default => 'https://github.com/api/v2/json/');
@@ -151,7 +154,7 @@ sub _get_json_to_obj_authed {
     $req->header('Authorization', 'Basic ' . encode_base64($auth_basic));
     
     my $res = $self->ua->request($req);
-    return { error => '404 Not Found' } if $res->code == 404;
+
     # Slow down if we're approaching the rate limit
     # By the way GitHub mistakes days for minutes in their documentation --
     # the rate limit is per minute, not per day.
@@ -161,7 +164,18 @@ sub _get_json_to_obj_authed {
     }
 
     my $json = $res->content();
-    my $data = $self->json->jsonToObj($json);
+    my $data = eval { $self->json->jsonToObj($json) };
+    unless ($data) {
+        # We tolerate bad JSON for errors,
+        # otherwise we just rethrow the JSON parsing problem.
+        die unless $res->is_error;
+        $data = { error => $res->message };
+    }
+
+    if ( $self->throw_errors ) {
+        croak (ref $data->{error} eq 'ARRAY' ? $data->{error}[0] : $data->{error})
+           if exists $data->{error};
+    }
 
     return $data->{$key} if ( $key and exists $data->{$key} );
     return $data;
