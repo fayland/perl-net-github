@@ -98,6 +98,16 @@ before get_json_to_obj_authed => sub {
 };
 
 sub get_json_to_obj_authed {
+    push @_, undef;
+    _get_json_to_obj_authed(@_);
+}
+
+sub get_json_to_obj_authed_GET {
+    push @_, 'GET';
+    _get_json_to_obj_authed(@_);
+}
+
+sub get_json_to_obj_authed_POST {
     push @_, 'POST';
     _get_json_to_obj_authed(@_);
 }
@@ -116,7 +126,7 @@ sub _get_json_to_obj_authed {
     my $self = shift;
     my $pending_url = shift;
     
-    my $request_method = pop @_; # can be DELETE or PUT
+    my $request_method = pop @_; # defaults to GET or POST if undefined
 
     croak 'login and token are required' unless ( $self->has_login and $self->has_token );
 
@@ -129,10 +139,12 @@ sub _get_json_to_obj_authed {
         $key = pop @_;
     }
 
+    $request_method ||= @_ ? 'POST' : 'GET';
     my $req = $request_method eq 'DELETE' ? HTTP::Request::Common::DELETE( $url, [ @_ ] ) :
               $request_method eq 'PUT'    ? HTTP::Request::Common::PUT( $url, [ @_ ] ) :
-                                            HTTP::Request::Common::POST( $url, [ @_ ] );
-    
+              $request_method eq 'POST'   ? HTTP::Request::Common::POST( $url, [ @_ ] ) :
+                                            HTTP::Request::Common::GET( $url );
+
     # "schacon/token:6ef8395fecf207165f1a82178ae1b984"
     my $auth_basic = $self->login . '/token:' . $self->token;
     $req->header('Authorization', 'Basic ' . encode_base64($auth_basic));
