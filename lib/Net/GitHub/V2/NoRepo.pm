@@ -24,6 +24,7 @@ has 'always_Authorization' => ( is => 'rw', isa => 'Bool', default => 0 );
 # api
 has 'api_url' => ( is => 'ro', default => 'http://github.com/api/v2/json/');
 has 'api_url_https' => ( is => 'ro', default => 'https://github.com/api/v2/json/');
+has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
 
 has 'ua' => (
     isa     => 'WWW::Mechanize',
@@ -151,6 +152,13 @@ sub _get_json_to_obj_authed {
     
     my $res = $self->ua->request($req);
     return { error => '404 Not Found' } if $res->code == 404;
+    # Slow down if we're approaching the rate limit
+    # By the way GitHub mistakes days for minutes in their documentation --
+    # the rate limit is per minute, not per day.
+    if ( $self->api_throttle ) {
+        sleep 2 if (($res->header('x-ratelimit-remaining') || 0)
+            < ($res->header('x-ratelimit-limit') || 60) / 2);
+    }
 
     my $json = $res->content();
     my $data = $self->json->jsonToObj($json);
