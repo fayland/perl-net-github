@@ -86,6 +86,19 @@ sub delete {
     }
 }
 
+sub update {
+    my ( $self, %up ) = @_;
+
+    my $repo = $self->repo;
+
+    my @values;
+    foreach my $key ( keys %up ) {
+        push @values, ( "values[$key]", $up{$key} );
+    }
+
+    return $self->get_json_to_obj_authed( "repos/show/$repo", @values, 'repository' );
+}
+
 sub set_private {
     my ( $self ) = @_;
 
@@ -268,6 +281,16 @@ create a new repository (authentication required). $name are required. like 'per
     $repos->delete( { confirm => 1 } ); # delete the repository
 
 delete a repository (authentication required)
+
+=item update
+
+    $organization->update(
+        description => 'Linux kernel rewritten in Visual Basic',
+        has_wiki => 0,
+        has_issues => 1,
+        has_downloads => 0);
+
+change repository metadata.
 
 =item set_private
 
