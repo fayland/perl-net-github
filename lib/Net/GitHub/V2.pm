@@ -141,12 +141,22 @@ For those B<(authentication required)>, you must set login and token (in L<https
         login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
     );
 
-If you want to work with private repo, you can set B<always_Authorization>:
+If you want to work with private repo, you can set B<always_Authorization>.
+
+To disable call rate limiting (e.g. if your account is whitelisted), set
+B<api_throttle> to 0.
+
+By default, error responses are propagated to the user as they are received
+from the API. By switching B<throw_errors> on you can make the be turned into
+exceptions instead, so that you don't have to check for error response after
+every call.
 
     my $github = Net::GitHub::V2->new(
         owner => 'fayland', repo => 'perl-net-github',
         login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
         always_Authorization => 1,
+        api_throttle => 0,
+        throw_errors => 0,
     );
 
 =head1 METHODS
