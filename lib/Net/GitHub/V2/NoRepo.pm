@@ -253,9 +253,11 @@ Fayland Lam, C<< <fayland at gmail.com> >>
 Chris Nehren C<< apeiron@cpan.org >> refactored Net::GitHub::V2::Role to be
 smarter about requiring a repo.
 
+Lubomir Rintel C<< lkundrak@v3.sk >> for improvements
+
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009 Fayland Lam, all rights reserved.
+Copyright 2009 - 2011 Fayland Lam, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

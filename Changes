@@ -1,5 +1,11 @@
 Revision history for Net-GitHub
 
+0.30    2011.08.27
+        - Default to GET method if we've no data to POST (Lubomir Rintel)
+        - repository update (Lubomir Rintel)
+        - Slow down with requests if we're approaching the rate limit (Lubomir Rintel)
+        - Make it possible to turn API errors into exceptions (Lubomir Rintel)
+
 0.29    2011.05.07
         always_Authorization for private respo
 
