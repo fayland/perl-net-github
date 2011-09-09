@@ -56,7 +56,7 @@ Net::GitHub::V2::Commits - GitHub Commits API
 
     use Net::GitHub::V2::Commits;
 
-    my $commit = Net::GitHub::V2::Commits->new(
+    my $github_commits = Net::GitHub::V2::Commits->new(
         owner => 'fayland',            # GitHub username/organisation
         repo  => 'perl-net-github',    # Repository name
     );
@@ -71,21 +71,21 @@ L<http://develop.github.com/p/commits.html>
 
 =item branch
 
-    my $commits = $commit->branch(); # default as 'master'
-    my $commits = $commit->branch('v2');
+    my $commits = $github_commits->branch(); # default as 'master'
+    my $commits = $github_commits->branch('v2');
 
 list commits for a branch
 
 =item file($branch, $file)
 
-    my $commits = $commit->file( 'master', 'lib/Net/GitHub.pm' );
-    my $commits = $commit->file( 'lib/Net/GitHub.pm' ); # the same as above
+    my $commits = $github_commits->file( 'master', 'lib/Net/GitHub.pm' );
+    my $commits = $github_commits->file( 'lib/Net/GitHub.pm' ); # the same as above
 
 get all the commits that modified the file (default $branch to 'master')
 
 =item show
 
-    my $co_detail = $commit->show( '9bd63ae2114e3c7e4279b81ab2d8d8947ab4011d' );
+    my $commit = $github_commits->show( '9bd63ae2114e3c7e4279b81ab2d8d8947ab4011d' );
 
 get the changes introduced on a specific commit
 
