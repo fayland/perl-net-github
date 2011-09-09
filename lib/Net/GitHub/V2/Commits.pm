@@ -56,7 +56,10 @@ Net::GitHub::V2::Commits - GitHub Commits API
 
     use Net::GitHub::V2::Commits;
 
-    my $commit = Net::GitHub::V2::Commits->new();
+    my $commit = Net::GitHub::V2::Commits->new(
+        owner => 'projectowner',   # GitHub username/organisation
+        repo  => 'repo-name',      # Repository name
+    );
 
 =head1 DESCRIPTION
 
