@@ -65,6 +65,11 @@ Net::GitHub::V2::Commits - GitHub Commits API
 
 L<http://develop.github.com/p/commits.html>
 
+See also L<Net::GitHub> for how to create a L<Net::GitHub> object with the
+appropriate attributes, then get a C<Net::GitHub::V2::Commits> object from it
+easily.
+
+
 =head1 METHODS
 
 =over 4
