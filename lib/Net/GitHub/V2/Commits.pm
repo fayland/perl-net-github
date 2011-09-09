@@ -57,8 +57,8 @@ Net::GitHub::V2::Commits - GitHub Commits API
     use Net::GitHub::V2::Commits;
 
     my $commit = Net::GitHub::V2::Commits->new(
-        owner => 'projectowner',   # GitHub username/organisation
-        repo  => 'repo-name',      # Repository name
+        owner => 'fayland',            # GitHub username/organisation
+        repo  => 'perl-net-github',    # Repository name
     );
 
 =head1 DESCRIPTION
@@ -85,9 +85,11 @@ get all the commits that modified the file (default $branch to 'master')
 
 =item show
 
-    my $co_detail = $commit->show( '0e2e9d452f807f4b7138ae707e84577c10891d0c' );
+    my $co_detail = $commit->show( '9bd63ae2114e3c7e4279b81ab2d8d8947ab4011d' );
 
 get the changes introduced on a specific commit
+
+(As usual, the SHA can be abbreviated)
 
 =back
 
