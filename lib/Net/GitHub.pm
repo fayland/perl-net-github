@@ -49,6 +49,11 @@ Net::GitHub - Perl Interface for github.com
 
 L<http://github.com> is a popular git host.
 
+This distribution provides easy methods to access GitHub via their APIs.
+
+See L<http://develop.github.com/p/general.html> for details of the GitHub APIs
+this distribution uses.
+
 Please feel free to fork L<http://github.com/fayland/perl-net-github/tree/master>, fix or contribute some code. :)
 
 Read L<Net::GitHub::V2> for more details.
