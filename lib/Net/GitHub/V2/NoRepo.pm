@@ -12,11 +12,13 @@ use HTTP::Request::Common ();
 use Carp qw/croak/;
 
 # repo stuff
-has 'owner' => ( isa => 'Str', is => 'ro', required => 1 );
+# has 'owner' => ( isa => 'Str', is => 'ro', required => 1 );
+has 'owner' => ( isa => 'Str', is => 'ro' );
 
 # login
 has 'login' => (is => 'rw', isa => 'Str', predicate => 'has_login',);
 has 'token' => (is => 'rw', isa => 'Str', predicate => 'has_token',);
+has 'access_token' => ( is => 'rw' , predicate => 'has_access_token' );
 
 # always send Authorization header, useful for private respo
 has 'always_Authorization' => ( is => 'rw', isa => 'Bool', default => 0 );
@@ -129,7 +131,6 @@ sub get_json_to_obj_authed_DELETE {
 sub _get_json_to_obj_authed {
     my $self = shift;
     my $pending_url = shift;
-    
     my $request_method = pop @_; # defaults to GET or POST if undefined
 
     croak 'login and token are required' unless ( $self->has_login and $self->has_token );

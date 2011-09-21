@@ -8,7 +8,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 with 'Net::GitHub::V2::NoRepo' => { -excludes => [ 'args_to_pass' ] };
 
 # repo stuff
-has 'repo'  => ( isa => 'Str', is => 'ro', required => 1 );
+has 'repo'  => ( isa => 'Str', is => 'ro' );
 
 sub args_to_pass {
     my $self = shift;
