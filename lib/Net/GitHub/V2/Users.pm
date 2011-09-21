@@ -19,8 +19,8 @@ sub show {
     my ( $self, $owner ) = @_;
     
     $owner ||= $self->owner;
-    
-    return $self->get_json_to_obj( "user/show/$owner", 'user' );
+    return $self->get_json_to_obj( "user/show/$owner", 'user' ) if $owner;
+    return $self->get_json_to_obj( "user/show", 'user' );
 }
 
 sub update {
