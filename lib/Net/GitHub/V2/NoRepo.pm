@@ -5,6 +5,7 @@ use Any::Moose 'Role';
 our $VERSION = '0.24';
 our $AUTHORITY = 'cpan:FAYLAND';
 
+use URI;
 use JSON::Any;
 use WWW::Mechanize::GZip;
 use MIME::Base64;
@@ -74,8 +75,10 @@ sub get_json_to_obj {
     }
 
     $pending_url =~ s!^/!!; # Strip leading '/'
-    my $url  = $self->api_url . $pending_url;
+    my $url  = URI->new($self->api_url . $pending_url);
+    $url->query_form( access_token => $self->access_token ) if $self->access_token;
     my $resp = $self->ua->get($url);
+
     return { error => '404 Not Found' } if $resp->code == 404;
     return { error => $resp->as_string() } unless ( $resp->is_success );
     my $json = $resp->content();
@@ -90,6 +93,8 @@ before get_json_to_obj_authed => sub {
 
     return if $self->has_login and $self->has_token;
 
+
+    # Gitconfig Fallback
     eval { require Config::GitLike::Git; };
     return if $@;
 
@@ -133,7 +138,8 @@ sub _get_json_to_obj_authed {
     my $pending_url = shift;
     my $request_method = pop @_; # defaults to GET or POST if undefined
 
-    croak 'login and token are required' unless ( $self->has_login and $self->has_token );
+    croak 'login and token or access_token are required' unless ( 
+        $self->has_login and $self->has_token and $self->has_access_token );
 
     $pending_url =~ s!^/!!; # Strip leading '/'
     my $url  = ( $pending_url =~ /^https?\:/ ) ? $pending_url :
@@ -150,10 +156,15 @@ sub _get_json_to_obj_authed {
               $request_method eq 'POST'   ? HTTP::Request::Common::POST( $url, [ @_ ] ) :
                                             HTTP::Request::Common::GET( $url );
 
-    # "schacon/token:6ef8395fecf207165f1a82178ae1b984"
-    my $auth_basic = $self->login . '/token:' . $self->token;
-    $req->header('Authorization', 'Basic ' . encode_base64($auth_basic));
-    
+    # OAuth access_token
+    if( $self->access_token ) {
+        $req->header( 'access_token' => $self->access_token );
+    } else {
+        # "schacon/token:6ef8395fecf207165f1a82178ae1b984"
+        my $auth_basic = $self->login . '/token:' . $self->token;
+        $req->header('Authorization', 'Basic ' . encode_base64($auth_basic));
+    }
+
     my $res = $self->ua->request($req);
 
     # Slow down if we're approaching the rate limit
@@ -185,7 +196,7 @@ sub _get_json_to_obj_authed {
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('owner', 'login', 'token', 'always_Authorization') {
+    foreach my $col ('owner', 'login', 'access_token', 'token', 'always_Authorization') {
         $ret->{$col} = $self->$col;
     }
     return $ret;
