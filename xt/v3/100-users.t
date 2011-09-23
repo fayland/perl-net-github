@@ -10,8 +10,6 @@ BAIL_OUT('Please export environment variable GITHUB_USER/GITHUB_PASS') unless $E
 my $gh = Net::GitHub::V3->new( login => $ENV{GITHUB_USER}, pass => $ENV{GITHUB_PASS});
 my $user = $gh->user;
 
-=pod
-
 diag( 'Using user = ' . $ENV{GITHUB_USER} );
 
 ok( $gh );
@@ -26,8 +24,6 @@ sleep 1;
 my $u = $user->show();
 is($u->{bio}, $bio);
 is_deeply($u, $uu);
-
-=cut
 
 diag("Testing follow/unfollow");
 my $f = 'c9s';

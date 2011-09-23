@@ -126,7 +126,13 @@ sub query {
     }
 
     if ( $self->RaiseError ) {
-        croak $data->{message} if exists $data->{message}; # for 'Client Errors'
+        croak $data->{message} if ref $data eq 'HASH' and exists $data->{message}; # for 'Client Errors'
+    }
+    
+    ## be smarter
+    if (wantarray) {
+        return @$data if ref $data eq 'ARRAY';
+        return %$data if ref $data eq 'HASH';
     }
 
     return $data;

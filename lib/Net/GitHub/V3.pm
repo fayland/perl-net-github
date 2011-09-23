@@ -8,6 +8,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 with 'Net::GitHub::V3::Query';
 
 use Net::GitHub::V3::Users;
+use Net::GitHub::V3::Repos;
 
 has 'user' => (
     is => 'rw',
@@ -16,6 +17,16 @@ has 'user' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::Users->new( $self->args_to_pass );
+    },
+);
+
+has 'repos' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V3::Repos',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::Repos->new( $self->args_to_pass );
     },
 );
 
@@ -114,6 +125,17 @@ every call.
     $github->user->update( bio => 'Just Another Perl Programmer' );
 
 L<Net::GitHub::V3::Users>
+
+=head2 repos
+
+    my @repos = $github->repos->list;
+    my $rp = $github->->create( {
+        "name" => "Hello-World",
+        "description" => "This is your first repo",
+        "homepage" => "https://github.com"
+    } );
+
+L<Net::GitHub::V3::Repos>
 
 =head2 query($method, $url, $data)
 
