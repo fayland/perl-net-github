@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.30';
+our $VERSION = '0.40';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -10,9 +10,9 @@ sub new {
     my $params = $class->BUILDARGS(@_);
 
     my $obj;
-    if ( exists $params->{version} and $params->{version} == 1 ) {
-        require Net::GitHub::V1;
-        return Net::GitHub::V1->new($params);
+    if ( exists $params->{version} and $params->{version} == 2 ) {
+        require Net::GitHub::V2;
+        return Net::GitHub::V2->new($params);
     } else {
         require Net::GitHub::V3;
         return Net::GitHub::V3->new($params);
@@ -51,25 +51,27 @@ This distribution provides easy methods to access GitHub via their APIs.
 
 Check L<http://developer.github.com/> for more details of the GitHub APIs.
 
-Please feel free to fork L<http://github.com/fayland/perl-net-github/tree/master>, fix or contribute some code. :)
+Read L<Net::GitHub::V3> for API usage.
 
-Read L<Net::GitHub::V3> for more details.
+If you prefer object oriented way, L<Pithub> is 'There is more than one way to do it'.
 
-=head1 Git URL
+=head1 Git
 
-L<http://github.com/fayland/perl-net-github/tree/master>
+L<http://github.com/fayland/perl-net-github/>
 
 =head1 SEE ALSO
 
-L<Any::Moose>
+L<Any::Moose>, L<Pithub>
 
 =head1 AUTHOR
 
 Fayland Lam, C<< <fayland at gmail.com> >>
 
+Everything who is listed in B<Changes>.
+
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009-2011 Fayland Lam, all rights reserved.
+Copyright 2009-2011 Fayland Lam all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
