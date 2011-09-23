@@ -227,6 +227,8 @@ L<Any::Moose>
 
 Fayland Lam, C<< <fayland at gmail.com> >>
 
+More on Changes
+
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2009-2011 Fayland Lam, all rights reserved.
