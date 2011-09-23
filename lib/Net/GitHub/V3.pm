@@ -76,10 +76,10 @@ There are two ways to authenticate through GitHub API v3:
 
     my $gh = Net::GitHub->new(
         # login/pass or access_token
-        raw_string => 1
+        raw_response => 1
     );
 
-return raw response
+return raw L<HTTP::Response> object
 
 =head3 raw_string
 
@@ -88,7 +88,7 @@ return raw response
         raw_string => 1
     );
     
-return response content as string
+return L<HTTP::Response> response content as string
 
 =head3 api_throttle
 
@@ -114,6 +114,14 @@ every call.
     $github->user->update( bio => 'Just Another Perl Programmer' );
 
 L<Net::GitHub::V3::Users>
+
+=head2 query($method, $url, $data)
+
+    my $data = $github->query('/user');
+    $github->query('PATCH', '/user', $data);
+    $github->query('DELETE', '/user/emails', [ 'myemail@somewhere.com' ]);
+
+query API directly
 
 =head1 SEE ALSO
 

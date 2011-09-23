@@ -67,7 +67,7 @@ L<Any::Moose>, L<Pithub>
 
 Fayland Lam, C<< <fayland at gmail.com> >>
 
-Everything who is listed in B<Changes>.
+Everyone who is listed in B<Changes>.
 
 =head1 COPYRIGHT & LICENSE
 
