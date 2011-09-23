@@ -17,13 +17,11 @@ use Carp qw/croak/;
 
 # Authentication
 has 'user'  => ( is => 'rw', isa => 'Str', predicate => 'has_user' );
-has 'token' => ( is => 'rw', isa => 'Str', predicate => 'has_token' );
 has 'pass'  => ( is => 'rw', isa => 'Str', predicate => 'has_pass' );
 has 'access_token' => ( is => 'rw', isa => 'Str', predicate => 'has_access_token' );
 
 # return raw unparsed JSON
 has 'raw' => (is => 'rw', isa => 'Bool', default => 0);
-has 'raw_json' => (is => 'rw', isa => 'Bool', default => 0);
 
 has 'api_url' => (is => 'ro', default => 'https://api.github.com');
 has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
@@ -34,8 +32,9 @@ has 'RaiseError' => ( is => 'rw', isa => 'Bool', default => 1 );
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('user', 'pass', 'token', 'access_token', 'raw', 'raw_json', 'api_url', 'api_throttle') {
-        $ret->{$col} = $self->$col;
+    foreach my $col ('user', 'pass', 'access_token', 'raw', 'api_url', 'api_throttle') {
+        my $v = $self->$col;
+        $ret->{$col} = $v if defined $v;
     }
     return $ret;
 }
@@ -87,10 +86,6 @@ sub query {
     } elsif ($self->has_user and $self->has_pass) {
         my $auth_basic = $self->user . ':' . $self->pass;
         $ua->default_header('Authorization', 'Basic ' . encode_base64($auth_basic));
-    } elsif ($self->has_user and $self->has_token) { # I'm not sure if it still works, it's not documented
-        # "schacon/token:6ef8395fecf207165f1a82178ae1b984"
-        my $auth_basic = $self->user . '/token:' . $self->token;
-        $ua->default_header('Authorization', 'Basic ' . encode_base64($auth_basic));
     }
 
     $url = $self->api_url . $url unless $url =~ /^https\:/;
@@ -116,10 +111,13 @@ sub query {
             < ($res->header('x-ratelimit-limit') || 60) / 2);
     }
 
-    return $res if $self->raw;
-    return $res->content if $self->raw_json;
+    return $ua->content if $self->raw;
     
-    my $json = $res->content;
+    my $json = $ua->content;
+    
+    use Data::Dumper;
+    print STDERR Dumper(\$ua->res);
+    
     my $data = eval { $self->json->jsonToObj($json) };
     unless ($data) {
         # We tolerate bad JSON for errors,
@@ -133,25 +131,6 @@ sub query {
     }
 
     return $data;
-}
-
-sub load_git_config { ## please call to set, it's not loaded by default anymore
-    my ($self) = @_;
-    
-    return if $self->has_user and $self->has_token;
-    
-    # Gitconfig Fallback
-    eval { require Config::GitLike::Git; };
-    return if $@;
-
-    my $c = Config::GitLike::Git->new();
-    $c->load;
-    my $user  = $c->get(key => 'github.user');
-    my $token = $c->get(key => 'github.token');
-    if ($user && $token) {
-        $self->user($user);
-        $self->token($token);
-    }
 }
 
 no Any::Moose;

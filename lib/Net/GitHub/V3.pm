@@ -5,100 +5,17 @@ use Any::Moose;
 our $VERSION = '0.40';
 our $AUTHORITY = 'cpan:FAYLAND';
 
-use Net::GitHub::V2::Repositories;
-use Net::GitHub::V2::Users;
-use Net::GitHub::V2::Commits;
-use Net::GitHub::V2::Issues;
-use Net::GitHub::V2::Object;
-use Net::GitHub::V2::Network;
-use Net::GitHub::V2::Organizations;
-use Net::GitHub::V2::PullRequest;
+with 'Net::GitHub::V3::Query';
 
-with 'Net::GitHub::V2::HasRepo';
+use Net::GitHub::V3::Users;
 
-has 'repos' => (
+has 'users' => (
     is => 'rw',
-    isa => 'Net::GitHub::V2::Repositories',
+    isa => 'Net::GitHub::V3::Users',
     lazy => 1,
     default => sub {
         my $self = shift;
-        return Net::GitHub::V2::Repositories->new( $self->args_to_pass );
-    },
-);
-
-has 'user' => (
-    is => 'rw',
-    isa => 'Net::GitHub::V2::Users',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        return Net::GitHub::V2::Users->new( $self->args_to_pass );
-    },
-);
-
-has 'commit' => (
-    is => 'rw',
-    isa => 'Net::GitHub::V2::Commits',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        return Net::GitHub::V2::Commits->new( $self->args_to_pass );
-    },
-);
-
-has 'issue' => (
-    is => 'rw',
-    isa => 'Net::GitHub::V2::Issues',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        return Net::GitHub::V2::Issues->new( $self->args_to_pass );
-    },
-);
-
-has 'object' => (
-    is => 'rw',
-    isa => 'Net::GitHub::V2::Object',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        return Net::GitHub::V2::Object->new( $self->args_to_pass );
-    },
-    handles => {
-        obj_tree => 'tree',
-        obj_blob => 'blob',
-        obj_raw  => 'raw',
-    }
-);
-
-has 'network' => (
-    is => 'rw',
-    isa => 'Net::GitHub::V2::Network',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        return Net::GitHub::V2::Network->new( $self->args_to_pass );
-    },
-    handles => ['network_meta', 'network_data_chunk']
-);
-
-has 'organization' => (
-    is => 'rw',
-    isa => 'Net::GitHub::V2::Organizations',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        return Net::GitHub::V2::Organizations->new( $self->args_to_pass );
-    },
-);
-
-has 'pull_request' => (
-    is => 'rw',
-    isa => 'Net::GitHub::V2::PullRequest',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        return Net::GitHub::V2::PullRequest->new( $self->args_to_pass );
+        return Net::GitHub::V3::Users->new( $self->args_to_pass );
     },
 );
 
@@ -110,33 +27,42 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V2 - Perl Interface for github.com (V2)
+Net::GitHub::V3 - Github API v3
 
 =head1 SYNOPSIS
 
 Prefer:
 
     use Net::GitHub;
-
     my $github = Net::GitHub->new(
-        version => 2, # optional, default as 2
-        owner => 'fayland', repo => 'perl-net-github'
+        version => 3,
+        user => 'fayland', pass => 'mypass',
+        # or
+        # access_token => $oauth_token
     );
 
 Or:
 
-    use Net::GitHub::V2;
-
-    # for http://github.com/fayland/perl-net-github/tree/master
-    my $github = Net::GitHub::V2->new( owner => 'fayland', repo => 'perl-net-github' );
+    use Net::GitHub::V3;
+    my $github = Net::GitHub::V3->new(
+        user => 'fayland', pass => 'mypass',
+        # or
+        # access_token => $oauth_token
+    );
 
 =head1 DESCRIPTION
 
 L<http://develop.github.com/>
 
+=head2 ATTRIBUTES
+
+=head3 Authentication
+
+There are two ways to authenticate through GitHub API v3:
+
 For those B<(authentication required)>, you must set login and token (in L<https://github.com/account>). If no login and token are provided, your B<.gitconfig> will be loaded: if the github.user and github.token keys are defined, they will be used.
 
-    my $github = Net::GitHub::V2->new(
+    my $github = Net::GitHub::V3->new(
         owner => 'fayland', repo => 'perl-net-github',
         login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
     );
@@ -151,7 +77,7 @@ from the API. By switching B<throw_errors> on you can make the be turned into
 exceptions instead, so that you don't have to check for error response after
 every call.
 
-    my $github = Net::GitHub::V2->new(
+    my $github = Net::GitHub::V3->new(
         owner => 'fayland', repo => 'perl-net-github',
         login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
         always_Authorization => 1,
@@ -166,14 +92,14 @@ every call.
     $github->repos->create( 'sandbox3', 'Sandbox desc', 'http://fayland.org/', 1 );
     $github->repos->show();
 
-L<Net::GitHub::V2::Repositories>
+L<Net::GitHub::V3::Repositories>
 
 =head2 user
 
     my $followers = $github->user->followers();
     $github->user->update( name => 'Fayland Lam' );
 
-L<Net::GitHub::V2::Users>
+L<Net::GitHub::V3::Users>
 
 =head2 commit
 
@@ -181,7 +107,7 @@ L<Net::GitHub::V2::Users>
     my $commits = $github->commit->file( 'master', 'lib/Net/GitHub.pm' );
     my $co_detail = $github->commit->show( $sha1 );
 
-L<Net::GitHub::V2::Commits>
+L<Net::GitHub::V3::Commits>
 
 =head2 issue
 
@@ -189,7 +115,7 @@ L<Net::GitHub::V2::Commits>
     my $issue  = $github->issue->open( 'Bug title', 'Bug detail' );
     $github->issue->close( $number );
 
-L<Net::GitHub::V2::Issues>
+L<Net::GitHub::V3::Issues>
 
 =head2 object
 
@@ -197,27 +123,27 @@ L<Net::GitHub::V2::Issues>
     my $blob = $github->obj_blob( $tree_sha1, 'lib/Net/GitHub.pm' ); # alias object->blob
     my $raw  = $github->obj_raw( $sha1 ); # alias object->raw
 
-L<Net::GitHub::V2::Object>
+L<Net::GitHub::V3::Object>
 
 =head2 network
 
     $github->network_meta; # alias ->network->network_meta
     $github->network_data_chunk( $net_hash ); # alias network->network_data_chunk
 
-L<Net::GitHub::V2::Network>
+L<Net::GitHub::V3::Network>
 
 =head2 organization
 
     my $organization = $github->organization->organizations('github');
     my $teams = $github->organization->teams('PerlChina');
 
-L<Net::GitHub::V2::Organizations>    
+L<Net::GitHub::V3::Organizations>    
 
 =head2 pull_request
 
     my $pull = $github->pull_request->pull_request();
 
-L<Net::GitHub::V2::PullRequest>
+L<Net::GitHub::V3::PullRequest>
 
 =head1 SEE ALSO
 
