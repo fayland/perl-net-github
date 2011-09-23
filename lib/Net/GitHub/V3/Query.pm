@@ -15,12 +15,13 @@ use Carp qw/croak/;
 # configurable args
 
 # Authentication
-has 'user'  => ( is => 'rw', isa => 'Str', predicate => 'has_user' );
+has 'login'  => ( is => 'rw', isa => 'Str', predicate => 'has_login' );
 has 'pass'  => ( is => 'rw', isa => 'Str', predicate => 'has_pass' );
 has 'access_token' => ( is => 'rw', isa => 'Str', predicate => 'has_access_token' );
 
 # return raw unparsed JSON
-has 'raw' => (is => 'rw', isa => 'Bool', default => 0);
+has 'raw_string' => (is => 'rw', isa => 'Bool', default => 0);
+has 'raw_response' => (is => 'rw', isa => 'Bool', default => 0);
 
 has 'api_url' => (is => 'ro', default => 'https://api.github.com');
 has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
@@ -31,7 +32,7 @@ has 'RaiseError' => ( is => 'rw', isa => 'Bool', default => 1 );
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('user', 'pass', 'access_token', 'raw', 'api_url', 'api_throttle') {
+    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle') {
         my $v = $self->$col;
         $ret->{$col} = $v if defined $v;
     }
@@ -80,11 +81,11 @@ sub query {
 
     my $ua = $self->ua;
 
-    ## always go with user:pass or access_token (for private repos)
+    ## always go with login:pass or access_token (for private repos)
     if ($self->has_access_token) {
         $ua->default_header('Authorization', "token " . $self->access_token);
-    } elsif ($self->has_user and $self->has_pass) {
-        my $auth_basic = $self->user . ':' . $self->pass;
+    } elsif ($self->has_login and $self->has_pass) {
+        my $auth_basic = $self->login . ':' . $self->pass;
         $ua->default_header('Authorization', 'Basic ' . encode_base64($auth_basic));
     }
 
@@ -107,7 +108,8 @@ sub query {
             < ($res->header('x-ratelimit-limit') || 60) / 2);
     }
 
-    return $ua->content if $self->raw;
+    return $ua->res if $self->raw_response;
+    return $ua->content if $self->raw_string;
     
     my $json = $ua->content;
     $data = eval { $self->json->jsonToObj($json) };
@@ -149,17 +151,19 @@ set Authentication and call API
 
 =over 4
 
-=item user
+=item login
 
 =item pass
 
 =item access_token
 
-either set access_token from OAuth or user:pass for Basic Authentication
+either set access_token from OAuth or login:pass for Basic Authentication
 
 L<http://developer.github.com/>
 
-=item raw
+=item raw_string
+
+=item raw_response
 
 =item api_throttle
 

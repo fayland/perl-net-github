@@ -9,7 +9,7 @@ with 'Net::GitHub::V3::Query';
 
 use Net::GitHub::V3::Users;
 
-has 'users' => (
+has 'user' => (
     is => 'rw',
     isa => 'Net::GitHub::V3::Users',
     lazy => 1,
@@ -36,7 +36,7 @@ Prefer:
     use Net::GitHub;
     my $github = Net::GitHub->new(
         version => 3,
-        user => 'fayland', pass => 'mypass',
+        login => 'fayland', pass => 'mypass',
         # or
         # access_token => $oauth_token
     );
@@ -45,7 +45,7 @@ Or:
 
     use Net::GitHub::V3;
     my $github = Net::GitHub::V3->new(
-        user => 'fayland', pass => 'mypass',
+        login => 'fayland', pass => 'mypass',
         # or
         # access_token => $oauth_token
     );
@@ -62,9 +62,9 @@ There are two ways to authenticate through GitHub API v3:
 
 =over 4
 
-=item user/pass
+=item login/pass
 
-    my $gh = Net::GitHub::V3->new( user => $ENV{GITHUB_USER}, pass => $ENV{GITHUB_PASS} );
+    my $gh = Net::GitHub::V3->new( login => $ENV{GITHUB_USER}, pass => $ENV{GITHUB_PASS} );
     
 =item access_token
 
@@ -72,11 +72,20 @@ There are two ways to authenticate through GitHub API v3:
 
 =back
 
-=head3 raw
+=head3 raw_response
 
     my $gh = Net::GitHub->new(
-        # user/pass or access_token
-        raw => 1
+        # login/pass or access_token
+        raw_string => 1
+    );
+
+return raw response
+
+=head3 raw_string
+
+    my $gh = Net::GitHub->new(
+        # login/pass or access_token
+        raw_string => 1
     );
     
 return response content as string
@@ -84,7 +93,7 @@ return response content as string
 =head3 api_throttle
 
     my $gh = Net::GitHub->new(
-        # user/pass or access_token
+        # login/pass or access_token
         api_throttle => 0
     );
 
@@ -99,10 +108,10 @@ every call.
 
 =head2 Modules
 
-=head3 users
+=head3 user
 
-    my $user = $github->users->show('nothingmuch');
-    $github->users->update( bio => 'Just Another Perl Programmer' );
+    my $user = $github->user->show('nothingmuch');
+    $github->user->update( bio => 'Just Another Perl Programmer' );
 
 L<Net::GitHub::V3::Users>
 
