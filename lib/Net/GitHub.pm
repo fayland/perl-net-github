@@ -35,13 +35,26 @@ Net::GitHub - Perl Interface for github.com
 
     use Net::GitHub;
 
-    my $github = Net::GitHub->new(); # default to Net::GitHub::V3
+    my $github = Net::GitHub->new( login => 'fayland', pass => 'secret' ); # default to Net::GitHub::V3
 
     # for backwards
     my $github = Net::GitHub->new(  # Net::GitHub::V2
         version => 2,
         owner => 'fayland', name => 'perl-net-github'
     );
+    
+    # for V3
+    # L<Net::GitHub::V3::Users>
+    my $user = $github->user->show('nothingmuch');
+    $github->user->update( bio => 'Just Another Perl Programmer' );
+    
+    # L<Net::GitHub::V3::Repos>
+    my @repos = $github->repos->list;
+    my $rp = $github->->create( {
+        "name" => "Hello-World",
+        "description" => "This is your first repo",
+        "homepage" => "https://github.com"
+    } );
 
 =head1 DESCRIPTION
 

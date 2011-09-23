@@ -4,64 +4,54 @@ NAME
 SYNOPSIS
         use Net::GitHub;
 
-        my $github = Net::GitHub->new(  # Net::GitHub::V2, default
-            owner => 'fayland', repo => 'perl-net-github'
-        );
+        my $github = Net::GitHub->new( login => 'fayland', pass => 'secret' ); # default to Net::GitHub::V3
 
-    # DEPRECATED, for backwards compatibility
-        my $github = Net::GitHub->new(  # Net::GitHub::V1
-            version => 1,
+        # for backwards
+        my $github = Net::GitHub->new(  # Net::GitHub::V2
+            version => 2,
             owner => 'fayland', name => 'perl-net-github'
         );
+    
+        # for V3
+        # L<Net::GitHub::V3::Users>
+        my $user = $github->user->show('nothingmuch');
+        $github->user->update( bio => 'Just Another Perl Programmer' );
+    
+        # L<Net::GitHub::V3::Repos>
+        my @repos = $github->repos->list;
+        my $rp = $github->->create( {
+            "name" => "Hello-World",
+            "description" => "This is your first repo",
+            "homepage" => "https://github.com"
+        } );
 
 DESCRIPTION
     <http://github.com> is a popular git host.
 
-    Please feel free to fork
-    <http://github.com/fayland/perl-net-github/tree/master>
-    fix or contribute some code. :)
+    This distribution provides easy methods to access GitHub via their APIs.
 
-    Read Net::GitHub::V2 for more details.
+    Check <http://developer.github.com/> for more details of the GitHub
+    APIs.
 
-        use Net::GitHub;
+    Read Net::GitHub::V3 for API usage.
 
-        my $github = Net::GitHub->new(  # Net::GitHub::V2, default
-            owner => 'fayland', repo  => 'perl-net-github',
-            login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
-        );
+    If you prefer object oriented way, Pithub is 'There is more than one way
+    to do it'.
 
-    $github->repos->create( 'sandbox3', 'Sandbox desc', 'http://fayland.org/', 1 );
-        $github->repos->show();
-
-    my $followers = $github->user->followers();
-        $github->user->update( name => 'Fayland Lam' );
-
-    my $commits = $github->commit->branch();
-        my $commits = $github->commit->file( 'master', 'lib/Net/GitHub.pm' );
-        my $co_detail = $github->commit->show( $sha1 );
-
-    my $issues = $github->issue->list('open');
-        my $issue  = $github->issue->open( 'Bug title', 'Bug detail' );
-        $github->issue->close( $number );
-
-    my $tree = $github->obj_tree( $tree_sha1 );
-        my $blob = $github->obj_blob( $tree_sha1, 'lib/Net/GitHub.pm' );
-        my $raw  = $github->obj_raw( $sha1 );
-
-    $github->network_meta;
-        $github->network_data_chunk( $net_hash );
-
-Git URL
-    <http://github.com/fayland/perl-net-github/tree/master>
+Git
+    <http://github.com/fayland/perl-net-github/>
 
 SEE ALSO
-    Moose
+    Any::Moose, Pithub
 
 AUTHOR
     Fayland Lam, "<fayland at gmail.com>"
 
+    Everyone who is listed in Changes.
+
 COPYRIGHT & LICENSE
-    Copyright 2009 Fayland Lam, all rights reserved.
+    Copyright 2009-2011 Fayland Lam all rights reserved.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
+
