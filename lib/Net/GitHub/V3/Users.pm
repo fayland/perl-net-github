@@ -59,15 +59,24 @@ sub is_following {
     $self->raw_response(1); # need check header
     my $res = $self->query('/user/following/' . uri_escape($user));
     $self->raw_response($old_raw_response);
-    return $res->status =~ /404/ ? 0 : 1;
+    return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 sub follow {
     my ( $self, $user ) = @_;
-    return $self->query( 'PUT', '/user/following/' . uri_escape($user));
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('PUT', '/user/following/' . uri_escape($user));
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 sub unfollow {
     my ( $self, $user ) = @_;
-    return $self->query( 'DELETE', '/user/following/' . uri_escape($user));
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('DELETE', '/user/following/' . uri_escape($user));
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 
 sub keys {

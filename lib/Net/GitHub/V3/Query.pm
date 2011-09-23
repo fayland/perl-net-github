@@ -95,8 +95,8 @@ sub query {
     if ($data) {
         my $json = $self->json->objToJson($data);
         $req->content($json);
-        $req->header( 'Content-Length' => length $json );
     }
+    $req->header( 'Content-Length' => length $req->content );
 
     my $res = $ua->request($req);
 
@@ -111,12 +111,17 @@ sub query {
     return $ua->res if $self->raw_response;
     return $ua->content if $self->raw_string;
     
-    my $json = $ua->content;
-    $data = eval { $self->json->jsonToObj($json) };
-    unless ($data) {
-        # We tolerate bad JSON for errors,
-        # otherwise we just rethrow the JSON parsing problem.
-        die unless $res->is_error;
+    
+    if ($res->header('Content-Type') and $res->header('Content-Type') eq 'application/json') {
+        my $json = $ua->content;
+        $data = eval { $self->json->jsonToObj($json) };
+        unless ($data) {
+            # We tolerate bad JSON for errors,
+            # otherwise we just rethrow the JSON parsing problem.
+            die unless $res->is_error;
+            $data = { message => $res->message };
+        }
+    } else {
         $data = { message => $res->message };
     }
 
