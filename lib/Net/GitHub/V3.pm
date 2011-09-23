@@ -60,90 +60,51 @@ L<http://develop.github.com/>
 
 There are two ways to authenticate through GitHub API v3:
 
-For those B<(authentication required)>, you must set login and token (in L<https://github.com/account>). If no login and token are provided, your B<.gitconfig> will be loaded: if the github.user and github.token keys are defined, they will be used.
+=over 4
 
-    my $github = Net::GitHub::V3->new(
-        owner => 'fayland', repo => 'perl-net-github',
-        login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
+=item user/pass
+
+    my $gh = Net::GitHub::V3->new( user => $ENV{GITHUB_USER}, pass => $ENV{GITHUB_PASS} );
+    
+=item access_token
+
+    my $gh = Net::GitHub->new( access_token => $ENV{GITHUB_ACCESS_TOKEN} );
+
+=back
+
+=head3 raw
+
+    my $gh = Net::GitHub->new(
+        # user/pass or access_token
+        raw => 1
+    );
+    
+return response content as string
+
+=head3 api_throttle
+
+    my $gh = Net::GitHub->new(
+        # user/pass or access_token
+        api_throttle => 0
     );
 
-If you want to work with private repo, you can set B<always_Authorization>.
+To disable call rate limiting (e.g. if your account is whitelisted), set B<api_throttle> to 0.
 
-To disable call rate limiting (e.g. if your account is whitelisted), set
-B<api_throttle> to 0.
+=head3 RaiseError
 
 By default, error responses are propagated to the user as they are received
-from the API. By switching B<throw_errors> on you can make the be turned into
+from the API. By switching B<RaiseError> on you can make the be turned into
 exceptions instead, so that you don't have to check for error response after
 every call.
 
-    my $github = Net::GitHub::V3->new(
-        owner => 'fayland', repo => 'perl-net-github',
-        login => 'fayland', token => '54b5197d7f92f52abc5c7149b313cf51', # faked
-        always_Authorization => 1,
-        api_throttle => 0,
-        throw_errors => 0,
-    );
+=head2 Modules
 
-=head1 METHODS
+=head3 users
 
-=head2 repos
-
-    $github->repos->create( 'sandbox3', 'Sandbox desc', 'http://fayland.org/', 1 );
-    $github->repos->show();
-
-L<Net::GitHub::V3::Repositories>
-
-=head2 user
-
-    my $followers = $github->user->followers();
-    $github->user->update( name => 'Fayland Lam' );
+    my $user = $github->users->show('nothingmuch');
+    $github->users->update( bio => 'Just Another Perl Programmer' );
 
 L<Net::GitHub::V3::Users>
-
-=head2 commit
-
-    my $commits = $github->commit->branch();
-    my $commits = $github->commit->file( 'master', 'lib/Net/GitHub.pm' );
-    my $co_detail = $github->commit->show( $sha1 );
-
-L<Net::GitHub::V3::Commits>
-
-=head2 issue
-
-    my $issues = $github->issue->list('open');
-    my $issue  = $github->issue->open( 'Bug title', 'Bug detail' );
-    $github->issue->close( $number );
-
-L<Net::GitHub::V3::Issues>
-
-=head2 object
-
-    my $tree = $github->obj_tree( $tree_sha1 ); # alias object->tree
-    my $blob = $github->obj_blob( $tree_sha1, 'lib/Net/GitHub.pm' ); # alias object->blob
-    my $raw  = $github->obj_raw( $sha1 ); # alias object->raw
-
-L<Net::GitHub::V3::Object>
-
-=head2 network
-
-    $github->network_meta; # alias ->network->network_meta
-    $github->network_data_chunk( $net_hash ); # alias network->network_data_chunk
-
-L<Net::GitHub::V3::Network>
-
-=head2 organization
-
-    my $organization = $github->organization->organizations('github');
-    my $teams = $github->organization->teams('PerlChina');
-
-L<Net::GitHub::V3::Organizations>    
-
-=head2 pull_request
-
-    my $pull = $github->pull_request->pull_request();
-
-L<Net::GitHub::V3::PullRequest>
 
 =head1 SEE ALSO
 

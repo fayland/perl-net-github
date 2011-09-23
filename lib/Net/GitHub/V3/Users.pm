@@ -20,18 +20,10 @@ sub show {
 }
 
 sub update {
-    my ( $self, %up ) = @_;
+    my $self = shift;
+    my $data = @_ % 2 ? shift @_ : { @_ };
     
-    my $user = $self->owner;
-    
-    # with format values[key] = value
-    my @values;
-    foreach my $key ( keys %up ) {
-        push @values, ( "values[$key]", $up{$key} );
-    }
-    
-    my $url = $self->api_url_https . "user/show/$user";
-    return $self->get_json_to_obj_authed( $url, @values, 'user' );
+    return $self->query('PATCH', '/user', $data);
 }
 
 sub followers {
@@ -135,13 +127,8 @@ Net::GitHub::V3::Users - GitHub Users API
 =item update
 
     $user->update(
-        name  => 'Another Name',
-        email => 'Another@email.com',
+        bio  => 'another Perl programmer and Father',
     );
-
-update your users information (authentication required)
-
-possible keys: name, email, blog, company, location
 
 =item followers
 

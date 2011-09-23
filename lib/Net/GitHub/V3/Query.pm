@@ -10,7 +10,6 @@ use JSON::Any;
 use WWW::Mechanize;
 use MIME::Base64;
 use HTTP::Request;
-use HTTP::Request::Common ();
 use Carp qw/croak/;
 
 # configurable args
@@ -77,6 +76,7 @@ sub query {
     }
     my $request_method = shift @args;
     my $url = shift @args;
+    my $data = shift @args;
 
     my $ua = $self->ua;
 
@@ -90,15 +90,11 @@ sub query {
 
     $url = $self->api_url . $url unless $url =~ /^https\:/;
     
-    my $req = $request_method eq 'DELETE' ? HTTP::Request::Common::DELETE( $url, [ @_ ] ) :
-              $request_method eq 'HEAD'   ? HTTP::Request::Common::HEAD( $url, [ @_ ] ) :
-              $request_method eq 'PUT'    ? HTTP::Request::Common::PUT( $url, [ @_ ] ) :
-              $request_method eq 'POST'   ? HTTP::Request::Common::POST( $url, [ @_ ] ) :
-              $request_method eq 'PATCH'  ? HTTP::Request::Common::PUT( $url, [ @_ ] ) : 
-                                            HTTP::Request::Common::GET( $url );
-
-    if ($request_method eq 'PATCH') {
-        $req->metohd('PATCH'); # is it working?!
+    my $req = HTTP::Request->new( $request_method, $url );
+    if ($data) {
+        my $json = $self->json->objToJson($data);
+        $req->content($json);
+        $req->header( 'Content-Length' => length $json );
     }
 
     my $res = $ua->request($req);
@@ -114,11 +110,7 @@ sub query {
     return $ua->content if $self->raw;
     
     my $json = $ua->content;
-    
-    use Data::Dumper;
-    print STDERR Dumper(\$ua->res);
-    
-    my $data = eval { $self->json->jsonToObj($json) };
+    $data = eval { $self->json->jsonToObj($json) };
     unless ($data) {
         # We tolerate bad JSON for errors,
         # otherwise we just rethrow the JSON parsing problem.
@@ -166,6 +158,12 @@ set Authentication and call API
 either set access_token from OAuth or user:pass for Basic Authentication
 
 L<http://developer.github.com/>
+
+=item raw
+
+=item api_throttle
+
+=item RaiseError
 
 =back
 
