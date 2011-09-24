@@ -72,7 +72,7 @@ Net::GitHub::V3 - Github API v3
 Prefer:
 
     use Net::GitHub;
-    my $github = Net::GitHub->new(
+    my $gh = Net::GitHub->new(
         version => 3,
         login => 'fayland', pass => 'mypass',
         # or
@@ -82,7 +82,7 @@ Prefer:
 Or:
 
     use Net::GitHub::V3;
-    my $github = Net::GitHub::V3->new(
+    my $gh = Net::GitHub::V3->new(
         login => 'fayland', pass => 'mypass',
         # or
         # access_token => $oauth_token
