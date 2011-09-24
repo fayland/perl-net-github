@@ -213,7 +213,7 @@ Net::GitHub::V3::PullRequests - GitHub Pull Requests API
 
 =head1 DESCRIPTION
 
-<B>To ease the keyboard, we provied two ways to call any method which starts with :user/:repo</B>
+B<To ease the keyboard, we provied two ways to call any method which starts with :user/:repo>
 
 1. SET user/repos before call methods below
 

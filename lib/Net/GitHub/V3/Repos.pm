@@ -642,7 +642,7 @@ L<http://developer.github.com/v3/repos/>
 
 =back
 
-<B>To ease the keyboard, we provied two ways to call any method which starts with :user/:repo</B>
+B<To ease the keyboard, we provied two ways to call any method which starts with :user/:repo>
 
 1. SET user/repos before call methods below
 

@@ -441,8 +441,7 @@ L<http://developer.github.com/v3/issues/>
 
 =back
 
-
-<B>To ease the keyboard, we provied two ways to call any method which starts with :user/:repo</B>
+B<To ease the keyboard, we provied two ways to call any method which starts with :user/:repo>
 
 1. SET user/repo before call methods below
 
