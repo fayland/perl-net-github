@@ -271,7 +271,7 @@ L<http://developer.github.com/v3/pulls/>
 
 =head3 Pull Request Comments API
 
-L<http://developer.github.com/v3/pulls/comments//
+L<http://developer.github.com/v3/pulls/comments/>
 
 =over 4
 

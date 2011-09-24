@@ -489,7 +489,7 @@ L<http://developer.github.com/v3/issues/>
 
 =head3 Issue Comments API
 
-L<http://developer.github.com/v3/issues/comments/
+L<http://developer.github.com/v3/issues/comments/>
 
 =over 4
 
