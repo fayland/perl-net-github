@@ -342,7 +342,7 @@ sub upload_download {
             'file'                  => [ $file ],
         ],
     );
-    my $request = POST $result->{s3_url}, %data;
+    my $request = POST $download->{s3_url}, %data;
     my $res = $self->ua->request($request);
     return $res->code == 201 ? 1 : 0;
 }
