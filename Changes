@@ -3,6 +3,7 @@ Revision history for Net-GitHub
 0.40_01 2011.09.28
         - access_token patch on V2 (c9s)
         - V3 API by default (no backwards with V2, if you still want to stick with V2, pass version => 2)
+        - Note: Missing Orgs, Gists, Git Data (will be added in next version soon)
 
 0.30    2011.08.27
         - Default to GET method if we've no data to POST (Lubomir Rintel)
