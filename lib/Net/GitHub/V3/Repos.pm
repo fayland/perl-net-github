@@ -497,6 +497,87 @@ sub unwatch {
     return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 
+## http://developer.github.com/v3/repos/hooks/
+
+sub hooks {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks');
+}
+sub hook {
+    my $self = shift;
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks/' . uri_escape($cid);
+    return $self->query($u);
+}
+
+sub delete_hook {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks/' . uri_escape($cid);
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('DELETE', $u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
+
+sub test_hook {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks/' . uri_escape($cid) . '/test';
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('POST', $u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
+
+sub create_hook {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $hook) = @_;
+
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks';
+    return $self->query('POST', $u, $hook);
+}
+
+sub update_hook {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $hook_id, $new_hook) = @_;
+
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks/' . uri_escape($hook_id);
+    return $self->query('PATCH', $u, $new_hook);
+}
+
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
@@ -771,6 +852,33 @@ L<http://developer.github.com/v3/repos/watching/>
     my $st = $repos->watch('fayland', 'perl-net-github');
     my $st = $repos->unwatch();
     my $st = $repos->unwatch('fayland', 'perl-net-github');
+
+=back
+
+=head3 Hooks API
+
+L<http://developer.github.com/v3/repos/hooks/>
+
+=over 4
+
+=item hooks
+
+=item hook
+
+=item create_hook
+
+=item update_hook
+
+=item test_hook
+
+=item delete_hook
+
+    my @hooks = $repos->hooks;
+    my $hook  = $repos->hook($hook_id);
+    my $hook  = $repos->create_hook($hook_hash);
+    my $hook  = $repos->update_hook($hook_id, $new_hook_hash);
+    my $st    = $repos->test_hook($hook_id);
+    my $st    = $repos->delete_hook($hook_id);
 
 =back
 
