@@ -126,7 +126,7 @@ Net::GitHub::V3::Users - GitHub Users API
     use Net::GitHub::V3;
 
     my $gh = Net::GitHub::V3->new; # read L<Net::GitHub::V3> to set right authentication info
-    my $user = $gh->users;
+    my $user = $gh->user;
 
 =head1 DESCRIPTION
 
