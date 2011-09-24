@@ -446,7 +446,8 @@ L<http://developer.github.com/v3/issues/>
 
 1. SET user/repo before call methods below
 
-    $issue->set_default_user_repo('fayland', 'perl-net-github');
+    $gh->set_default_user_repo('fayland', 'perl-net-github'); # take effects for all $gh->
+    $issue->set_default_user_repo('fayland', 'perl-net-github'); # only take effect to $gh->issue
     my @issues = $repos->issues;
 
 2. If it is just for once, we can pass :user, :repo before any arguments

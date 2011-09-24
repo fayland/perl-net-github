@@ -12,6 +12,8 @@ use Net::GitHub::V3::Repos;
 use Net::GitHub::V3::Issues;
 use Net::GitHub::V3::PullRequests;
 
+has '+is_main_module' => (default => 1);
+
 has 'user' => (
     is => 'rw',
     isa => 'Net::GitHub::V3::Users',
@@ -26,6 +28,7 @@ has 'repos' => (
     is => 'rw',
     isa => 'Net::GitHub::V3::Repos',
     lazy => 1,
+    predicate => 'is_repos_init',
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::Repos->new( $self->args_to_pass );
@@ -36,6 +39,7 @@ has 'issue' => (
     is => 'rw',
     isa => 'Net::GitHub::V3::Issues',
     lazy => 1,
+    predicate => 'is_issue_init',
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::Issues->new( $self->args_to_pass );
@@ -46,6 +50,7 @@ has 'pull_request' => (
     is => 'rw',
     isa => 'Net::GitHub::V3::PullRequests',
     lazy => 1,
+    predicate => 'is_pull_request_init',
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::PullRequests->new( $self->args_to_pass );
@@ -139,19 +144,45 @@ from the API. By switching B<RaiseError> on you can make the be turned into
 exceptions instead, so that you don't have to check for error response after
 every call.
 
-=head2 Modules
+=head2 METHODS
+
+=head3 query($method, $url, $data)
+
+    my $data = $gh->query('/user');
+    $gh->query('PATCH', '/user', $data);
+    $gh->query('DELETE', '/user/emails', [ 'myemail@somewhere.com' ]);
+
+query API directly
+
+=head3 set_default_user_repo
+
+    $gh->set_default_user_repo('fayland', 'perl-net-github'); # take effects for all $gh->
+    $gh->repos->set_default_user_repo('fayland', 'perl-net-github'); # take effects on $gh->repos
+
+<B>To ease the keyboard, we provied two ways to call any method which starts with :user/:repo</B>
+
+1. SET user/repos before call methods below
+
+    $gh->set_default_user_repo('fayland', 'perl-net-github');
+    my @contributors = $gh->repos->contributors;
+
+2. If it is just for once, we can pass :user, :repo before any arguments
+
+    my @contributors = $repos->contributors($user, $repo);
+
+=head2 MODULES
 
 =head3 user
 
-    my $user = $github->user->show('nothingmuch');
-    $github->user->update( bio => 'Just Another Perl Programmer' );
+    my $user = $gh->user->show('nothingmuch');
+    $gh->user->update( bio => 'Just Another Perl Programmer' );
 
 L<Net::GitHub::V3::Users>
 
-=head2 repos
+=head3 repos
 
-    my @repos = $github->repos->list;
-    my $rp = $github->repos->create( {
+    my @repos = $gh->repos->list;
+    my $rp = $gh->repos->create( {
         "name" => "Hello-World",
         "description" => "This is your first repo",
         "homepage" => "https://github.com"
@@ -159,24 +190,18 @@ L<Net::GitHub::V3::Users>
 
 L<Net::GitHub::V3::Repos>
 
-=head2 issue
+=head3 issue
 
-    my @issues = $github->issue->issues();
-    my $issue  = $github->issue->issue($issue_id);
+    my @issues = $gh->issue->issues();
+    my $issue  = $gh->issue->issue($issue_id);
 
 L<Net::GitHub::V3::Issues>
 
-=head2 pull_request
+=head3 pull_request
+
+    my @pulls = $gh->pull_request->pulls();
 
 L<Net::GitHub::V3::PullRequests>
-
-=head2 query($method, $url, $data)
-
-    my $data = $github->query('/user');
-    $github->query('PATCH', '/user', $data);
-    $github->query('DELETE', '/user/emails', [ 'myemail@somewhere.com' ]);
-
-query API directly
 
 =head1 SEE ALSO
 

@@ -217,7 +217,8 @@ Net::GitHub::V3::PullRequests - GitHub Pull Requests API
 
 1. SET user/repos before call methods below
 
-    $pull_request->set_default_user_repo('fayland', 'perl-net-github');
+    $gh->set_default_user_repo('fayland', 'perl-net-github'); # take effects for all $gh->
+    $pull_request->set_default_user_repo('fayland', 'perl-net-github'); # only take effect to $gh->pull_request
     my @pulls = $pull_request->pulls();
 
 2. If it is just for once, we can pass :user, :repo before any arguments

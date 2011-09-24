@@ -646,7 +646,8 @@ L<http://developer.github.com/v3/repos/>
 
 1. SET user/repos before call methods below
 
-    $repos->set_default_user_repo('fayland', 'perl-net-github');
+    $gh->set_default_user_repo('fayland', 'perl-net-github'); # take effects for all $gh->
+    $repos->set_default_user_repo('fayland', 'perl-net-github'); # only take effect to $gh->repos
     my @contributors = $repos->contributors;
 
 2. If it is just for once, we can pass :user, :repo before any arguments

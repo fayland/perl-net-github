@@ -34,12 +34,26 @@ has 'RaiseError' => ( is => 'rw', isa => 'Bool', default => 1 );
 has 'u'  => (is => 'rw', isa => 'Str');
 has 'repo' => (is => 'rw', isa => 'Str');
 
+has 'is_main_module' => (is => 'ro', isa => 'Bool', default => 0);
 sub set_default_user_repo {
     my ($self, $user, $repo) = @_;
     
     $self->u($user);
     $self->repo($repo);
     
+    # need apply to all sub modules
+    if ($self->is_main_module) {
+        if ($self->is_repos_init) {
+            $self->repos->u($user); $self->repos->repo($repo);
+        }
+        if ($self->is_issue_init) {
+            $self->issue->u($user); $self->issue->repo($repo);
+        }
+        if ($self->is_pull_request_init) {
+            $self->pull_request->u($user); $self->pull_request->repo($repo);
+        }
+    }
+
     return $self;
 }
 
