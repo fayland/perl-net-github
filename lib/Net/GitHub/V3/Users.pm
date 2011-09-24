@@ -103,7 +103,12 @@ sub update_key {
 }
 sub delete_key {
     my ( $self, $id ) = @_;
-    return $self->query('DELETE', '/user/keys/' . uri_escape($id));
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('DELETE', '/user/keys/' . uri_escape($id));
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 
 no Any::Moose;
@@ -143,6 +148,7 @@ L<http://developer.github.com/v3/users/>
     $user->update(
         bio  => 'another Perl programmer and Father',
     );
+
 =back
 
 =head3 Emails

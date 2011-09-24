@@ -350,6 +350,97 @@ sub upload_download {
     return $res->code == 201 ? 1 : 0;
 }
 
+## http://developer.github.com/v3/repos/forks/
+
+sub forks {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/forks');
+}
+
+sub create_fork {
+    my $self = shift;
+    
+    if (@_ < 2) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $org) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/forks';
+    $u .= '?org=' . $org if defined $org;
+    return $self->query('POST', $u);
+}
+
+## http://developer.github.com/v3/repos/keys/
+
+sub keys {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/forks');
+}
+sub key {
+    my $self = shift;
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/keys/' . uri_escape($cid);
+    return $self->query($u);
+}
+sub create_key {
+    my $self = shift;
+    
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $title, $key ) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/keys';
+
+    unless (ref $title eq 'HASH') { # title can be a hashref
+        $title = {
+            title => $title,
+            key => $key
+        }
+    }
+    return $self->query('POST', $u, $title);
+        
+}
+sub update_key {
+    my $self = shift;
+    
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $key_id, $new_key) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/keys/' . uri_escape($key_id);
+    return $self->query('PATCH', $u, $new_key);
+}
+sub delete_key {
+    my $self = shift;
+    
+    if (@_ < 2) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $key_id) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/keys/' . uri_escape($key_id);
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('DELETE', $u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
+
+
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
@@ -550,6 +641,49 @@ L<http://developer.github.com/v3/repos/downloads/>
         "content_type" => "text/plain",
         file => '/path/to/new_file.jpg',
     } );
+
+=back
+
+=head3 Forks API
+
+L<http://developer.github.com/v3/repos/forks/>
+
+=over 4
+
+=item forks
+
+=item create_fork
+
+    my @forks = $repos->forks;
+    my $fork = $repos->create_fork;
+    my $fork = $repos->create_fork($org);
+
+=back
+
+=head3 Repos Deploy Keys API
+
+L<http://developer.github.com/v3/repos/keys/>
+
+=over 4
+
+=item keys
+
+=item key
+
+=item create_key
+
+=item update_key
+
+=item delete_key
+
+    my @keys = $repos->keys;
+    my $key  = $repos->key($key_id); # get key
+    $repos->create_key( 'title', $key );
+    $repos->update_key($key_id, {
+        title => $title,
+        key   => $key
+    });
+    $repos->delete_key($key_id);
 
 =back
 
