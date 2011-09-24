@@ -508,10 +508,10 @@ L<http://developer.github.com/v3/issues/comments/
     my $comment  = $issue->create_comment($issue_id, {
         "body" => "a new comment"
     });
-    my $comment = $repos->update_comment($comment_id, {
+    my $comment = $issue->update_comment($comment_id, {
         "body" => "Nice change"
     });
-    my $st = $repos->delete_comment($comment_id);
+    my $st = $issue->delete_comment($comment_id);
 
 =back
 

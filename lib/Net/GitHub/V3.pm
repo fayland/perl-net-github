@@ -9,6 +9,8 @@ with 'Net::GitHub::V3::Query';
 
 use Net::GitHub::V3::Users;
 use Net::GitHub::V3::Repos;
+use Net::GitHub::V3::Issues;
+use Net::GitHub::V3::PullRequests;
 
 has 'user' => (
     is => 'rw',
@@ -27,6 +29,26 @@ has 'repos' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::Repos->new( $self->args_to_pass );
+    },
+);
+
+has 'issue' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V3::Issues',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::Issues->new( $self->args_to_pass );
+    },
+);
+
+has 'pull_request' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V3::PullRequests',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::PullRequests->new( $self->args_to_pass );
     },
 );
 
@@ -50,6 +72,9 @@ Prefer:
         login => 'fayland', pass => 'mypass',
         # or
         # access_token => $oauth_token
+        
+        # optional
+        user => 'fayland', repos => 'perl-net-github',
     );
 
 Or:
@@ -59,6 +84,9 @@ Or:
         login => 'fayland', pass => 'mypass',
         # or
         # access_token => $oauth_token
+        
+        # optional
+        user => 'fayland', repos => 'perl-net-github',
     );
 
 =head1 DESCRIPTION
@@ -129,13 +157,24 @@ L<Net::GitHub::V3::Users>
 =head2 repos
 
     my @repos = $github->repos->list;
-    my $rp = $github->->create( {
+    my $rp = $github->repos->create( {
         "name" => "Hello-World",
         "description" => "This is your first repo",
         "homepage" => "https://github.com"
     } );
 
 L<Net::GitHub::V3::Repos>
+
+=head2 issue
+
+    my @issues = $github->issue->issues();
+    my $issue  = $github->issue->issue($issue_id);
+
+L<Net::GitHub::V3::Issues>
+
+=head2 pull_request
+
+L<Net::GitHub::V3::PullRequests>
 
 =head2 query($method, $url, $data)
 

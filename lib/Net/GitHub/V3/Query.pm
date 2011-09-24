@@ -29,10 +29,15 @@ has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
 # Error handle
 has 'RaiseError' => ( is => 'rw', isa => 'Bool', default => 1 );
 
+# optional
+
+has 'user'  => (is => 'rw', isa => 'Str');
+has 'repos' => (is => 'rw', isa => 'Str');
+
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle') {
+    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'user', 'repos') {
         my $v = $self->$col;
         $ret->{$col} = $v if defined $v;
     }
