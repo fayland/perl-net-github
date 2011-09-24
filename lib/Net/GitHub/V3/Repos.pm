@@ -6,6 +6,7 @@ our $VERSION = '0.40';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
+use HTTP::Request::Common qw(POST);
 
 with 'Net::GitHub::V3::Query';
 
@@ -155,6 +156,200 @@ sub delete_collaborator {
     return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 
+## http://developer.github.com/v3/repos/commits/
+
+sub commits {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits');
+}
+
+sub commit {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $sha1) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits/' . uri_escape($sha1);
+    return $self->query($u);
+}
+
+sub comments {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments');
+}
+sub commit_comments {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $sha1) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits/' . uri_escape($sha1) . '/comments';
+    return $self->query($u);
+}
+sub create_comment {
+    my $self = shift;
+    
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $sha1, $comment) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits/' . uri_escape($sha1) . '/comments';
+    return $self->query('POST', $u, $comment);
+}
+sub comment {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments/' . uri_escape($cid);
+    return $self->query($u);
+}
+sub update_comment {
+    my $self = shift;
+    
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid, $comment) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments/' . uri_escape($cid);
+    return $self->query('PATCH', $u, $comment);
+}
+
+sub delete_comment {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments/' . uri_escape($cid);
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('DELETE', $u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
+
+sub compare_commits {
+    my $self = shift;
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $base, $head) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/compare/' . uri_escape($base) . '...' . uri_escape($head);
+    return $self->query($u);
+}
+
+## http://developer.github.com/v3/repos/downloads/
+
+sub downloads {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads');
+}
+sub download {
+    my $self = shift;
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads/' . uri_escape($cid);
+    return $self->query($u);
+}
+
+sub delete_download {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $cid) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads/' . uri_escape($cid);
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('DELETE', $u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
+
+sub create_download {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $download) = @_;
+    
+    my $file = delete $download->{file};
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads';
+    my $d = $self->query('POST', $u, $download);
+    if (defined $file) {
+        return $self->upload_download($d, $file);
+    } else {
+        return $d;
+    }
+}
+
+sub upload_download {
+    my $self = shift;
+    
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $download, $file) = @_;
+    
+    # must successful on create_download
+    return 0 unless exists $download->{s3_url};
+    
+    ## POST form-data
+    my %data = (
+        Content_Type => 'form-data',
+        Content      => [
+            'key'                   => $download->{path},
+            'acl'                   => $download->{acl},
+            'success_action_status' => 201,
+            'Filename'              => $download->{name},
+            'AWSAccessKeyId'        => $download->{accesskeyid},
+            'Policy'                => $download->{policy},
+            'Signature'             => $download->{signature},
+            'Content-Type'          => $download->{mime_type},
+            'file'                  => [ $file ],
+        ],
+    );
+    my $request = POST $result->{s3_url}, %data;
+    my $res = $self->ua->request($request);
+    return $res->code == 201 ? 1 : 0;
+}
+
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
@@ -270,6 +465,91 @@ L<http://developer.github.com/v3/repos/collaborators/>
     my $is = $repos->is_collaborator('fayland');
     $repos->add_collaborator('fayland');
     $repos->delete_collaborator('fayland');
+
+=back
+
+=head3 Commits API
+
+L<http://developer.github.com/v3/repos/commits/>
+
+=over 4
+
+=item commits
+
+=item commit
+
+    my @commits = $repos->commits;
+    my $commit  = $repos->commit($sha);
+
+=item comments
+
+=item commit_comments
+
+=item create_comment
+
+=item comment
+
+=item update_comment
+
+=item delete_comment
+
+    my @comments = $repos->comments;
+    my @comments = $repos->commit_comments($sha);
+    my $comment  = $repos->create_comment($sha, {
+        "body" => "Nice change",
+        "commit_id" => "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+        "line" => 1,
+        "path" => "file1.txt",
+        "position" => 4
+    });
+    my $comment = $repos->comment($comment_id);
+    my $comment = $repos->update_comment($comment_id, {
+        "body" => "Nice change"
+    });
+    my $st = $repos->delete_comment($comment_id);
+
+=item compare_commits
+
+    my $diffs = $repos->compare_commits($base, $head);
+
+=back
+
+=head3 Downloads
+
+L<http://developer.github.com/v3/repos/downloads/>
+
+=over 4
+
+=item downloads
+
+=item download
+
+=item delete_download
+
+    my @downloads = $repos->downloads;
+    my $download  = $repos->download($download_id);
+    my $st = $repos->delete_download($download_id);
+
+=item create_download
+
+=item upload_download
+
+    my $download = $repos->create_download( {
+        "name" => "new_file.jpg",
+        "size" => 114034,
+        "description" => "Latest release",
+        "content_type" => "text/plain"
+    } );
+    my $st = $repos->upload_download($download, "/path/to/new_file.jpg");
+    
+    # or batch it
+    my $st = $repos->create_download( {
+        "name" => "new_file.jpg",
+        "size" => 114034,
+        "description" => "Latest release",
+        "content_type" => "text/plain",
+        file => '/path/to/new_file.jpg',
+    } );
 
 =back
 
