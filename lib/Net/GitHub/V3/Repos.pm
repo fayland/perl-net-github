@@ -617,12 +617,12 @@ L<http://developer.github.com/v3/repos/>
 
 =item list_org
 
-    my $rp = $repos->list; # or my @rp = $repos->list;
-    my $rp = $repos->list('private');
-    my $rp = $repos->list_user('c9s');
-    my $rp = $repos->list_user('c9s', 'member');
-    my $rp = $repos->list_org('perlchina');
-    my $rp = $repos->list_org('perlchina', 'public');
+    my @rp = $repos->list; # or my $rp = $repos->list;
+    my @rp = $repos->list('private');
+    my @rp = $repos->list_user('c9s');
+    my @rp = $repos->list_user('c9s', 'member');
+    my @rp = $repos->list_org('perlchina');
+    my @rp = $repos->list_org('perlchina', 'public');
 
 =item create
 
@@ -650,6 +650,10 @@ L<http://developer.github.com/v3/repos/>
 
     $repos->user('fayland');
     $repos->repos('perl-net-github');
+    my @contributors = $repos->contributors;
+
+    # or you can always pass them as the arguments
+    my @contributors = $repos->contributors($user, $repos);
 
 =over 4
 
@@ -667,11 +671,11 @@ L<http://developer.github.com/v3/repos/>
 
 =item contributors
 
-    my $contributors = $repos->contributors;
-    my $languages = $repos->languages;
-    my $teams = $repos->teams;
-    my $tags = $repos->tags;
-    my $branches = $repos->branches;
+    my @contributors = $repos->contributors;
+    my @languages = $repos->languages;
+    my @teams = $repos->teams;
+    my @tags = $repos->tags;
+    my @branches = $repos->branches;
 
 =back
 
