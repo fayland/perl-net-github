@@ -20,7 +20,7 @@ sub pulls {
     
     my @p;
     foreach my $p (qw/state/) {
-        push @p, "$p=" . $arg->{$p} if exists $args->{$p};
+        push @p, "$p=" . $args->{$p} if exists $args->{$p};
     }
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/pulls';
     $u .= '?' . join('&', @p) if @p;
@@ -101,7 +101,7 @@ sub is_merged {
     }
     my ($user, $repos, $id) = @_;
 
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/pulls/' . $id . '/merge'
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/pulls/' . $id . '/merge';
     
     my $old_raw_response = $self->raw_response;
     $self->raw_response(1); # need check header
@@ -119,7 +119,7 @@ sub merge {
     }
     my ($user, $repos, $id) = @_;
 
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/pulls/' . $id . '/merge'
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/pulls/' . $id . '/merge';
     return $self->query('PUT', $u);
 }
 

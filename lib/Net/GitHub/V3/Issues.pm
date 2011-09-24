@@ -15,7 +15,7 @@ sub issues {
     
     my @p;
     foreach my $p (qw/filter state labels sort direction since/) {
-        push @p, "$p=" . $arg->{$p} if exists $args->{$p};
+        push @p, "$p=" . $args->{$p} if exists $args->{$p};
     }
     my $u = '/issues';
     $u .= '?' . join('&', @p) if @p;
@@ -33,7 +33,7 @@ sub repos_issues {
     
     my @p;
     foreach my $p (qw/milestone state assignee mentioned labels sort direction since/) {
-        push @p, "$p=" . $arg->{$p} if exists $args->{$p};
+        push @p, "$p=" . $args->{$p} if exists $args->{$p};
     }
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues';
     $u .= '?' . join('&', @p) if @p;
@@ -266,7 +266,7 @@ sub create_issue_label {
     my ($user, $repos, $id, $labels) = @_;
 
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . $id . '/labels';
-    return $self->query('POST', $u, $label);
+    return $self->query('POST', $u, $labels);
 }
 
 sub delete_issue_label {
@@ -297,7 +297,7 @@ sub replace_issue_label {
     my ($user, $repos, $id, $labels) = @_;
 
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . $id . '/labels';
-    return $self->query('PUT', $u, $label);
+    return $self->query('PUT', $u, $labels);
 }
 
 sub delete_issue_labels {
@@ -344,7 +344,7 @@ sub milestones {
     
     my @p;
     foreach my $p (qw/state sort direction/) {
-        push @p, "$p=" . $arg->{$p} if exists $args->{$p};
+        push @p, "$p=" . $args->{$p} if exists $args->{$p};
     }
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones';
     $u .= '?' . join('&', @p) if @p;
