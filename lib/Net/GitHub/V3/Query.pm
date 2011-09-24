@@ -11,6 +11,7 @@ use WWW::Mechanize;
 use MIME::Base64;
 use HTTP::Request;
 use Carp qw/croak/;
+use URI::Escape;
 
 # configurable args
 
@@ -30,14 +31,22 @@ has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
 has 'RaiseError' => ( is => 'rw', isa => 'Bool', default => 1 );
 
 # optional
+has 'u'  => (is => 'rw', isa => 'Str');
+has 'repo' => (is => 'rw', isa => 'Str');
 
-has 'user'  => (is => 'rw', isa => 'Str');
-has 'repos' => (is => 'rw', isa => 'Str');
+sub set_default_user_repo {
+    my ($self, $user, $repo) = @_;
+    
+    $self->u($user);
+    $self->repo($repo);
+    
+    return $self;
+}
 
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'user', 'repos') {
+    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'u', 'repo') {
         my $v = $self->$col;
         $ret->{$col} = $v if defined $v;
     }

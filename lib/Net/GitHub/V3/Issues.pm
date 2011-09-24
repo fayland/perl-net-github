@@ -26,8 +26,8 @@ sub repos_issues {
     my $self = shift;
     
     if (@_ < 2) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $args) = @_;
     
@@ -43,8 +43,8 @@ sub repos_issues {
 sub issue {
     my $self = shift;
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -56,8 +56,8 @@ sub create_issue {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $issue) = @_;
 
@@ -69,8 +69,8 @@ sub update_issue {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $issue_id, $new_issue) = @_;
 
@@ -84,8 +84,8 @@ sub comments {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $issue_id) = @_;
 
@@ -96,8 +96,8 @@ sub comment {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -108,8 +108,8 @@ sub create_comment {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $issue_id, $comment) = @_;
     
@@ -121,8 +121,8 @@ sub update_comment {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid, $comment) = @_;
     
@@ -134,8 +134,8 @@ sub delete_comment {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -154,8 +154,8 @@ sub events {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $issue_id) = @_;
 
@@ -165,7 +165,7 @@ sub events {
 
 sub repos_events {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/events');
 }
 
@@ -173,8 +173,8 @@ sub event {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $issue_id) = @_;
 
@@ -186,15 +186,15 @@ sub event {
 
 sub labels {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/labels');
 }
 sub label {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -205,8 +205,8 @@ sub create_label {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $label) = @_;
 
@@ -217,8 +217,8 @@ sub update_label {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id, $label) = @_;
     
@@ -229,8 +229,8 @@ sub delete_label {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
     
@@ -247,8 +247,8 @@ sub issue_labels {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -260,8 +260,8 @@ sub create_issue_label {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id, $labels) = @_;
 
@@ -273,8 +273,8 @@ sub delete_issue_label {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id, $label_id) = @_;
     
@@ -291,8 +291,8 @@ sub replace_issue_label {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id, $labels) = @_;
 
@@ -304,8 +304,8 @@ sub delete_issue_labels {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
     
@@ -322,8 +322,8 @@ sub milestone_labels {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -337,8 +337,8 @@ sub milestones {
     my $self = @_;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $args) = @_;
     
@@ -355,8 +355,8 @@ sub milestone {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -368,8 +368,8 @@ sub create_milestone {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $milestone) = @_;
 
@@ -381,8 +381,8 @@ sub update_milestone {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id, $milestone) = @_;
     
@@ -393,8 +393,8 @@ sub delete_milestone {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
     
@@ -441,14 +441,17 @@ L<http://developer.github.com/v3/issues/>
 
 =back
 
-<B>SET user/repos before call methods below</B>
 
-    $issue->user('fayland');
-    $issue->repos('perl-net-github');
-    my @issues = $issue->repos_issues;
+<B>To ease the keyboard, we provied two ways to call any method which starts with :user/:repo</B>
 
-    # or you can always pass them as the arguments
-    my @issues = $issue->repos_issues($user, $repos);
+1. SET user/repo before call methods below
+
+    $issue->set_default_user_repo('fayland', 'perl-net-github');
+    my @issues = $repos->issues;
+
+2. If it is just for once, we can pass :user, :repo before any arguments
+
+    my @issues = $issue->repos_issues($user, $repo);
 
 =over 4
 

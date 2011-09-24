@@ -20,7 +20,7 @@ sub list {
 
 sub list_user {
     my ($self, $user, $type) = @_;
-    $user ||= $self->user;
+    $user ||= $self->u;
     $type ||= 'all';
     my $u = "/users/" . uri_escape($user) . "/repos";
     $u .= '?type=' . $type if $type ne 'all';
@@ -49,7 +49,7 @@ sub create {
 
 sub get {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos));
 }
 
@@ -57,8 +57,8 @@ sub update {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $new_repos) = @_;
 
@@ -68,27 +68,27 @@ sub update {
 
 sub contributors {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/contributors');
 }
 sub languages {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/languages');
 }
 sub teams {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/teams');
 }
 sub tags {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/tags');
 }
 sub branches {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/branches');
 }
 
@@ -96,7 +96,7 @@ sub branches {
 
 sub collaborators {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/collaborators');
 }
 
@@ -104,8 +104,8 @@ sub is_collaborator {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $collaborator) = @_;
 
@@ -122,8 +122,8 @@ sub add_collaborator {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $collaborator) = @_;
     
@@ -139,8 +139,8 @@ sub delete_collaborator {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $collaborator) = @_;
     
@@ -157,7 +157,7 @@ sub delete_collaborator {
 
 sub commits {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits');
 }
 
@@ -165,8 +165,8 @@ sub commit {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $sha1) = @_;
     
@@ -176,15 +176,15 @@ sub commit {
 
 sub comments {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments');
 }
 sub commit_comments {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $sha1) = @_;
     
@@ -195,8 +195,8 @@ sub create_comment {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $sha1, $comment) = @_;
     
@@ -207,8 +207,8 @@ sub comment {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -219,8 +219,8 @@ sub update_comment {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid, $comment) = @_;
     
@@ -232,8 +232,8 @@ sub delete_comment {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -249,8 +249,8 @@ sub delete_comment {
 sub compare_commits {
     my $self = shift;
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $base, $head) = @_;
     
@@ -262,14 +262,14 @@ sub compare_commits {
 
 sub downloads {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads');
 }
 sub download {
     my $self = shift;
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -281,8 +281,8 @@ sub delete_download {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -299,8 +299,8 @@ sub create_download {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $download) = @_;
     
@@ -319,8 +319,8 @@ sub upload_download {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $download, $file) = @_;
     
@@ -351,7 +351,7 @@ sub upload_download {
 
 sub forks {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/forks');
 }
 
@@ -359,8 +359,8 @@ sub create_fork {
     my $self = shift;
     
     if (@_ < 2) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $org) = @_;
     
@@ -373,14 +373,14 @@ sub create_fork {
 
 sub keys {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/forks');
 }
 sub key {
     my $self = shift;
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -391,8 +391,8 @@ sub create_key {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $title, $key ) = @_;
     
@@ -411,8 +411,8 @@ sub update_key {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $key_id, $new_key) = @_;
     
@@ -423,8 +423,8 @@ sub delete_key {
     my $self = shift;
     
     if (@_ < 2) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $key_id) = @_;
     
@@ -441,7 +441,7 @@ sub delete_key {
 
 sub watchers {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/watchers');
 }
 
@@ -457,7 +457,7 @@ sub watched {
 
 sub is_watching {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     
     # /user/watched/:user/:repo
     my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
@@ -471,7 +471,7 @@ sub is_watching {
 
 sub watch {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     
     my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
     
@@ -483,7 +483,7 @@ sub watch {
 }
 sub unwatch {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     
     my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
     
@@ -498,14 +498,14 @@ sub unwatch {
 
 sub hooks {
     my ($self, $user, $repos) = @_;
-    $user ||= $self->user; $repos ||= $self->repos;
+    $user ||= $self->u; $repos ||= $self->repo;
     return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks');
 }
 sub hook {
     my $self = shift;
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -517,8 +517,8 @@ sub delete_hook {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -535,8 +535,8 @@ sub test_hook {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -553,8 +553,8 @@ sub create_hook {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $hook) = @_;
 
@@ -566,8 +566,8 @@ sub update_hook {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $hook_id, $new_hook) = @_;
 
@@ -592,9 +592,8 @@ Net::GitHub::V3::Repos - GitHub Repos API
     my $gh = Net::GitHub::V3->new; # read L<Net::GitHub::V3> to set right authentication info
     my $repos = $gh->repos;
     
-    # set user/repos for simple calls
-    $repos->user('fayland');
-    $repos->repos('perl-net-github');
+    # set :user/:repo for simple calls
+    $repos->set_default_user_repo('fayland', 'perl-net-github');
     my @contributors = $repos->contributors; # don't need pass user and repos
     
 
@@ -643,14 +642,16 @@ L<http://developer.github.com/v3/repos/>
 
 =back
 
-<B>SET user/repos before call methods below</B>
+<B>To ease the keyboard, we provied two ways to call any method which starts with :user/:repo</B>
 
-    $repos->user('fayland');
-    $repos->repos('perl-net-github');
+1. SET user/repos before call methods below
+
+    $repos->set_default_user_repo('fayland', 'perl-net-github');
     my @contributors = $repos->contributors;
 
-    # or you can always pass them as the arguments
-    my @contributors = $repos->contributors($user, $repos);
+2. If it is just for once, we can pass :user, :repo before any arguments
+
+    my @contributors = $repos->contributors($user, $repo);
 
 =over 4
 

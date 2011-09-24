@@ -13,8 +13,8 @@ sub pulls {
     my $self = @_;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $args) = @_;
     
@@ -31,8 +31,8 @@ sub pull {
     my $self = @_;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -44,8 +44,8 @@ sub create_pull {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $pull) = @_;
 
@@ -57,8 +57,8 @@ sub update_pull {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id, $pull) = @_;
 
@@ -70,8 +70,8 @@ sub commits {
     my $self = @_;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -83,8 +83,8 @@ sub files {
     my $self = @_;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -96,8 +96,8 @@ sub is_merged {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -114,8 +114,8 @@ sub merge {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $id) = @_;
 
@@ -129,8 +129,8 @@ sub comments {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $pull_id) = @_;
 
@@ -141,8 +141,8 @@ sub comment {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -153,8 +153,8 @@ sub create_comment {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $pull_id, $comment) = @_;
     
@@ -166,8 +166,8 @@ sub update_comment {
     my $self = shift;
     
     if (@_ < 3) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid, $comment) = @_;
     
@@ -179,8 +179,8 @@ sub delete_comment {
     my $self = shift;
     
     if (@_ == 1) {
-        unshift @_, $self->repos;
-        unshift @_, $self->user;
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
     }
     my ($user, $repos, $cid) = @_;
     
@@ -213,14 +213,16 @@ Net::GitHub::V3::PullRequests - GitHub Pull Requests API
 
 =head1 DESCRIPTION
 
-<B>SET user/repos before call methods below</B>
+<B>To ease the keyboard, we provied two ways to call any method which starts with :user/:repo</B>
 
-    $pull_request->user('fayland');
-    $pull_request->repos('perl-net-github');
-    my @pulls = $pull_request->pulls;
+1. SET user/repos before call methods below
 
-    # or you can always pass them as the arguments
-    my @pulls = $pull_request->pulls($user, $repos);
+    $pull_request->set_default_user_repo('fayland', 'perl-net-github');
+    my @pulls = $pull_request->pulls();
+
+2. If it is just for once, we can pass :user, :repo before any arguments
+
+    my @pulls = $pull_request->pulls($user, $repo);
 
 =head2 METHODS
 

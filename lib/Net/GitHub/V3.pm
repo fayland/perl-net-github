@@ -72,9 +72,6 @@ Prefer:
         login => 'fayland', pass => 'mypass',
         # or
         # access_token => $oauth_token
-        
-        # optional
-        user => 'fayland', repos => 'perl-net-github',
     );
 
 Or:
@@ -84,9 +81,6 @@ Or:
         login => 'fayland', pass => 'mypass',
         # or
         # access_token => $oauth_token
-        
-        # optional
-        user => 'fayland', repos => 'perl-net-github',
     );
 
 =head1 DESCRIPTION
