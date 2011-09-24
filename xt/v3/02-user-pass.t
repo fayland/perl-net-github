@@ -10,7 +10,7 @@ my $gh = Net::GitHub::V3->new( login => $ENV{GITHUB_USER}, pass => $ENV{GITHUB_P
 diag( 'Using user = ' . $ENV{GITHUB_USER} );
 
 ok( $gh );
-my $data = $gh->users->show();
+my $data = $gh->user->show();
 
 ok( $data );
 ok( $data->{id} );
