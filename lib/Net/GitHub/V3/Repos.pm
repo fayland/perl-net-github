@@ -440,6 +440,62 @@ sub delete_key {
     return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 
+## http://developer.github.com/v3/repos/watching/
+
+sub watchers {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/watchers');
+}
+
+sub watched {
+    my ($self, $user) = @_;
+    
+    if ($user) {
+        return $self->query('/users/' . uri_escape($user). '/watched');
+    } else {
+        return $self->query('/user/watched');
+    }
+}
+
+sub is_watching {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    
+    # /user/watched/:user/:repo
+    my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query($u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
+
+sub watch {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    
+    my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('PUT', $u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
+sub unwatch {
+    my ($self, $user, $repos) = @_;
+    $user ||= $self->user; $repos ||= $self->repos;
+    
+    my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('DELETE', $u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
 
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
@@ -684,6 +740,37 @@ L<http://developer.github.com/v3/repos/keys/>
         key   => $key
     });
     $repos->delete_key($key_id);
+
+=back
+
+=head3 Repo Watching API
+
+L<http://developer.github.com/v3/repos/watching/>
+
+=over 4
+
+=item watchers
+
+    my @watchers = $repos->watchers;
+
+=item watched
+
+    my @repos = $repos->watched; # what I watched
+    my @repos = $repos->watched('c9s');
+
+=item is_watching
+
+    my $is_watching = $repos->is_watching;
+    my $is_watching = $repos->is_watching('fayland', 'perl-net-github');
+
+=item watch
+
+=item unwatch
+
+    my $st = $repos->watch();
+    my $st = $repos->watch('fayland', 'perl-net-github');
+    my $st = $repos->unwatch();
+    my $st = $repos->unwatch('fayland', 'perl-net-github');
 
 =back
 
