@@ -32,8 +32,7 @@ sub repos_issues {
         unshift @_, $self->repos;
         unshift @_, $self->user;
     }
-    my $user  = shift @_;
-    my $repos = shift @_;
+    my ($user, $repos, $args) = @_;
     
     my @p;
     foreach my $p (qw/milestone state assignee mentioned labels sort direction since/) {
@@ -335,6 +334,82 @@ sub milestone_labels {
     return $self->query($u);
 }
 
+## http://developer.github.com/v3/issues/milestones/
+
+sub milestones {
+    my $self = @_;
+    
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $args) = @_;
+    
+    my @p;
+    foreach my $p (qw/state sort direction/) {
+        push @p, "$p=" . $arg->{$p} if exists $args->{$p};
+    }
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones';
+    $u .= '?' . join('&', @p) if @p;
+    return $self->query($u);
+}
+
+sub milestone {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $id) = @_;
+
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones/' . $id;
+    return $self->query($u);
+}
+
+sub create_milestone {
+    my $self = shift;
+    
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $milestone) = @_;
+
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones';
+    return $self->query('POST', $u, $milestone);
+}
+
+sub update_milestone {
+    my $self = shift;
+    
+    if (@_ < 3) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $id, $milestone) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones/' . uri_escape($id);
+    return $self->query('PATCH', $u, $milestone);
+}
+sub delete_milestone {
+    my $self = shift;
+    
+    if (@_ == 1) {
+        unshift @_, $self->repos;
+        unshift @_, $self->user;
+    }
+    my ($user, $repos, $id) = @_;
+    
+    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestone/' . uri_escape($id);
+    
+    my $old_raw_response = $self->raw_response;
+    $self->raw_response(1); # need check header
+    my $res = $self->query('DELETE', $u);
+    $self->raw_response($old_raw_response);
+    return $res->header('Status') =~ /204/ ? 1 : 0;
+}
+
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 
@@ -382,12 +457,9 @@ L<http://developer.github.com/v3/issues/>
 
 =item repos_issues
 
-    # don't be confused
     my @issues = $issue->repos_issues;
     my @issues = $issue->repos_issues($user, $repos);
-    my @issues = $issue->repos_issues(state => 'open');
     my @issues = $issue->repos_issues( { state => 'open' } );
-    my @issues = $issue->repos_issues($user, $repos, state => 'open');
     my @issues = $issue->repos_issues($user, $repos, { state => 'open' } );
 
 =item issue
@@ -505,6 +577,37 @@ L<http://developer.github.com/v3/issues/labels/>
     my @labels = $issue->replace_issue_label($issue_id, ['New Label']);
     my $st = $issue->delete_issue_labels($issue_id);
     my @lbales = $issue->milestone_labels($milestone_id);
+
+=back
+
+=head3 Issue Milestones API
+
+L<http://developer.github.com/v3/issues/milestones/>
+
+=over 4
+
+=item milestones
+
+=item milestone
+
+=item create_milestone
+
+=item update_milestone
+
+=item delete_milestone
+
+    my @milestones = $issue->milestones;
+    my @milestones = $issue->milestones( { state => 'open' } );
+    my $milestone  = $issue->milestone($milestone_id);
+    my $milestone  = $issue->create_milestone( {
+        "title" => "String",
+        "state" => "open",
+        "description" => "String",
+    } );
+    my $milestone  = $issue->update_milestone( $milestone_id, {
+        title => 'New Title'
+    } );
+    my $st = $issue->delete_milestone($milestone_id);
 
 =back
 
