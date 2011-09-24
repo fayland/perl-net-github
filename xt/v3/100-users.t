@@ -25,6 +25,8 @@ my $u = $user->show();
 is($u->{bio}, $bio);
 is_deeply($u, $uu);
 
+=pod
+
 diag("Testing follow/unfollow");
 my $f = 'c9s';
 my $is_following = $user->is_following($f);
@@ -48,6 +50,8 @@ if ($is_following) {
     $ok = $user->unfollow($f);
     ok($ok);
 }
+
+=cut
 
 done_testing;
 

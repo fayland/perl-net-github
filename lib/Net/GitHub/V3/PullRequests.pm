@@ -9,9 +9,6 @@ use URI::Escape;
 
 with 'Net::GitHub::V3::Query';
 
-has 'user'  => (is => 'rw', isa => 'Str');
-has 'repos' => (is => 'rw', isa => 'Str');
-
 sub pulls {
     my $self = @_;
     

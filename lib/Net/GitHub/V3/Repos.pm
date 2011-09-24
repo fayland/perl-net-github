@@ -10,9 +10,6 @@ use HTTP::Request::Common qw(POST);
 
 with 'Net::GitHub::V3::Query';
 
-has 'user'  => (is => 'rw', isa => 'Str');
-has 'repos' => (is => 'rw', isa => 'Str');
-
 sub list {
     my ( $self, $type ) = @_;
     $type ||= 'all';
