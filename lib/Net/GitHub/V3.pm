@@ -13,6 +13,7 @@ use Net::GitHub::V3::Issues;
 use Net::GitHub::V3::PullRequests;
 use Net::GitHub::V3::Orgs;
 use Net::GitHub::V3::GitData;
+use Net::GitHub::V3::Gists;
 
 has '+is_main_module' => (default => 1);
 
@@ -33,6 +34,16 @@ has 'org' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::Orgs->new( $self->args_to_pass );
+    },
+);
+
+has 'gist' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V3::Gists',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::Gists->new( $self->args_to_pass );
     },
 );
 
@@ -235,6 +246,10 @@ L<Net::GitHub::V3::Orgs>
 =head3 git_data
 
 L<Net::GitHub::V3::GitData>
+
+=head3 gist
+
+L<Net::GitHub::V3::Gists>
 
 =head1 SEE ALSO
 
