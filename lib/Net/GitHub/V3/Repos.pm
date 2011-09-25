@@ -494,86 +494,19 @@ sub unwatch {
     return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 
-## http://developer.github.com/v3/repos/hooks/
+## build methods on fly
+my %__methods = (
 
-sub hooks {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks');
-}
-sub hook {
-    my $self = shift;
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
+    # http://developer.github.com/v3/repos/hooks/
+    hooks => { url => "/repos/%s/%s/hooks" },
+    hook  => { url => "/repos/%s/%s/hooks/%s" },
+    delete_hook => { url => "/repos/%s/%s/hooks/%s", method => 'DELETE', check_status => 204 },
+    test_hook   => { url => "/repos/%s/%s/hooks/%s/test", method => 'POST', check_status => 204 },
+    create_hook => { url => "/repos/%s/%s/hooks", method => 'POST',  args => 1 },
+    update_hook => { url => "/repos/%s/%s/hooks/%s", method => 'PATCH', args => 1 },
     
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks/' . uri_escape($cid);
-    return $self->query($u);
-}
-
-sub delete_hook {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks/' . uri_escape($cid);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-sub test_hook {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks/' . uri_escape($cid) . '/test';
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('POST', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-sub create_hook {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $hook) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks';
-    return $self->query('POST', $u, $hook);
-}
-
-sub update_hook {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $hook_id, $new_hook) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/hooks/' . uri_escape($hook_id);
-    return $self->query('PATCH', $u, $new_hook);
-}
+);
+__build_methods(__PACKAGE__, %__methods);
 
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;

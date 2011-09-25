@@ -11,19 +11,19 @@ with 'Net::GitHub::V3::Query';
 
 ## build methods on fly
 my %__methods = (
-    blob => { url => "/repos/%s/%s/git/blobs/%s", is_u_repo => 1 },
-    create_blob => { url => "/repos/%s/%s/git/blobs", is_u_repo => 1, method => 'POST', args => 1 },
+    blob => { url => "/repos/%s/%s/git/blobs/%s" },
+    create_blob => { url => "/repos/%s/%s/git/blobs", method => 'POST', args => 1 },
     
-    commit => { url => "/repos/%s/%s/git/commits/%s", is_u_repo => 1 },
-    create_commit => { url => "/repos/%s/%s/git/commits", is_u_repo => 1, method => 'POST', args => 1 },
+    commit => { url => "/repos/%s/%s/git/commits/%s" },
+    create_commit => { url => "/repos/%s/%s/git/commits", method => 'POST', args => 1 },
     
-    refs => { url => "/repos/%s/%s/git/refs", is_u_repo => 1 },
-    ref  => { url => "/repos/%s/%s/git/refs/%s", is_u_repo => 1 },
-    create_ref => { url => "/repos/%s/%s/git/refs", is_u_repo => 1, method => 'POST', args => 1 },
-    update_ref => { url => "repos/%s/%s/git/refs/%s", is_u_repo => 1, method => 'PATCH', args => 1 },
+    refs => { url => "/repos/%s/%s/git/refs" },
+    ref  => { url => "/repos/%s/%s/git/refs/%s" },
+    create_ref => { url => "/repos/%s/%s/git/refs", method => 'POST', args => 1 },
+    update_ref => { url => "repos/%s/%s/git/refs/%s", method => 'PATCH', args => 1 },
     
-    tag => { url => "/repos/%s/%s/git/tags/%s", is_u_repo => 1 },
-    create_tag => { url => "/repos/%s/%s/git/tags", is_u_repo => 1, method => 'POST', args => 1 },
+    tag => { url => "/repos/%s/%s/git/tags/%s" },
+    create_tag => { url => "/repos/%s/%s/git/tags", method => 'POST', args => 1 },
     
 );
 __build_methods(__PACKAGE__, %__methods);

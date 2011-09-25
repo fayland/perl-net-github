@@ -30,22 +30,22 @@ sub pulls {
 ## build methods on fly
 my %__methods = (
 
-    pull => { url => "/repos/%s/%s/pulls/%s", is_u_repo => 1 },
+    pull => { url => "/repos/%s/%s/pulls/%s" },
 
-    create_pull => { url => "/repos/%s/%s/pulls", is_u_repo => 1, method => "POST", args => 1 },
-    update_pull => { url => "/repos/%s/%s/pulls/%s", is_u_repo => 1, method => "PATCH", args => 1 },
+    create_pull => { url => "/repos/%s/%s/pulls", method => "POST", args => 1 },
+    update_pull => { url => "/repos/%s/%s/pulls/%s", method => "PATCH", args => 1 },
 
-    commits => { url => "/repos/%s/%s/pulls/%s/commits", is_u_repo => 1 },
-    files => { url => "/repos/%s/%s/pulls/%s/files", is_u_repo => 1 },
-    is_merged => { url => "/repos/%s/%s/pulls/%s/merge", is_u_repo => 1, check_status => 204 },
-    merge => { url => "/repos/%s/%s/pulls/%s/merge", is_u_repo => 1, method => "PUT" },
+    commits => { url => "/repos/%s/%s/pulls/%s/commits" },
+    files => { url => "/repos/%s/%s/pulls/%s/files" },
+    is_merged => { url => "/repos/%s/%s/pulls/%s/merge", check_status => 204 },
+    merge => { url => "/repos/%s/%s/pulls/%s/merge", method => "PUT" },
 
     # http://developer.github.com/v3/pulls/comments/
-    comments => { url => "/repos/%s/%s/pulls/%s/comments", is_u_repo => 1 },
-    comment  => { url => "/repos/%s/%s/pulls/comments/%s", is_u_repo => 1 },
-    create_comment => { url => "/repos/%s/%s/pulls/%s/comments", is_u_repo => 1, method => 'POST',  args => 1 },
-    update_comment => { url => "/repos/%s/%s/pulls/comments/%s", is_u_repo => 1, method => 'PATCH', args => 1 },
-    delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", is_u_repo => 1, method => 'DELETE', check_status => 204 },
+    comments => { url => "/repos/%s/%s/pulls/%s/comments" },
+    comment  => { url => "/repos/%s/%s/pulls/comments/%s" },
+    create_comment => { url => "/repos/%s/%s/pulls/%s/comments", method => 'POST',  args => 1 },
+    update_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'PATCH', args => 1 },
+    delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'DELETE', check_status => 204 },
     
 );
 __build_methods(__PACKAGE__, %__methods);

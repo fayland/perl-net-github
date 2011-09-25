@@ -179,6 +179,7 @@ sub __build_methods {
         my $method = $v->{method} || 'GET';
         my $args = $v->{args} || 0; # args for ->query
         my $check_status = $v->{check_status};
+        my $is_u_repo = $v->{is_u_repo}; # need auto shift u/repo
         
         $package->meta->add_method( $m => sub {
             my $self = shift;
@@ -186,8 +187,8 @@ sub __build_methods {
             # count how much %s inside u
             my $n = 0; while ($url =~ /\%s/g) { $n++ }
             
-            ## both ($user, $repo, @args) or (@args) should be supported
-            if ( index($url, '/repos/%s/%s/') > -1 and @_ < $n + $args) {
+            ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
+            if ( ($is_u_repo or index($url, '/repos/%s/%s/') > -1) and @_ < $n + $args) {
                 unshift @_, $self->repo;
                 unshift @_, $self->u;
             }
