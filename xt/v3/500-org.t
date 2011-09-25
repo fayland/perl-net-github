@@ -15,6 +15,8 @@ diag( 'Using user = ' . $ENV{GITHUB_USER} );
 ok( $gh );
 ok( $org );
 
+=pod
+
 my $o = $org->org('perlchina'); # PerlChina
 ok($o);
 is($o->{'billing_email'}, 'perlchina@googlegroups.com');
@@ -22,6 +24,13 @@ is($o->{'billing_email'}, 'perlchina@googlegroups.com');
 $o = $org->update_org('perlchina', { name => 'PerlChina' });
 ok($o);
 is($o->{name}, 'PerlChina');
+
+=cut
+
+my $is_member = $org->is_member('perlchina', 'fayland');
+is($is_member, 1);
+$is_member = $org->is_member('perlchina', 'nothingmuch');
+is($is_member, 0);
 
 done_testing;
 

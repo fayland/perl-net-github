@@ -175,17 +175,26 @@ sub __build_methods {
         my $url = $v->{url};
         my $method = $v->{method} || 'GET';
         my $args = $v->{args}; # args for ->query
+        my $check_status = $v->{check_status};
         
         $package->meta->add_method( $m => sub {
             my $self = shift;
             
             # count how much %s inside u
-            my $n = ($url =~ /\%s/g);
+            my $n; while ($url =~ /\%s/g) { $n++ }
             my @uargs = splice(@_, 0, $n);
             my $u = sprintf($url, @uargs);
-            
+
             my @qargs = $args ? splice(@_, 0, $args) : ();
-            return $self->query($method, $u, @qargs);
+            if ($check_status) {
+                my $old_raw_response = $self->raw_response;
+                $self->raw_response(1); # need check header
+                my $res = $self->query($method, $u, @qargs);
+                $self->raw_response($old_raw_response);
+                return index($res->header('Status'), $check_status) > -1 ? 1 : 0;
+            } else {
+                return $self->query($method, $u, @qargs);
+            }
         } );
     }
 }
