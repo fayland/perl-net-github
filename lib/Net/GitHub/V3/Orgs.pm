@@ -18,12 +18,8 @@ sub orgs {
 
 ## build methods on fly
 my %__methods = (
-    'org' => { url => "/orgs/%s" },
-    'update_org' => {
-        url  => "/orgs/%s",
-        method => 'PATCH',
-        args => 1
-    },
+    org => { url => "/orgs/%s" },
+    update_org => { url => "/orgs/%s", method => 'PATCH', args => 1 },
     # Members
     members   => { url => "/orgs/%s/members" },
     is_member => { url => "/orgs/%s/members/%s", check_status => 204 },

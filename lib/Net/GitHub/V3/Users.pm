@@ -12,11 +12,8 @@ with 'Net::GitHub::V3::Query';
 sub show {
     my ( $self, $user ) = @_;
     
-    if ($user) {
-        return $self->query("/users/" . uri_escape($user));
-    } else {
-        return $self->query('/user');
-    }
+    my $u = $user ? "/users/" . uri_escape($user) : '/user';
+    return $self->query($u);
 }
 
 sub update {
@@ -26,90 +23,42 @@ sub update {
     return $self->query('PATCH', '/user', $data);
 }
 
-sub emails {
-    (shift)->query('/user/emails');
-}
 sub add_email {
     (shift)->query( 'POST', '/user/emails', [ @_ ] );
 }
 sub remove_email {
     (shift)->query( 'DELETE', '/user/emails', [ @_ ] );
 }
-
 sub followers {
     my ($self, $user) = @_;
-    if ($user) {
-        return $self->query("/users/" . uri_escape($user) . '/followers');
-    } else {
-        return $self->query('/user/followers');
-    }
+    
+    my $u = $user ? "/users/" . uri_escape($user) . '/followers' : '/user/followers';
+    return $self->query($u);
 }
 sub following {
     my ($self, $user) = @_;
-    if ($user) {
-        return $self->query("/users/" . uri_escape($user) . '/following');
-    } else {
-        return $self->query('following');
-    }
-}
-sub is_following {
-    my ($self, $user) = @_;
     
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('/user/following/' . uri_escape($user));
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-sub follow {
-    my ( $self, $user ) = @_;
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('PUT', '/user/following/' . uri_escape($user));
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-sub unfollow {
-    my ( $self, $user ) = @_;
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', '/user/following/' . uri_escape($user));
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
+    my $u = $user ? "/users/" . uri_escape($user) . '/following' : '/user/following';
+    return $self->query($u);
 }
 
-sub keys {
-    (shift)->query('/user/keys');
-}
-sub key {
-    my ($self, $key_id) = @_;
-    return $self->query('/user/keys/' . uri_escape($key_id));
-}
-sub create_key {
-    my ( $self, $title, $key ) = @_;
-    unless (ref $title eq 'HASH') { # title can be a hashref
-        $title = {
-            title => $title,
-            key => $key
-        }
-    }
-    return $self->query('POST', '/user/keys', $title);
-        
-}
-sub update_key {
-    my ($self, $key_id, $new_key) = @_;
-    return $self->query('PATCH', '/user/keys/' . uri_escape($key_id), $new_key);
-}
-sub delete_key {
-    my ( $self, $id ) = @_;
+
+## build methods on fly
+my %__methods = (
+
+    emails => { url => "/user/email" },
     
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', '/user/keys/' . uri_escape($id));
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
+    is_following => { url => "/use/following/%s", check_status => 204 },
+    follow => { url => "/use/following/%s", method => 'PUT', check_status => 204 },
+    unfollow => { url => "/use/following/%s", method => 'DELETE', check_status => 204 },
+
+    keys => { url => "/user/keys" },
+    key  => { url => "/user/keys/%s" },
+    create_key => { url => "/user/keys", method => 'POST', args => 1 },
+    update_key => { url => "/user/keys/%s", method => 'PATCH', args => 1 },
+    delete_key => { url => "/user/keys/%s", method => 'DELETE', check_status => 204 },
+);
+__build_methods(__PACKAGE__, %__methods);
 
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
@@ -217,7 +166,10 @@ L<http://developer.github.com/v3/users/keys/>
 
     my $keys = $user->keys;
     my $key  = $user->key($key_id); # get key
-    $user->create_key( 'title', $key );
+    $user->create_key({
+        title => 'title',
+        key   => $key
+    });
     $user->update_key($key_id, {
         title => $title,
         key   => $key
