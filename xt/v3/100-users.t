@@ -5,7 +5,8 @@ use warnings;
 use Test::More;
 use Net::GitHub::V3;
 
-BAIL_OUT('Please export environment variable GITHUB_USER/GITHUB_PASS') unless $ENV{GITHUB_USER} and $ENV{GITHUB_PASS};
+plan skip_all => 'Please export environment variable GITHUB_USER/GITHUB_PASS'
+     unless $ENV{GITHUB_USER} and $ENV{GITHUB_PASS};
 
 my $gh = Net::GitHub::V3->new( login => $ENV{GITHUB_USER}, pass => $ENV{GITHUB_PASS});
 my $user = $gh->user;

@@ -3,7 +3,7 @@
 use Test::More;
 use Net::GitHub;
 
-BAIL_OUT('Please export environment variable GITHUB_ACCESS_TOKEN') unless $ENV{GITHUB_ACCESS_TOKEN};
+plan skip_all => 'Please export environment variable GITHUB_ACCESS_TOKEN' unless $ENV{GITHUB_ACCESS_TOKEN};
 
 my $gh = Net::GitHub->new( access_token => $ENV{GITHUB_ACCESS_TOKEN});
 
