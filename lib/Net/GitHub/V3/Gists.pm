@@ -144,6 +144,7 @@ L<http://developer.github.com/v3/gists/comments/>
     });
     my $st = $gist->delete_comment($gist_id);
 
+=back
 
 =head1 AUTHOR & COPYRIGHT & LICENSE
 
