@@ -42,7 +42,6 @@ sub following {
     return $self->query($u);
 }
 
-
 ## build methods on fly
 my %__methods = (
 

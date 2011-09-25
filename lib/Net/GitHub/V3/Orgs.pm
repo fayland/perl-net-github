@@ -60,7 +60,7 @@ Net::GitHub::V3::Orgs - GitHub Orgs API
     use Net::GitHub::V3;
 
     my $gh = Net::GitHub::V3->new; # read L<Net::GitHub::V3> to set right authentication info
-    my $user = $gh->org;
+    my $org = $gh->org;
 
 =head1 DESCRIPTION
 

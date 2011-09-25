@@ -52,6 +52,9 @@ sub set_default_user_repo {
         if ($self->is_pull_request_init) {
             $self->pull_request->u($user); $self->pull_request->repo($repo);
         }
+        if ($self->is_git_data_init) {
+            $self->git_data->u($user); $self->git_data->repo($repo);
+        }
     }
 
     return $self;

@@ -12,6 +12,7 @@ use Net::GitHub::V3::Repos;
 use Net::GitHub::V3::Issues;
 use Net::GitHub::V3::PullRequests;
 use Net::GitHub::V3::Orgs;
+use Net::GitHub::V3::GitData;
 
 has '+is_main_module' => (default => 1);
 
@@ -65,6 +66,17 @@ has 'pull_request' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::PullRequests->new( $self->args_to_pass );
+    },
+);
+
+has 'git_data' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V3::GitData',
+    lazy => 1,
+    predicate => 'is_git_data_init',
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::GitData->new( $self->args_to_pass );
     },
 );
 
@@ -219,6 +231,10 @@ L<Net::GitHub::V3::PullRequests>
     my @orgs   = $gh->org->orgs;
     
 L<Net::GitHub::V3::Orgs>
+
+=head3 git_data
+
+L<Net::GitHub::V3::GitData>
 
 =head1 SEE ALSO
 
