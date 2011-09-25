@@ -188,7 +188,7 @@ sub __build_methods {
             my $n = 0; while ($url =~ /\%s/g) { $n++ }
             
             ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
-            if ( ($is_u_repo or index($url, '/repos/%s/%s/') > -1) and @_ < $n + $args) {
+            if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
                 unshift @_, $self->repo;
                 unshift @_, $self->u;
             }

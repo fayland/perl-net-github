@@ -47,253 +47,63 @@ sub create {
     return $self->query('POST', $u, $data);
 }
 
-sub get {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos));
-}
+## build methods on fly
+my %__methods = (
 
-sub update {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $new_repos) = @_;
+    get => { url => "/repos/%s/%s" },
+    update => { url => "/repos/%s/%s", method => 'PATCH', args => 1 },
+    contributors => { url => "/repos/%s/%s/contributors" },
+    languages => { url => "/repos/%s/%s/languages" },
+    teams     => { url => "/repos/%s/%s/teams" },
+    tags      => { url => "/repos/%s/%s/tags" },
+    branches  => { url => "/repos/%s/%s/branches" },
 
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos);
-    return $self->query('PATCH', $u, $new_repos);
-}
+    # http://developer.github.com/v3/repos/collaborators/
+    collaborators       => { url => "/repos/%s/%s/collaborators" },
+    is_collaborator     => { url => "/repos/%s/%s/collaborators/%s", check_status => 204 },
+    add_collaborator    => { url => "/repos/%s/%s/collaborators/%s", method => 'PUT', check_status => 204 },
+    delete_collaborator => { url => "/repos/%s/%s/collaborators/%s", method => 'DELETE', check_status => 204 },
 
-sub contributors {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/contributors');
-}
-sub languages {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/languages');
-}
-sub teams {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/teams');
-}
-sub tags {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/tags');
-}
-sub branches {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/branches');
-}
+    # http://developer.github.com/v3/repos/commits/
+    commits  => { url => "/repos/%s/%s/commits" },
+    commit   => { url => "/repos/%s/%s/commits/%s" },
+    comments => { url => "/repos/%s/%s/comments" },
+    comment  => { url => "/repos/%s/%s/comments/%s" },
+    commit_comments => { url => "/repos/%s/%s/commits/%s/comments" },
+    create_comment => { url => "/repos/%s/%s/commits/%s/comments", method => 'POST',  args => 1 },
+    update_comment => { url => "/repos/%s/%s/comments/%s", method => 'PATCH', args => 1 },
+    delete_comment => { url => "/repos/%s/%s/comments/%s", method => 'DELETE', check_status => 204 },
+    compare_commits => { url => "/repos/%s/%s/compare/%s...%s" },
 
-## http://developer.github.com/v3/repos/collaborators/
+    # http://developer.github.com/v3/repos/downloads/
+    downloads => { url => "/repos/%s/%s/downloads" },
+    download  => { url => "/repos/%s/%s/downloads/%s" },
+    delete_download => { url => "/repos/%s/%s/downloads/%s", method => 'DELETE', check_status => 204 },
 
-sub collaborators {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/collaborators');
-}
+    forks => { url => "/repos/%s/%s/forks" },
 
-sub is_collaborator {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $collaborator) = @_;
+    # http://developer.github.com/v3/repos/keys/
+    keys => { url => "/repos/%s/%s/keys" },
+    key  => { url => "/repos/%s/%s/keys/%s" },
+    create_key => { url => "/repos/%s/%s/keys", method => 'POST', args => 1 },
+    update_key => { url => "/repos/%s/%s/keys/%s", method => 'PATCH', check_status => 204, args => 1 },
+    delete_key => { url => "/repos/%s/%s/keys/%s", method => 'DELETE', check_status => 204 },
 
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/collaborators/' . uri_escape($collaborator);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query($u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
+    # http://developer.github.com/v3/repos/watching/
+    watchers => { url => "/repos/%s/%s/watchers" },
+    is_watching => { url => "/user/watched/%s/%s", is_u_repo => 1, check_status => 204 },
+    watch   => { url => "/user/watched/%s/%s", is_u_repo => 1, method => 'PUT', check_status => 204 },
+    unwatch => { url => "/user/watched/%s/%s", is_u_repo => 1, method => 'DELETE', check_status => 204 },
 
-sub add_collaborator {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $collaborator) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/collaborators/' . uri_escape($collaborator);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('PUT', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-sub delete_collaborator {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $collaborator) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/collaborators/' . uri_escape($collaborator);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-## http://developer.github.com/v3/repos/commits/
-
-sub commits {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits');
-}
-
-sub commit {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $sha1) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits/' . uri_escape($sha1);
-    return $self->query($u);
-}
-
-sub comments {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments');
-}
-sub commit_comments {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $sha1) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits/' . uri_escape($sha1) . '/comments';
-    return $self->query($u);
-}
-sub create_comment {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $sha1, $comment) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits/' . uri_escape($sha1) . '/comments';
-    return $self->query('POST', $u, $comment);
-}
-sub comment {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments/' . uri_escape($cid);
-    return $self->query($u);
-}
-sub update_comment {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid, $comment) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments/' . uri_escape($cid);
-    return $self->query('PATCH', $u, $comment);
-}
-
-sub delete_comment {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/comments/' . uri_escape($cid);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-sub compare_commits {
-    my $self = shift;
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $base, $head) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/compare/' . uri_escape($base) . '...' . uri_escape($head);
-    return $self->query($u);
-}
-
-## http://developer.github.com/v3/repos/downloads/
-
-sub downloads {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads');
-}
-sub download {
-    my $self = shift;
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads/' . uri_escape($cid);
-    return $self->query($u);
-}
-
-sub delete_download {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads/' . uri_escape($cid);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
+    # http://developer.github.com/v3/repos/hooks/
+    hooks => { url => "/repos/%s/%s/hooks" },
+    hook  => { url => "/repos/%s/%s/hooks/%s" },
+    delete_hook => { url => "/repos/%s/%s/hooks/%s", method => 'DELETE', check_status => 204 },
+    test_hook   => { url => "/repos/%s/%s/hooks/%s/test", method => 'POST', check_status => 204 },
+    create_hook => { url => "/repos/%s/%s/hooks", method => 'POST',  args => 1 },
+    update_hook => { url => "/repos/%s/%s/hooks/%s", method => 'PATCH', args => 1 },
+);
+__build_methods(__PACKAGE__, %__methods);
 
 sub create_download {
     my $self = shift;
@@ -348,13 +158,6 @@ sub upload_download {
 }
 
 ## http://developer.github.com/v3/repos/forks/
-
-sub forks {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/forks');
-}
-
 sub create_fork {
     my $self = shift;
     
@@ -369,144 +172,13 @@ sub create_fork {
     return $self->query('POST', $u);
 }
 
-## http://developer.github.com/v3/repos/keys/
-
-sub keys {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/forks');
-}
-sub key {
-    my $self = shift;
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/keys/' . uri_escape($cid);
-    return $self->query($u);
-}
-sub create_key {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $title, $key ) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/keys';
-
-    unless (ref $title eq 'HASH') { # title can be a hashref
-        $title = {
-            title => $title,
-            key => $key
-        }
-    }
-    return $self->query('POST', $u, $title);
-        
-}
-sub update_key {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $key_id, $new_key) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/keys/' . uri_escape($key_id);
-    return $self->query('PATCH', $u, $new_key);
-}
-sub delete_key {
-    my $self = shift;
-    
-    if (@_ < 2) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $key_id) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/keys/' . uri_escape($key_id);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
 ## http://developer.github.com/v3/repos/watching/
-
-sub watchers {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/watchers');
-}
-
 sub watched {
     my ($self, $user) = @_;
     
-    if ($user) {
-        return $self->query('/users/' . uri_escape($user). '/watched');
-    } else {
-        return $self->query('/user/watched');
-    }
+    my $u = $user ? '/users/' . uri_escape($user). '/watched' : '/user/watched';
+    return $self->query($u);
 }
-
-sub is_watching {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    
-    # /user/watched/:user/:repo
-    my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query($u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-sub watch {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    
-    my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('PUT', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-sub unwatch {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    
-    my $u = "/user/watched/" . uri_escape($user) . "/" . uri_escape($repos);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-## build methods on fly
-my %__methods = (
-
-    # http://developer.github.com/v3/repos/hooks/
-    hooks => { url => "/repos/%s/%s/hooks" },
-    hook  => { url => "/repos/%s/%s/hooks/%s" },
-    delete_hook => { url => "/repos/%s/%s/hooks/%s", method => 'DELETE', check_status => 204 },
-    test_hook   => { url => "/repos/%s/%s/hooks/%s/test", method => 'POST', check_status => 204 },
-    create_hook => { url => "/repos/%s/%s/hooks", method => 'POST',  args => 1 },
-    update_hook => { url => "/repos/%s/%s/hooks/%s", method => 'PATCH', args => 1 },
-    
-);
-__build_methods(__PACKAGE__, %__methods);
 
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
@@ -751,7 +423,10 @@ L<http://developer.github.com/v3/repos/keys/>
 
     my @keys = $repos->keys;
     my $key  = $repos->key($key_id); # get key
-    $repos->create_key( 'title', $key );
+    $repos->create_key( {
+        title => 'title',
+        key   => $key
+    } );
     $repos->update_key($key_id, {
         title => $title,
         key   => $key
