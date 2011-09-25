@@ -7,7 +7,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;
 use JSON::Any;
-use WWW::Mechanize;
+use WWW::Mechanize::GZip;
 use MIME::Base64;
 use HTTP::Request;
 use Carp qw/croak/;
@@ -68,12 +68,12 @@ sub args_to_pass {
 }
 
 has 'ua' => (
-    isa     => 'WWW::Mechanize',
+    isa     => 'WWW::Mechanize::GZip',
     is      => 'ro',
     lazy    => 1,
     default => sub {
         my $self = shift;
-        return WWW::Mechanize->new(
+        return WWW::Mechanize::GZip->new(
             agent       => "perl-net-github $VERSION",
             cookie_jar  => {},
             stack_depth => 1,
@@ -138,8 +138,7 @@ sub query {
 
     return $ua->res if $self->raw_response;
     return $ua->content if $self->raw_string;
-    
-    
+
     if ($res->header('Content-Type') and $res->header('Content-Type') eq 'application/json') {
         my $json = $ua->content;
         $data = eval { $self->json->jsonToObj($json) };
@@ -164,6 +163,31 @@ sub query {
     }
 
     return $data;
+}
+
+## build methods on fly
+sub __build_methods {
+    my $package = shift;
+    my %methods = @_;
+    
+    foreach my $m (keys %methods) {
+        my $v = $methods{$m};
+        my $url = $v->{url};
+        my $method = $v->{method} || 'GET';
+        my $args = $v->{args}; # args for ->query
+        
+        $package->meta->add_method( $m => sub {
+            my $self = shift;
+            
+            # count how much %s inside u
+            my $n = ($url =~ /\%s/g);
+            my @uargs = splice(@_, 0, $n);
+            my $u = sprintf($url, @uargs);
+            
+            my @qargs = $args ? splice(@_, 0, $args) : ();
+            return $self->query($method, $u, @qargs);
+        } );
+    }
 }
 
 no Any::Moose;

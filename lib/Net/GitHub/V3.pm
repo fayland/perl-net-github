@@ -11,6 +11,7 @@ use Net::GitHub::V3::Users;
 use Net::GitHub::V3::Repos;
 use Net::GitHub::V3::Issues;
 use Net::GitHub::V3::PullRequests;
+use Net::GitHub::V3::Orgs;
 
 has '+is_main_module' => (default => 1);
 
@@ -21,6 +22,16 @@ has 'user' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::Users->new( $self->args_to_pass );
+    },
+);
+
+has 'org' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V3::Orgs',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::Orgs->new( $self->args_to_pass );
     },
 );
 
@@ -202,6 +213,12 @@ L<Net::GitHub::V3::Issues>
     my @pulls = $gh->pull_request->pulls();
 
 L<Net::GitHub::V3::PullRequests>
+
+=head3 org
+
+    my @orgs   = $gh->org->orgs;
+    
+L<Net::GitHub::V3::Orgs>
 
 =head1 SEE ALSO
 
