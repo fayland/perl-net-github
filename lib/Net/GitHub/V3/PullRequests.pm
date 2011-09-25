@@ -45,7 +45,7 @@ my %__methods = (
     comment  => { url => "/repos/%s/%s/pulls/comments/%s", is_u_repo => 1 },
     create_comment => { url => "/repos/%s/%s/pulls/%s/comments", is_u_repo => 1, method => 'POST',  args => 1 },
     update_comment => { url => "/repos/%s/%s/pulls/comments/%s", is_u_repo => 1, method => 'PATCH', args => 1 },
-    delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", is_u_repo => 1, method => 'DELETE' },
+    delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", is_u_repo => 1, method => 'DELETE', check_status => 204 },
     
 );
 __build_methods(__PACKAGE__, %__methods);

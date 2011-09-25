@@ -40,299 +40,48 @@ sub repos_issues {
     return $self->query($u);
 }
 
-sub issue {
-    my $self = shift;
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . uri_escape($cid);
-    return $self->query($u);
-}
+## build methods on fly
+my %__methods = (
 
-sub create_issue {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $issue) = @_;
+    issue => { url => "/repos/%s/%s/issues/%s" },
+    create_issue => { url => "/repos/%s/%s/issues", method => 'POST', args => 1 },
+    update_issue => { url => "/repos/%s/%s/issues/%s", method => 'PATCH', args => 1 },
 
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues';
-    return $self->query('POST', $u, $issue);
-}
+    ## http://developer.github.com/v3/issues/comments/
+    comments => { url => "/repos/%s/%s/issues/%s/comments" },
+    comment  => { url => "/repos/%s/%s/issues/comments/%s" },
+    create_comment => { url => "/repos/%s/%s/issues/%s/comments", method => 'POST',  args => 1 },
+    update_comment => { url => "/repos/%s/%s/issues/comments/%s", method => 'PATCH', args => 1 },
+    delete_comment => { url => "/repos/%s/%s/issues/comments/%s", method => 'DELETE', check_status => 204 },
 
-sub update_issue {
-    my $self = shift;
+    # http://developer.github.com/v3/issues/events/
+    events => { url => "/repos/%s/%s/issues/%s/events" },
+    repos_events => { url => "/repos/%s/%s/issues/events" },
+    event => { url => "/repos/%s/%s/issues/events/%s" },
     
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $issue_id, $new_issue) = @_;
+    # http://developer.github.com/v3/issues/labels/
+    labels => { url => "/repos/%s/%s/labels" },
+    label  => { url => "/repos/%s/%s/labels/%s" },
+    create_label => { url => "/repos/%s/%s/labels", method => 'POST', args => 1 },
+    update_label => { url => "/repos/%s/%s/labels/%s", method => 'PATCH', args => 1 },
+    delete_label => { url => "/repos/%s/%s/labels/%s", method => 'DELETE', check_status => 204 },
+    issue_labels => { url => "/repos/%s/%s/issues/%s/labels" },
+    create_issue_label  => { url => "/repos/%s/%s/issues/%s/labels", method => 'POST', args => 1 },
+    delete_issue_label  => { url => "/repos/%s/%s/issues/%s/labels/%s", method => 'DELETE', check_status => 204 },
+    replace_issue_label => { url => "/repos/%s/%s/issues/%s/labels", method => 'PUT', args => 1 },
+    delete_issue_labels => { url => "/repos/%s/%s/issues/%s/labels", method => 'DELETE', check_status => 204 },
+    milestone_labels => { url => "/repos/%s/%s/milestones/%s/labels" },
 
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . uri_escape($issue_id);
-    return $self->query('PATCH', $u, $new_issue);
-}
-
-## http://developer.github.com/v3/issues/comments/
-
-sub comments {
-    my $self = shift;
+    # http://developer.github.com/v3/issues/milestones/
+    milestone  => { url => "/repos/%s/%s/milestones/%s" },
+    create_milestone => { url => "/repos/%s/%s/milestones", method => 'POST',  args => 1 },
+    update_milestone => { url => "/repos/%s/%s/milestones/%s", method => 'PATCH', args => 1 },
+    delete_milestone => { url => "/repos/%s/%s/milestones/%s", method => 'DELETE', check_status => 204 },
     
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $issue_id) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . uri_escape($issue_id) . '/comments';
-    return $self->query($u);
-}
-sub comment {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/comments/' . uri_escape($cid);
-    return $self->query($u);
-}
-sub create_comment {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $issue_id, $comment) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . uri_escape($issue_id) . '/comments';
-    return $self->query('POST', $u, $comment);
-}
-
-sub update_comment {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid, $comment) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/comments/' . uri_escape($cid);
-    return $self->query('PATCH', $u, $comment);
-}
-
-sub delete_comment {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $cid) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/comments/' . uri_escape($cid);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-## http://developer.github.com/v3/issues/events/
-
-sub events {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $issue_id) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . uri_escape($issue_id) . '/events';
-    return $self->query($u);
-}
-
-sub repos_events {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/events');
-}
-
-sub event {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $issue_id) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/events/' . uri_escape($issue_id);
-    return $self->query($u);
-}
-
-## http://developer.github.com/v3/issues/labels/
-
-sub labels {
-    my ($self, $user, $repos) = @_;
-    $user ||= $self->u; $repos ||= $self->repo;
-    return $self->query("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/labels');
-}
-sub label {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/labels/' . uri_escape($id);
-    return $self->query($u);
-}
-sub create_label {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $label) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/labels';
-    return $self->query('POST', $u, $label);
-}
-sub update_label {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id, $label) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/labels/' . uri_escape($id);
-    return $self->query('PATCH', $u, $label);
-}
-sub delete_label {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/labels/' . uri_escape($id);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-sub issue_labels {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . $id . '/labels';
-    return $self->query($u);
-}
-
-sub create_issue_label {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id, $labels) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . $id . '/labels';
-    return $self->query('POST', $u, $labels);
-}
-
-sub delete_issue_label {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id, $label_id) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . $id . '/labels' . $label_id;
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-sub replace_issue_label {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id, $labels) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . $id . '/labels';
-    return $self->query('PUT', $u, $labels);
-}
-
-sub delete_issue_labels {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues/' . $id . '/labels';
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
-}
-
-sub milestone_labels {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones/' . $id . '/labels';
-    return $self->query($u);
-}
+);
+__build_methods(__PACKAGE__, %__methods);
 
 ## http://developer.github.com/v3/issues/milestones/
-
 sub milestones {
     my $self = @_;
     
@@ -349,62 +98,6 @@ sub milestones {
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones';
     $u .= '?' . join('&', @p) if @p;
     return $self->query($u);
-}
-
-sub milestone {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones/' . $id;
-    return $self->query($u);
-}
-
-sub create_milestone {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $milestone) = @_;
-
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones';
-    return $self->query('POST', $u, $milestone);
-}
-
-sub update_milestone {
-    my $self = shift;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id, $milestone) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones/' . uri_escape($id);
-    return $self->query('PATCH', $u, $milestone);
-}
-sub delete_milestone {
-    my $self = shift;
-    
-    if (@_ == 1) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $id) = @_;
-    
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestone/' . uri_escape($id);
-    
-    my $old_raw_response = $self->raw_response;
-    $self->raw_response(1); # need check header
-    my $res = $self->query('DELETE', $u);
-    $self->raw_response($old_raw_response);
-    return $res->header('Status') =~ /204/ ? 1 : 0;
 }
 
 no Any::Moose;

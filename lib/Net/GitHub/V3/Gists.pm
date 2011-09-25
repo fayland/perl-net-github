@@ -28,6 +28,13 @@ my %__methods = (
     is_starred => { url => "/gists/%s/star", method => "GET", check_status => 204 },
     fork => { url => "/gists/%s/fork", method => "POST" },
     delete => { url => "/gists/%s", method => "DELETE", check_status => 204 },
+    
+    # http://developer.github.com/v3/gists/comments/
+    comments => { url => "/gists/%s/comments" },
+    comment  => { url => "/gists/comments/%s" },
+    create_comment => { url => "/gists/%s/comments", method => 'POST',  args => 1 },
+    update_comment => { url => "/gists/comments/%s", method => 'PATCH', args => 1 },
+    delete_comment => { url => "/gists/comments/%s", method => 'DELETE', check_status => 204 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -110,6 +117,33 @@ L<http://developer.github.com/v3/gists/>
     my $st = $gist->delete($gist_id);
 
 =back
+
+=head3 Gist Comments API
+
+L<http://developer.github.com/v3/gists/comments/>
+
+=over 4
+
+=item comments
+
+=item comment
+
+=item create_comment
+
+=item update_comment
+
+=item delete_comment
+
+    my @comments = $gist->comments();
+    my $comment  = $gist->comment($comment_id);
+    my $comment  = $gist->create_comment($gist_id, {
+        "body" => "a new comment"
+    });
+    my $comment = $gist->update_comment($gist_id, {
+        "body" => "Nice change"
+    });
+    my $st = $gist->delete_comment($gist_id);
+
 
 =head1 AUTHOR & COPYRIGHT & LICENSE
 
