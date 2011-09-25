@@ -1,5 +1,4 @@
 Changes
-examples/organizations.pl
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
@@ -24,7 +23,10 @@ lib/Net/GitHub/V2/PullRequest.pm
 lib/Net/GitHub/V2/Repositories.pm
 lib/Net/GitHub/V2/Users.pm
 lib/Net/GitHub/V3.pm
+lib/Net/GitHub/V3/Gists.pm
+lib/Net/GitHub/V3/GitData.pm
 lib/Net/GitHub/V3/Issues.pm
+lib/Net/GitHub/V3/Orgs.pm
 lib/Net/GitHub/V3/PullRequests.pm
 lib/Net/GitHub/V3/Query.pm
 lib/Net/GitHub/V3/Repos.pm
@@ -39,3 +41,6 @@ xt/v3/01-access-token.t
 xt/v3/02-user-pass.t
 xt/v3/100-users.t
 xt/v3/200-repos.t
+xt/v3/500-org.t
+xt/v3/600-git_data.t
+xt/v3/700-gists.t
