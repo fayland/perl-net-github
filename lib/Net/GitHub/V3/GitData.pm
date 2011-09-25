@@ -11,7 +11,7 @@ with 'Net::GitHub::V3::Query';
 
 ## build methods on fly
 my %__methods = (
-    
+    blob => { url => "/repos/%s/%s/git/blobs/%s", is_u_repo => 1 }
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -30,9 +30,21 @@ Net::GitHub::V3::GitData - GitHub Git DB API
     use Net::GitHub::V3;
 
     my $gh = Net::GitHub::V3->new; # read L<Net::GitHub::V3> to set right authentication info
-    my $user = $gh->git_data;
+    my $git_data = $gh->git_data;
 
 =head1 DESCRIPTION
+
+B<To ease the keyboard, we provied two ways to call any method which starts with :user/:repo>
+
+1. SET user/repos before call methods below
+
+    $gh->set_default_user_repo('fayland', 'perl-net-github'); # take effects for all $gh->
+    $git_data->set_default_user_repo('fayland', 'perl-net-github'); # only take effect to $gh->pull_request
+    my $blob = $git_data->blob($sha);
+
+2. If it is just for once, we can pass :user, :repo before any arguments
+
+    my $blob = $git_data->blob($user, $repo, $sha);
 
 =head2 METHODS
 
@@ -42,7 +54,9 @@ L<http://developer.github.com/v3/git/>
 
 =over 4
 
-=item 
+=item blob
+
+    my $blob = $git_data->blob('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
 
 =back
 

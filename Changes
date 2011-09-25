@@ -1,5 +1,9 @@
 Revision history for Net-GitHub
 
+0.40_02 2011.09.29
+        - Orgs, Git Data and Gists
+        - code cleanup and built on-fly
+
 0.40_01 2011.09.28
         - access_token patch on V2 (c9s)
         - V3 API by default (no backwards with V2, if you still want to stick with V2, pass version => 2)

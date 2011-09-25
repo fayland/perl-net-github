@@ -177,19 +177,29 @@ sub __build_methods {
         my $v = $methods{$m};
         my $url = $v->{url};
         my $method = $v->{method} || 'GET';
-        my $args = $v->{args}; # args for ->query
+        my $args = $v->{args} || 0; # args for ->query
         my $check_status = $v->{check_status};
+        my $is_u_repo = $v->{is_u_repo}; # need auto shift u/repo
         
         $package->meta->add_method( $m => sub {
             my $self = shift;
             
             # count how much %s inside u
-            my $n; while ($url =~ /\%s/g) { $n++ }
+            my $n = 0; while ($url =~ /\%s/g) { $n++ }
+            
+            ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
+            if ($is_u_repo and @_ < $n + $args) {
+                unshift @_, $self->repo;
+                unshift @_, $self->u;
+            }
+
+            # make url, replace %s with real args
             my @uargs = splice(@_, 0, $n);
             my $u = sprintf($url, @uargs);
 
+            # args for json data POST
             my @qargs = $args ? splice(@_, 0, $args) : ();
-            if ($check_status) {
+            if ($check_status) { # need check Response Status
                 my $old_raw_response = $self->raw_response;
                 $self->raw_response(1); # need check header
                 my $res = $self->query($method, $u, @qargs);
