@@ -19,6 +19,10 @@ $git_data->set_default_user_repo('fayland', 'perl-net-github');
 my $blob = $git_data->blob('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
 ok($blob);
 
+my $commit = $git_data->commit('5a1faac3ad');
+use Data::Dumper;
+diag(Dumper(\$commit));
+
 done_testing;
 
 1;

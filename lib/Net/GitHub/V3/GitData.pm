@@ -11,7 +11,10 @@ with 'Net::GitHub::V3::Query';
 
 ## build methods on fly
 my %__methods = (
-    blob => { url => "/repos/%s/%s/git/blobs/%s", is_u_repo => 1 }
+    blob => { url => "/repos/%s/%s/git/blobs/%s", is_u_repo => 1 },
+    create_blob => { url => "/repos/%s/%s/git/blobs", is_u_repo => 1, method => 'POST', args => 1 },
+    commit => { url => "/repos/%s/%s/git/commits/%s", is_u_repo => 1 },
+    create_commit => { url => "/repos/%s/%s/git/commits", is_u_repo => 1, method => 'POST', args => 1 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -57,6 +60,17 @@ L<http://developer.github.com/v3/git/>
 =item blob
 
     my $blob = $git_data->blob('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
+
+=item create_blob
+
+    my $result = $git_data->create_blob( {
+        content => $content,
+        encoding => 'utf-8',
+    } );
+
+=item commit
+
+    my $commit = $git_data->commit('5a1faac3ad');
 
 =back
 
