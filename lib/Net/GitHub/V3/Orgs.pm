@@ -27,15 +27,25 @@ my %__methods = (
     # Members
     members   => { url => "/orgs/%s/members" },
     is_member => { url => "/orgs/%s/members/%s", check_status => 204 },
-    delete_member => {
-        url => "/orgs/%s/members/%s",
-        method => 'DELETE',
-        check_status => 204
-    },
+    delete_member => { url => "/orgs/%s/members/%s", method => 'DELETE', check_status => 204 },
     public_members => { url => "/orgs/%s/public_members" },
     is_public_member => { url => "/orgs/%s/public_members/%s", check_status => 204 },
     publicize_member => { url => "/orgs/%s/public_members/%s", method => 'PUT', check_status => 204 },
     conceal_member => { url => "/orgs/%s/public_members/%s", method => 'DELETE', check_status => 204 },
+    # Org Teams API
+    teams => { url => "/orgs/%s/teams" },
+    team  => { url => "/teams/%s" },
+    create_team => { url => "/orgs/%s/teams", method => 'POST', args => 1 },
+    update_team => { url => "/teams/%s", method => 'PATCH', args => 1 },
+    delete_team => { url => "/teams/%s", method => 'DELETE', check_status => 204 },
+    team_members => { url => "/teams/%s/members" },
+    is_team_member  => { url => "/teams/%s/members/%s", check_status => 204 },
+    add_team_member => { url => "/teams/%s/members/%s", method => 'PUT', check_status => 204 },
+    delete_team_member => { url => "/teams/%s/members/%s", method => 'DELETE', check_status => 204 },
+    team_repos => { url => "/teams/%s/repos" },
+    is_team_repos  => { url => "/teams/%s/repos/%s", check_status => 204 },
+    add_team_repos => { url => "/teams/%s/repos/%s", method => 'PUT', check_status => 204 },
+    delete_team_repos => { url => "/teams/%s/repos/%s", method => 'DELETE', check_status => 204 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -109,6 +119,60 @@ L<http://developer.github.com/v3/orgs/members/>
     my $is_public_member = $org->is_public_member('perlchina', 'fayland');
     my $st = $org->publicize_member('perlchina', 'fayland');
     my $st = $org->conceal_member('perlchina', 'fayland');
+
+=back
+
+=head3 Org Teams API
+
+L<http://developer.github.com/v3/orgs/teams/>
+
+=over 4
+
+=item teams
+
+=item team
+
+=item create_team
+
+=item update_team
+
+=item delete_team
+
+    my @teams = $org->teams('perlchina');
+    my $team  = $org->team($team_id);
+    my $team  = $org->create_team('perlchina', {
+        "name" => "new team"
+    });
+    my $team  = $org->update_team($team_id, {
+        name => "new team name"
+    });
+    my $st = $org->delete_team($team_id);
+    
+=item team_members
+
+=item is_team_member
+
+=item add_team_member
+
+=item delete_team_member
+
+    my @members = $org->team_members($team_id);
+    my $is_team_member = $org->is_team_member($team_id, 'fayland');
+    my $st = $org->add_team_member($team_id, 'fayland');
+    my $st = $org->delete_team_member($team_id, 'fayland');
+
+=item team_repos
+
+=item is_team_repos
+
+=item add_team_repos
+
+=item delete_item_repos
+
+    my @repos = $org->team_repos($team_id);
+    my $is_team_repos = $org->is_team_repos($team_id, 'Hello-World');
+    my $st = $org->add_team_repos($team_id, 'Hello-World');
+    my $st = $org->delete_team_repos($team_id, 'Hello-World');
 
 =back
 
