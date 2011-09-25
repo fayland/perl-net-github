@@ -156,7 +156,7 @@ sub query {
     }
 
     if ( $self->RaiseError ) {
-        croak $data->{message} if ref $data eq 'HASH' and exists $data->{message}; # for 'Client Errors'
+        croak $data->{message} if not $ua->success and ref $data eq 'HASH' and exists $data->{message}; # for 'Client Errors'
     }
     
     ## be smarter
@@ -196,7 +196,7 @@ sub __build_methods {
             # make url, replace %s with real args
             my @uargs = splice(@_, 0, $n);
             my $u = sprintf($url, @uargs);
-
+            
             # args for json data POST
             my @qargs = $args ? splice(@_, 0, $args) : ();
             if ($check_status) { # need check Response Status

@@ -13,8 +13,18 @@ with 'Net::GitHub::V3::Query';
 my %__methods = (
     blob => { url => "/repos/%s/%s/git/blobs/%s", is_u_repo => 1 },
     create_blob => { url => "/repos/%s/%s/git/blobs", is_u_repo => 1, method => 'POST', args => 1 },
+    
     commit => { url => "/repos/%s/%s/git/commits/%s", is_u_repo => 1 },
     create_commit => { url => "/repos/%s/%s/git/commits", is_u_repo => 1, method => 'POST', args => 1 },
+    
+    refs => { url => "/repos/%s/%s/git/refs", is_u_repo => 1 },
+    ref  => { url => "/repos/%s/%s/git/refs/%s", is_u_repo => 1 },
+    create_ref => { url => "/repos/%s/%s/git/refs", is_u_repo => 1, method => 'POST', args => 1 },
+    update_ref => { url => "repos/%s/%s/git/refs/%s", is_u_repo => 1, method => 'PATCH', args => 1 },
+    
+    tag => { url => "/repos/%s/%s/git/tags/%s", is_u_repo => 1 },
+    create_tag => { url => "/repos/%s/%s/git/tags", is_u_repo => 1, method => 'POST', args => 1 },
+    
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -51,9 +61,11 @@ B<To ease the keyboard, we provied two ways to call any method which starts with
 
 =head2 METHODS
 
-=head3 Orgs
+=head3 Git Data
 
 L<http://developer.github.com/v3/git/>
+
+=head3 Blob
 
 =over 4
 
@@ -68,9 +80,55 @@ L<http://developer.github.com/v3/git/>
         encoding => 'utf-8',
     } );
 
+=back
+
+=head3 Commits
+
+L<http://developer.github.com/v3/git/commits/>
+
+=over 4
+
 =item commit
 
-    my $commit = $git_data->commit('5a1faac3ad');
+    my $commit = $git_data->commit('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
+    
+=item create_commit
+
+=back
+
+=head3 Refs
+
+L<http://developer.github.com/v3/git/refs/>
+
+=over 4
+
+=item refs
+
+=item ref
+
+=item create_ref
+
+=item update_ref
+
+    my @refs = $git_data->refs;
+    my $ref  = $git_data->ref($ref_id);
+    my $ref  = $git_data->create_ref($ref_data);
+    my $ref  = $git_data->update_ref($ref_id, $ref_data);
+
+=back
+
+=head3 Tags
+
+L<http://developer.github.com/v3/git/tags/>
+
+=over 4
+
+=item tag
+
+=item create_tag
+
+    my $tag = $git_data->tag($sha);
+    my $tag = $git_data->create_tag($tag_data);
 
 =back
 
