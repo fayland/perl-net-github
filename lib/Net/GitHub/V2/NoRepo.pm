@@ -59,7 +59,7 @@ has 'json' => (
     isa => 'JSON::Any',
     lazy => 1,
     default => sub {
-        return JSON::Any->new;
+        return JSON::Any->new( utf8 => 1 );
     }
 );
 
