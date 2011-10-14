@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.40';
+our $VERSION = '0.40_03';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -50,7 +50,7 @@ Net::GitHub - Perl Interface for github.com
     
     # L<Net::GitHub::V3::Repos>
     my @repos = $github->repos->list;
-    my $rp = $github->->create( {
+    my $rp = $github->repos->create( {
         "name" => "Hello-World",
         "description" => "This is your first repo",
         "homepage" => "https://github.com"
