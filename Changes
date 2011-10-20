@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.40_04 2011.10.20
+        - fix Content-Type check by regex (V3)
+
 0.40_03 2011.10.14
         - Use utf8 => 1 for JSON::Any by default. (jamesronan (James Ronan))
         - if you still want to use V2, pass version => 2

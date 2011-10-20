@@ -19,6 +19,25 @@ ok( $repos );
 my @p = $repos->list;
 ok(@p > 3, 'more than 3 repos');
 
+=pod
+
+$repos->set_default_user_repo('fayland', 'perl-net-github');
+my $hook = $repos->create_hook( {
+  "name" => "web",
+  "active" => 'true',
+  "config" => {
+    "url" => "http://something.com/webhook"
+  }
+} );
+use Data::Dumper;
+diag(Dumper(\$hook));
+my @hooks = $repos->hooks;
+is(@hooks, 1);
+my $st = $repos->delete_hook($hook->{id});
+is($st, 1);
+
+=cut
+
 done_testing;
 
 1;
