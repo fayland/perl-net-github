@@ -142,7 +142,7 @@ sub query {
     return $ua->res if $self->raw_response;
     return $ua->content if $self->raw_string;
 
-    if ($res->header('Content-Type') and $res->header('Content-Type') eq 'application/json') {
+    if ($res->header('Content-Type') and $res->header('Content-Type') =~ 'application/json') {
         my $json = $ua->content;
         $data = eval { $self->json->jsonToObj($json) };
         unless ($data) {
