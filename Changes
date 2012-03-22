@@ -1,5 +1,9 @@
 Revision history for Net-GitHub
 
+0.41    2012.03.22
+        - still let V2 as default to make ppl using token happy
+        - api_throttle work with unauthenticated requests
+
 0.40_04 2011.10.20
         - fix Content-Type check by regex (V3)
 

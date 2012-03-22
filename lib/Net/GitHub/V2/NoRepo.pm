@@ -2,7 +2,7 @@ package Net::GitHub::V2::NoRepo;
 
 use Any::Moose 'Role';
 
-our $VERSION = '0.24';
+our $VERSION = '0.41';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;
@@ -68,7 +68,7 @@ has 'json' => (
 
 sub get_json_to_obj {
     my ( $self, $pending_url, $key ) = @_;
-    
+
     if ( $self->always_Authorization ) {
         push @_, 'GET';
         return _get_json_to_obj_authed(@_);
@@ -78,6 +78,14 @@ sub get_json_to_obj {
     my $url  = URI->new($self->api_url . $pending_url);
     $url->query_form( access_token => $self->access_token ) if $self->access_token;
     my $resp = $self->ua->get($url);
+
+    # Slow down if we're approaching the rate limit
+    # By the way GitHub mistakes days for minutes in their documentation --
+    # the rate limit is per minute, not per day.
+    if ( $self->api_throttle ) {
+        sleep 2 if (($res->header('x-ratelimit-remaining') || 0)
+            < ($res->header('x-ratelimit-limit') || 60) / 2);
+    }
 
     return { error => '404 Not Found' } if $resp->code == 404;
     return { error => $resp->as_string() } unless ( $resp->is_success );
@@ -138,7 +146,7 @@ sub _get_json_to_obj_authed {
     my $pending_url = shift;
     my $request_method = pop @_; # defaults to GET or POST if undefined
 
-    croak 'login and token or access_token are required' unless ( 
+    croak 'login and token or access_token are required' unless (
         $self->has_login and $self->has_token and $self->has_access_token );
 
     $pending_url =~ s!^/!!; # Strip leading '/'

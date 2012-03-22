@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.40_04';
+our $VERSION = '0.41';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -10,12 +10,12 @@ sub new {
     my $params = $class->BUILDARGS(@_);
 
     my $obj;
-    if ( exists $params->{version} and $params->{version} == 2 ) {
-        require Net::GitHub::V2;
-        return Net::GitHub::V2->new($params);
-    } else {
+    if ( exists $params->{version} and $params->{version} == 3 ) {
         require Net::GitHub::V3;
         return Net::GitHub::V3->new($params);
+    } else {
+        require Net::GitHub::V2;
+        return Net::GitHub::V2->new($params);
     }
 
     #return $class->meta->new_object( __INSTANCE__ => $obj, @_,);
@@ -35,19 +35,19 @@ Net::GitHub - Perl Interface for github.com
 
     use Net::GitHub;
 
-    my $github = Net::GitHub->new( login => 'fayland', pass => 'secret' ); # default to Net::GitHub::V3
-
     # for backwards
-    my $github = Net::GitHub->new(  # Net::GitHub::V2
-        version => 2,
-        owner => 'fayland', name => 'perl-net-github'
+    my $github = Net::GitHub->new(owner => 'fayland', name => 'perl-net-github'); # default to Net::GitHub::V2
+
+    my $github = Net::GitHub->new(  # Net::GitHub::V3
+        version => 3,
+        login => 'fayland', pass => 'secret'
     );
-    
+
     # for V3
     # L<Net::GitHub::V3::Users>
     my $user = $github->user->show('nothingmuch');
     $github->user->update( bio => 'Just Another Perl Programmer' );
-    
+
     # L<Net::GitHub::V3::Repos>
     my @repos = $github->repos->list;
     my $rp = $github->repos->create( {
@@ -67,6 +67,8 @@ Check L<http://developer.github.com/> for more details of the GitHub APIs.
 Read L<Net::GitHub::V3> for API usage.
 
 If you prefer object oriented way, L<Pithub> is 'There is more than one way to do it'.
+
+and try L<Net::GitHub::V2> if you're happy with user+token
 
 =head1 Git
 
