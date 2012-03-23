@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.42    2012.03.23
+        - Fixed typo in Net::GitHub::V2::NoRepo.pm that crippled App::GitHub (worr)
+
 0.41    2012.03.22
         - still let V2 as default to make ppl using token happy
         - api_throttle work with unauthenticated requests
