@@ -83,8 +83,8 @@ sub get_json_to_obj {
     # By the way GitHub mistakes days for minutes in their documentation --
     # the rate limit is per minute, not per day.
     if ( $self->api_throttle ) {
-        sleep 2 if (($res->header('x-ratelimit-remaining') || 0)
-            < ($res->header('x-ratelimit-limit') || 60) / 2);
+        sleep 2 if (($resp->header('x-ratelimit-remaining') || 0)
+            < ($resp->header('x-ratelimit-limit') || 60) / 2);
     }
 
     return { error => '404 Not Found' } if $resp->code == 404;
