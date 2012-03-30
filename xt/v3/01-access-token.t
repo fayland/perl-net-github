@@ -10,7 +10,7 @@ my $gh = Net::GitHub->new( access_token => $ENV{GITHUB_ACCESS_TOKEN});
 diag( 'Using access_token = ' . $ENV{GITHUB_ACCESS_TOKEN} );
 
 ok( $gh );
-my $data = $gh->users->show();
+my $data = $gh->user->show();
 
 ok( $data );
 ok( $data->{id} );

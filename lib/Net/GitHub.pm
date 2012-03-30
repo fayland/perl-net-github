@@ -81,9 +81,21 @@ If you prefer object oriented way, L<Pithub> is 'There is more than one way to d
 
 =over 4
 
-=item * create access_token with user/pass
+=item * create access_token for Non-Web Application
 
+    my $gh = Net::GitHub::V3->new( login => 'fayland', pass => 'secret' );
+    my $oauth = $gh->oauth;
+    my $o = $oauth->create_authorization( {
+        scopes => ['user', 'public_repo', 'repo', 'gist'], # just ['public_repo']
+        note   => 'test purpose',
+    } );
+    print $o->{token};
 
+after create the token, you can use it without your password publicly written
+
+    my $github = Net::GitHub->new(
+        access_token => $token, # from above
+    );
 
 =back
 

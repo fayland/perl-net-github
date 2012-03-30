@@ -98,7 +98,7 @@ has 'oauth' => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        return Net::GitHub::V3::Gists->new( $self->args_to_pass );
+        return Net::GitHub::V3::OAuth->new( $self->args_to_pass );
     },
 );
 
