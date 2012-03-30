@@ -41,6 +41,12 @@ Net::GitHub::V3::OAuth - GitHub OAuth API
     my $gh = Net::GitHub::V3->new; # read L<Net::GitHub::V3> to set right authentication info
     my $oauth = $gh->oauth;
 
+=head2 DESCRIPTION
+
+For Web Application Flow, we suggest to use L<Net::OAuth>.
+
+For Non-Web Application Flow, read the L<Net::GitHub> FAQ.
+
 =head2 METHODS
 
 =head3 OAuth

@@ -15,6 +15,7 @@ use Net::GitHub::V3::Orgs;
 use Net::GitHub::V3::GitData;
 use Net::GitHub::V3::Gists;
 use Net::GitHub::V3::OAuth;
+use Net::GitHub::V3::Events;
 
 has '+is_main_module' => (default => 1);
 
@@ -99,6 +100,16 @@ has 'oauth' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::OAuth->new( $self->args_to_pass );
+    },
+);
+
+has 'event' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V3::Events',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::Events->new( $self->args_to_pass );
     },
 );
 
@@ -265,6 +276,10 @@ L<Net::GitHub::V3::Gists>
 =head3 oauth
 
 L<Net::GitHub::V3::OAuth>
+
+=head3 event
+
+L<Net::GitHub::V3::Events>
 
 =head1 SEE ALSO
 
