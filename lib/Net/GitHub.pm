@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.42';
+our $VERSION = '0.43';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -10,12 +10,12 @@ sub new {
     my $params = $class->BUILDARGS(@_);
 
     my $obj;
-    if ( exists $params->{version} and $params->{version} == 3 ) {
-        require Net::GitHub::V3;
-        return Net::GitHub::V3->new($params);
-    } else {
+    if ( exists $params->{version} and $params->{version} == 2 ) {
         require Net::GitHub::V2;
         return Net::GitHub::V2->new($params);
+    } else {
+        require Net::GitHub::V3;
+        return Net::GitHub::V3->new($params);
     }
 
     #return $class->meta->new_object( __INSTANCE__ => $obj, @_,);
@@ -35,12 +35,21 @@ Net::GitHub - Perl Interface for github.com
 
     use Net::GitHub;
 
-    # for backwards
-    my $github = Net::GitHub->new(owner => 'fayland', name => 'perl-net-github'); # default to Net::GitHub::V2
-
+    # default to v3
     my $github = Net::GitHub->new(  # Net::GitHub::V3
-        version => 3,
         login => 'fayland', pass => 'secret'
+    );
+
+    # suggested
+    # use OAuth to create token with user/pass
+    my $github = Net::GitHub->new(  # Net::GitHub::V3
+        access_token => $token
+    );
+
+    # for backwards, NOTE: Github will terminate API v1 and API v2 in 1 month on May 1st, 2012
+    my $github = Net::GitHub->new(
+        version => 2,
+        owner => 'fayland', name => 'perl-net-github'
     );
 
     # for V3
@@ -68,7 +77,15 @@ Read L<Net::GitHub::V3> for API usage.
 
 If you prefer object oriented way, L<Pithub> is 'There is more than one way to do it'.
 
-and try L<Net::GitHub::V2> if you're happy with user+token
+=head2 FAQ
+
+=over 4
+
+=item * create access_token with user/pass
+
+
+
+=back
 
 =head1 Git
 
@@ -86,7 +103,7 @@ Everyone who is listed in B<Changes>.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2009-2011 Fayland Lam all rights reserved.
+Copyright 2009-2012 Fayland Lam all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
