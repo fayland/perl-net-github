@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.43';
+our $VERSION = '0.43_01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -11,6 +11,7 @@ sub new {
 
     my $obj;
     if ( exists $params->{version} and $params->{version} == 2 ) {
+        warn "Github will terminate API v1 and API v2 in 1 month on May 1st, 2012\n";
         require Net::GitHub::V2;
         return Net::GitHub::V2->new($params);
     } else {

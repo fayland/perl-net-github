@@ -1,6 +1,6 @@
 Revision history for Net-GitHub
 
-0.43    2012.03.30
+0.43_01 2012.03.30
         - NOTE: We will terminate API v1 and API v2 in 1 month on May 1st, 2012
             (From https://github.com/blog/1090-github-api-moving-on)
         - so V3 is default on now

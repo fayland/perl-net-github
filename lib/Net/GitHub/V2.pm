@@ -132,6 +132,8 @@ Or:
 
 =head1 DESCRIPTION
 
+NOTE: B<Github will terminate API v1 and API v2 on May 1st, 2012>
+
 L<http://develop.github.com/>
 
 For those B<(authentication required)>, you must set login and token (in L<https://github.com/account>). If no login and token are provided, your B<.gitconfig> will be loaded: if the github.user and github.token keys are defined, they will be used.
@@ -211,7 +213,7 @@ L<Net::GitHub::V2::Network>
     my $organization = $github->organization->organizations('github');
     my $teams = $github->organization->teams('PerlChina');
 
-L<Net::GitHub::V2::Organizations>    
+L<Net::GitHub::V2::Organizations>
 
 =head2 pull_request
 
