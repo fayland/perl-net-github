@@ -16,6 +16,10 @@ my %__methods = (
     
     commit => { url => "/repos/%s/%s/git/commits/%s" },
     create_commit => { url => "/repos/%s/%s/git/commits", method => 'POST', args => 1 },
+
+    tree => { url => "/repos/%s/%s/git/trees/%s" },
+    trees => { url => "/repos/%s/%s/git/trees/%s?recursive=1" },
+    create_tree => { url => "/repos/%s/%s/git/trees", method => 'POST', args => 1 },
     
     refs => { url => "/repos/%s/%s/git/refs" },
     ref  => { url => "/repos/%s/%s/git/refs/%s" },
