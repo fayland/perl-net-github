@@ -23,9 +23,11 @@ lib/Net/GitHub/V2/PullRequest.pm
 lib/Net/GitHub/V2/Repositories.pm
 lib/Net/GitHub/V2/Users.pm
 lib/Net/GitHub/V3.pm
+lib/Net/GitHub/V3/Events.pm
 lib/Net/GitHub/V3/Gists.pm
 lib/Net/GitHub/V3/GitData.pm
 lib/Net/GitHub/V3/Issues.pm
+lib/Net/GitHub/V3/OAuth.pm
 lib/Net/GitHub/V3/Orgs.pm
 lib/Net/GitHub/V3/PullRequests.pm
 lib/Net/GitHub/V3/Query.pm
@@ -44,3 +46,4 @@ xt/v3/200-repos.t
 xt/v3/500-org.t
 xt/v3/600-git_data.t
 xt/v3/700-gists.t
+xt/v3/800-oauth.t

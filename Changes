@@ -1,5 +1,9 @@
 Revision history for Net-GitHub
 
+0.43_02 2012.03.31
+        - Fixed small typo that breaks is_following, follow and unfollow (worr)
+        - tree functions to Net::GitHub::V3::GitData (worr)
+
 0.43_01 2012.03.30
         - NOTE: We will terminate API v1 and API v2 in 1 month on May 1st, 2012
             (From https://github.com/blog/1090-github-api-moving-on)

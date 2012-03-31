@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Any::Moose;
 
-our $VERSION = '0.43_01';
+our $VERSION = '0.43_02';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
