@@ -136,6 +136,24 @@ L<http://developer.github.com/v3/git/tags/>
 
 =back
 
+=head3
+
+L<http://developer.github.com/v3/git/trees/>
+
+=over 4
+
+=item tree
+
+=item trees
+
+=item create_tree
+
+    my $tree = $git_data->tree($sha);
+    my $trees = $git_data->trees($sha);
+    my $tree = $git_data->create_tree($tree_data);
+
+=back
+
 =head1 AUTHOR & COPYRIGHT & LICENSE
 
 Refer L<Net::GitHub>
