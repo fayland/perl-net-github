@@ -47,9 +47,9 @@ my %__methods = (
 
     emails => { url => "/user/email" },
     
-    is_following => { url => "/use/following/%s", check_status => 204 },
-    follow => { url => "/use/following/%s", method => 'PUT', check_status => 204 },
-    unfollow => { url => "/use/following/%s", method => 'DELETE', check_status => 204 },
+    is_following => { url => "/user/following/%s", check_status => 204 },
+    follow => { url => "/user/following/%s", method => 'PUT', check_status => 204 },
+    unfollow => { url => "/user/following/%s", method => 'DELETE', check_status => 204 },
 
     keys => { url => "/user/keys" },
     key  => { url => "/user/keys/%s" },
