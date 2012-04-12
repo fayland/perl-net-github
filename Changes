@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.44    2012.04.12
+        - bump up version
+
 0.43_02 2012.03.31
         - Fixed small typo that breaks is_following, follow and unfollow (worr)
         - tree functions to Net::GitHub::V3::GitData (worr)
