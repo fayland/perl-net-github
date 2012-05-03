@@ -200,6 +200,26 @@ from the API. By switching B<RaiseError> on you can make the be turned into
 exceptions instead, so that you don't have to check for error response after
 every call.
 
+=head3 next_url, last_url, prev_url, first_url
+
+Any methods which return multiple results I<may> be paginated. After performing
+a query you should check to see if there are more results. These attributes will
+be reset for each query.
+
+The predicates to check these attributes are C<has_next_page>, C<has_last_page>,
+C<has_prev_page> and C<has_first_page>.
+
+See Github's documentation: L<http://developer.github.com/v3/#pagination>
+
+The C<per_page> parameter mentioned in their docs is B<NOT> supported by this module.
+
+  my @issues = $gh->issue->repos_issues;
+  while ($gh->issue->has_next_page) {
+      push @issues, $gh->issue->query($gh->issue->next_url);
+      ## OR ##
+      push @issues, $gh->issue->next_page);
+  }
+
 =head2 METHODS
 
 =head3 query($method, $url, $data)
@@ -210,12 +230,17 @@ every call.
 
 query API directly
 
+=head3 next_page
+
+When the results have been paginated, C<next_page> is sugar for the common case
+of iterating through all the pages in order. It simply calls C<query> with the C<next_url>.
+
 =head3 set_default_user_repo
 
     $gh->set_default_user_repo('fayland', 'perl-net-github'); # take effects for all $gh->
     $gh->repos->set_default_user_repo('fayland', 'perl-net-github'); # take effects on $gh->repos
 
-B<To ease the keyboard, we provied two ways to call any method which starts with :user/:repo>
+B<To ease the keyboard, we provided two ways to call any method which starts with :user/:repo>
 
 1. SET user/repos before call methods below
 
