@@ -27,6 +27,12 @@ has 'raw_response' => (is => 'rw', isa => 'Bool', default => 0);
 has 'api_url' => (is => 'ro', default => 'https://api.github.com');
 has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
 
+# pagination
+has 'next_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_next_url',  clearer => 'clear_next_url' );
+has 'last_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_last_url',  clearer => 'clear_last_url' );
+has 'first_url' => ( is => 'rw', isa => 'Str', predicate => 'has_first_url', clearer => 'clear_first_url' );
+has 'prev_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_prec_url',  clearer => 'clear_prev_url' );
+
 # Error handle
 has 'RaiseError' => ( is => 'rw', isa => 'Bool', default => 1 );
 
@@ -158,6 +164,22 @@ sub query {
     if ( $self->RaiseError ) {
         croak $data->{message} if not $ua->success and ref $data eq 'HASH' and exists $data->{message}; # for 'Client Errors'
     }
+
+    if ($res->header('link')) {
+        my @rel_strs = split ',', $res->header('link');
+        $self->_extract_link_url(\@rel_strs);
+    } else {
+       $self->_clear_pagination;
+    }
+    
+    # on the last page, last becomes first...?
+    if ($self->has_last_url && $self->has_first_url) {
+         $self->_clear_pagination if ($self->last_url eq $self->first_url);
+    }
+    
+    if ($self->has_last_url && $self->last_url eq $url) {
+        $self->_clear_pagination;
+    }
     
     ## be smarter
     if (wantarray) {
@@ -166,6 +188,34 @@ sub query {
     }
 
     return $data;
+}
+
+sub _clear_pagination {
+    my $self = shift;
+    foreach my $page (qw/first last prev next/) {
+        my $clearer = 'clear_' . $page . '_url';
+        $self->$clearer;
+    }
+    return 1;
+}
+
+sub _extract_link_url {
+    my ($self, $raw_strs) = @_;
+    foreach my $str (@$raw_strs) {
+        my ($link_url, $rel) = split ';', $str;
+
+        $link_url =~ s/^\s*//;
+        $link_url =~ s/^<//;
+        $link_url =~ s/>$//;
+        
+        $rel =~ m/rel="(next|last|first|prev)"/;
+        $rel = $1;
+
+        my $url_attr = $rel . "_url";
+        $self->$url_attr($link_url);
+    }
+    
+    return 1;
 }
 
 ## build methods on fly
