@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.45    2012.05.03
+        - pagination (ioanrogers (Ioan Rogers))
+
 0.44    2012.04.12
         - bump up version
 
