@@ -28,10 +28,10 @@ has 'api_url' => (is => 'ro', default => 'https://api.github.com');
 has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
 
 # pagination
-has 'next_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_next_url',  clearer => 'clear_next_url' );
-has 'last_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_last_url',  clearer => 'clear_last_url' );
-has 'first_url' => ( is => 'rw', isa => 'Str', predicate => 'has_first_url', clearer => 'clear_first_url' );
-has 'prev_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_prec_url',  clearer => 'clear_prev_url' );
+has 'next_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_next_page',  clearer => 'clear_next_url' );
+has 'last_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_last_page',  clearer => 'clear_last_url' );
+has 'first_url' => ( is => 'rw', isa => 'Str', predicate => 'has_first_page', clearer => 'clear_first_url' );
+has 'prev_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_prev_page',  clearer => 'clear_prev_url' );
 
 # Error handle
 has 'RaiseError' => ( is => 'rw', isa => 'Bool', default => 1 );
@@ -165,20 +165,10 @@ sub query {
         croak $data->{message} if not $ua->success and ref $data eq 'HASH' and exists $data->{message}; # for 'Client Errors'
     }
 
+    $self->_clear_pagination;
     if ($res->header('link')) {
         my @rel_strs = split ',', $res->header('link');
         $self->_extract_link_url(\@rel_strs);
-    } else {
-       $self->_clear_pagination;
-    }
-    
-    # on the last page, last becomes first...?
-    if ($self->has_last_url && $self->has_first_url) {
-         $self->_clear_pagination if ($self->last_url eq $self->first_url);
-    }
-    
-    if ($self->has_last_url && $self->last_url eq $url) {
-        $self->_clear_pagination;
     }
     
     ## be smarter
@@ -188,6 +178,11 @@ sub query {
     }
 
     return $data;
+}
+
+sub next_page {
+    my $self = shift;
+    return $self->query($self->next_url);
 }
 
 sub _clear_pagination {
@@ -312,6 +307,12 @@ L<http://developer.github.com/>
 =item query
 
 Refer L<Net::GitHub::V3>
+
+=back
+
+=item next_page
+
+Calls C<query> with C<next_url>. See L<Net::GitHub::V3>
 
 =back
 
