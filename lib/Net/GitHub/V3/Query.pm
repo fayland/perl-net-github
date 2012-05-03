@@ -43,10 +43,10 @@ has 'repo' => (is => 'rw', isa => 'Str');
 has 'is_main_module' => (is => 'ro', isa => 'Bool', default => 0);
 sub set_default_user_repo {
     my ($self, $user, $repo) = @_;
-    
+
     $self->u($user);
     $self->repo($repo);
-    
+
     # need apply to all sub modules
     if ($self->is_main_module) {
         if ($self->is_repos_init) {
@@ -104,7 +104,7 @@ has 'json' => (
 
 sub query {
     my $self = shift;
-    
+
     # fix ARGV, not sure if it's the good idea
     my @args = @_;
     if (@args == 1) {
@@ -127,7 +127,7 @@ sub query {
     }
 
     $url = $self->api_url . $url unless $url =~ /^https\:/;
-    
+
     my $req = HTTP::Request->new( $request_method, $url );
     if ($data) {
         my $json = $self->json->objToJson($data);
@@ -170,7 +170,7 @@ sub query {
         my @rel_strs = split ',', $res->header('link');
         $self->_extract_link_url(\@rel_strs);
     }
-    
+
     ## be smarter
     if (wantarray) {
         return @$data if ref $data eq 'ARRAY';
@@ -202,14 +202,14 @@ sub _extract_link_url {
         $link_url =~ s/^\s*//;
         $link_url =~ s/^<//;
         $link_url =~ s/>$//;
-        
+
         $rel =~ m/rel="(next|last|first|prev)"/;
         $rel = $1;
 
         my $url_attr = $rel . "_url";
         $self->$url_attr($link_url);
     }
-    
+
     return 1;
 }
 
@@ -217,7 +217,7 @@ sub _extract_link_url {
 sub __build_methods {
     my $package = shift;
     my %methods = @_;
-    
+
     foreach my $m (keys %methods) {
         my $v = $methods{$m};
         my $url = $v->{url};
@@ -225,13 +225,13 @@ sub __build_methods {
         my $args = $v->{args} || 0; # args for ->query
         my $check_status = $v->{check_status};
         my $is_u_repo = $v->{is_u_repo}; # need auto shift u/repo
-        
+
         $package->meta->add_method( $m => sub {
             my $self = shift;
-            
+
             # count how much %s inside u
             my $n = 0; while ($url =~ /\%s/g) { $n++ }
-            
+
             ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
             if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
                 unshift @_, ($self->u, $self->repo);
@@ -240,7 +240,7 @@ sub __build_methods {
             # make url, replace %s with real args
             my @uargs = splice(@_, 0, $n);
             my $u = sprintf($url, @uargs);
-            
+
             # args for json data POST
             my @qargs = $args ? splice(@_, 0, $args) : ();
             if ($check_status) { # need check Response Status
@@ -307,8 +307,6 @@ L<http://developer.github.com/>
 =item query
 
 Refer L<Net::GitHub::V3>
-
-=back
 
 =item next_page
 
