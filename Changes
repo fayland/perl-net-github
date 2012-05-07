@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.46    2012.05.07
+        - fix user emails (hdragolov (Hristo Dragolov))
+
 0.45    2012.05.03
         - pagination (ioanrogers (Ioan Rogers))
 
