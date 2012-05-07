@@ -45,7 +45,7 @@ sub following {
 ## build methods on fly
 my %__methods = (
 
-    emails => { url => "/user/email" },
+    emails => { url => "/user/emails" },
     
     is_following => { url => "/user/following/%s", check_status => 204 },
     follow => { url => "/user/following/%s", method => 'PUT', check_status => 204 },
