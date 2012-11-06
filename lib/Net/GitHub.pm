@@ -41,6 +41,12 @@ Net::GitHub - Perl Interface for github.com
         login => 'fayland', pass => 'secret'
     );
 
+    #Pass api_url for GitHub Enterprise installations
+    my $github = Net::GitHub->new(  # Net::GitHub::V3
+        login => 'fayland', pass => 'secret',  api_url => 'https://gits.aresweet.com/api/v3'
+    );
+
+
     # suggested
     # use OAuth to create token with user/pass
     my $github = Net::GitHub->new(  # Net::GitHub::V3
