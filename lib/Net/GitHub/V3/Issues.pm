@@ -2,7 +2,7 @@ package Net::GitHub::V3::Issues;
 
 use Any::Moose;
 
-our $VERSION = '0.40';
+our $VERSION = '0.47';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -12,7 +12,7 @@ with 'Net::GitHub::V3::Query';
 sub issues {
     my $self = shift;
     my $args = @_ % 2 ? shift : { @_ };
-    
+
     my @p;
     foreach my $p (qw/filter state labels sort direction since/) {
         push @p, "$p=" . $args->{$p} if exists $args->{$p};
@@ -24,13 +24,13 @@ sub issues {
 
 sub repos_issues {
     my $self = shift;
-    
+
     if (@_ < 2) {
         unshift @_, $self->repo;
         unshift @_, $self->u;
     }
     my ($user, $repos, $args) = @_;
-    
+
     my @p;
     foreach my $p (qw/milestone state assignee mentioned labels sort direction since/) {
         push @p, "$p=" . $args->{$p} if exists $args->{$p};
@@ -58,7 +58,7 @@ my %__methods = (
     events => { url => "/repos/%s/%s/issues/%s/events" },
     repos_events => { url => "/repos/%s/%s/issues/events" },
     event => { url => "/repos/%s/%s/issues/events/%s" },
-    
+
     # http://developer.github.com/v3/issues/labels/
     labels => { url => "/repos/%s/%s/labels" },
     label  => { url => "/repos/%s/%s/labels/%s" },
@@ -77,20 +77,20 @@ my %__methods = (
     create_milestone => { url => "/repos/%s/%s/milestones", method => 'POST',  args => 1 },
     update_milestone => { url => "/repos/%s/%s/milestones/%s", method => 'PATCH', args => 1 },
     delete_milestone => { url => "/repos/%s/%s/milestones/%s", method => 'DELETE', check_status => 204 },
-    
+
 );
 __build_methods(__PACKAGE__, %__methods);
 
 ## http://developer.github.com/v3/issues/milestones/
 sub milestones {
     my $self = shift;
-    
+
     if (@_ < 3) {
         unshift @_, $self->repo;
         unshift @_, $self->u;
     }
     my ($user, $repos, $args) = @_;
-    
+
     my @p;
     foreach my $p (qw/state sort direction/) {
         push @p, "$p=" . $args->{$p} if exists $args->{$p};

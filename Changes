@@ -1,5 +1,9 @@
 Revision history for Net-GitHub
 
+0.47    2012.11.07
+        - Documentation to demonstrate enterprise use (nebulous)
+        - Fix @_ vs shift bug for milestones (nebulous)
+
 0.46    2012.05.07
         - fix user emails (hdragolov (Hristo Dragolov))
 
