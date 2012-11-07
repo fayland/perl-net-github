@@ -83,7 +83,7 @@ __build_methods(__PACKAGE__, %__methods);
 
 ## http://developer.github.com/v3/issues/milestones/
 sub milestones {
-    my $self = @_;
+    my $self = shift;
     
     if (@_ < 3) {
         unshift @_, $self->repo;
