@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.48    2012.11.15
+        - repackage
+
 0.47    2012.11.07
         - Documentation to demonstrate enterprise use (nebulous)
         - Fix @_ vs shift bug for milestones (nebulous)
