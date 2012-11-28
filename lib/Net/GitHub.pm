@@ -1,23 +1,16 @@
 package Net::GitHub;
 
 use Any::Moose;
+use Net::GitHub::V3;
 
-our $VERSION = '0.48';
+our $VERSION = '0.49';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
     my $class = shift;
     my $params = $class->BUILDARGS(@_);
 
-    my $obj;
-    if ( exists $params->{version} and $params->{version} == 2 ) {
-        warn "Github will terminate API v1 and API v2 in 1 month on May 1st, 2012\n";
-        require Net::GitHub::V2;
-        return Net::GitHub::V2->new($params);
-    } else {
-        require Net::GitHub::V3;
-        return Net::GitHub::V3->new($params);
-    }
+    return Net::GitHub::V3->new($params);
 
     #return $class->meta->new_object( __INSTANCE__ => $obj, @_,);
 }
@@ -36,16 +29,14 @@ Net::GitHub - Perl Interface for github.com
 
     use Net::GitHub;
 
-    # default to v3
     my $github = Net::GitHub->new(  # Net::GitHub::V3
         login => 'fayland', pass => 'secret'
     );
 
-    #Pass api_url for GitHub Enterprise installations
+    # Pass api_url for GitHub Enterprise installations
     my $github = Net::GitHub->new(  # Net::GitHub::V3
         login => 'fayland', pass => 'secret',  api_url => 'https://gits.aresweet.com/api/v3'
     );
-
 
     # suggested
     # use OAuth to create token with user/pass
@@ -53,13 +44,6 @@ Net::GitHub - Perl Interface for github.com
         access_token => $token
     );
 
-    # for backwards, NOTE: Github will terminate API v1 and API v2 in 1 month on May 1st, 2012
-    my $github = Net::GitHub->new(
-        version => 2,
-        owner => 'fayland', name => 'perl-net-github'
-    );
-
-    # for V3
     # L<Net::GitHub::V3::Users>
     my $user = $github->user->show('nothingmuch');
     $github->user->update( bio => 'Just Another Perl Programmer' );

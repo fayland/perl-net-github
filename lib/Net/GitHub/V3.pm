@@ -16,6 +16,7 @@ use Net::GitHub::V3::GitData;
 use Net::GitHub::V3::Gists;
 use Net::GitHub::V3::OAuth;
 use Net::GitHub::V3::Events;
+use Net::GitHub::V3::Search;
 
 has '+is_main_module' => (default => 1);
 
@@ -110,6 +111,16 @@ has 'event' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::Events->new( $self->args_to_pass );
+    },
+);
+
+has 'search' => (
+    is => 'rw',
+    isa => 'Net::GitHub::V3::Search',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::Search->new( $self->args_to_pass );
     },
 );
 
@@ -305,6 +316,10 @@ L<Net::GitHub::V3::OAuth>
 =head3 event
 
 L<Net::GitHub::V3::Events>
+
+=head3 search
+
+L<Net::GitHub::V3::Search>
 
 =head1 SEE ALSO
 
