@@ -2,7 +2,7 @@ package Net::GitHub::V3;
 
 use Any::Moose;
 
-our $VERSION = '0.40';
+our $VERSION = '0.49';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V3::Query';

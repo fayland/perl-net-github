@@ -49,7 +49,7 @@ L<http://developer.github.com/v3/search/>
 
 =item issues
 
-    my %data = $search->issues('closed', 'milestone');
+    my %data = $search->issues('fayland', 'perl-net-github', 'closed', 'milestone');
     print Dumper(\$data{issues});
 
 =item repos
