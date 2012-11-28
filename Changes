@@ -1,5 +1,10 @@
 Revision history for Net-GitHub
 
+0.50    2012.11.28
+        - repos merging and statuses
+        - fix gist comments changes
+        - # TODO. Repos Contents, Activity Notifications
+
 0.49    2012.11.28
         - remove V2
         - add search api

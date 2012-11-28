@@ -2,7 +2,7 @@ package Net::GitHub::V3::Repos;
 
 use Any::Moose;
 
-our $VERSION = '0.40';
+our $VERSION = '0.50';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -70,10 +70,14 @@ my %__methods = (
     comments => { url => "/repos/%s/%s/comments" },
     comment  => { url => "/repos/%s/%s/comments/%s" },
     commit_comments => { url => "/repos/%s/%s/commits/%s/comments" },
-    create_comment => { url => "/repos/%s/%s/commits/%s/comments", method => 'POST',  args => 1 },
+    create_comment => { url => "/repos/%s/%s/commits/%s/comments", method => 'POST', args => 1 },
     update_comment => { url => "/repos/%s/%s/comments/%s", method => 'PATCH', args => 1 },
     delete_comment => { url => "/repos/%s/%s/comments/%s", method => 'DELETE', check_status => 204 },
     compare_commits => { url => "/repos/%s/%s/compare/%s...%s" },
+
+    # http://developer.github.com/v3/repos/contents/
+    readme => { url => "/repos/%s/%s/readme" },
+    get_content => { url => "/repos/%s/%s/contents/%s" },
 
     # http://developer.github.com/v3/repos/downloads/
     downloads => { url => "/repos/%s/%s/downloads" },
@@ -102,20 +106,27 @@ my %__methods = (
     test_hook   => { url => "/repos/%s/%s/hooks/%s/test", method => 'POST', check_status => 204 },
     create_hook => { url => "/repos/%s/%s/hooks", method => 'POST',  args => 1 },
     update_hook => { url => "/repos/%s/%s/hooks/%s", method => 'PATCH', args => 1 },
+
+    # http://developer.github.com/v3/repos/merging/
+    merges => { url => "/repos/%s/%s/merges", method => 'POST', args => 1 },
+
+    # http://developer.github.com/v3/repos/statuses/
+    list_statuses => { url => "/repos/%s/%s/statuses/%s" },
+    create_status => { url => "/repos/%s/%s/statuses/%s", method => 'POST', args => 1 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
 sub create_download {
     my $self = shift;
-    
+
     if (@_ == 1) {
         unshift @_, $self->repo;
         unshift @_, $self->u;
     }
     my ($user, $repos, $download) = @_;
-    
+
     my $file = delete $download->{file};
-    
+
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/downloads';
     my $d = $self->query('POST', $u, $download);
     if (defined $file) {
@@ -127,16 +138,16 @@ sub create_download {
 
 sub upload_download {
     my $self = shift;
-    
+
     if (@_ < 3) {
         unshift @_, $self->repo;
         unshift @_, $self->u;
     }
     my ($user, $repos, $download, $file) = @_;
-    
+
     # must successful on create_download
     return 0 unless exists $download->{s3_url};
-    
+
     ## POST form-data
     my %data = (
         Content_Type => 'form-data',
@@ -160,13 +171,13 @@ sub upload_download {
 ## http://developer.github.com/v3/repos/forks/
 sub create_fork {
     my $self = shift;
-    
+
     if (@_ < 2) {
         unshift @_, $self->repo;
         unshift @_, $self->u;
     }
     my ($user, $repos, $org) = @_;
-    
+
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/forks';
     $u .= '?org=' . $org if defined $org;
     return $self->query('POST', $u);
@@ -175,7 +186,7 @@ sub create_fork {
 ## http://developer.github.com/v3/repos/watching/
 sub watched {
     my ($self, $user) = @_;
-    
+
     my $u = $user ? '/users/' . uri_escape($user). '/watched' : '/user/watched';
     return $self->query($u);
 }
@@ -196,11 +207,11 @@ Net::GitHub::V3::Repos - GitHub Repos API
 
     my $gh = Net::GitHub::V3->new; # read L<Net::GitHub::V3> to set right authentication info
     my $repos = $gh->repos;
-    
+
     # set :user/:repo for simple calls
     $repos->set_default_user_repo('fayland', 'perl-net-github');
     my @contributors = $repos->contributors; # don't need pass user and repos
-    
+
 
 =head1 DESCRIPTION
 
@@ -377,7 +388,7 @@ L<http://developer.github.com/v3/repos/downloads/>
         "content_type" => "text/plain"
     } );
     my $st = $repos->upload_download($download, "/path/to/new_file.jpg");
-    
+
     # or batch it
     my $st = $repos->create_download( {
         "name" => "new_file.jpg",
@@ -490,6 +501,42 @@ L<http://developer.github.com/v3/repos/hooks/>
     my $hook  = $repos->update_hook($hook_id, $new_hook_hash);
     my $st    = $repos->test_hook($hook_id);
     my $st    = $repos->delete_hook($hook_id);
+
+=back
+
+=head3 Repo Merging API
+
+L<http://developer.github.com/v3/repos/merging/>
+
+=over 4
+
+=item merges
+
+    my $status = $repos->merges( {
+        "base" => "master",
+        "head" => "cool_feature",
+        "commit_message" => "Shipped cool_feature!"
+    } );
+
+=back
+
+=head3 Repo Statuses API
+
+L<http://developer.github.com/v3/repos/statuses/>
+
+=over 4
+
+=item list_statuses
+
+    my @statuses = $repos->list_statuses($sha1);
+
+=item create_status
+
+    my $status = $repos->create_status( {
+        "state" => "success",
+        "target_url" => "https://example.com/build/status",
+        "description" => "The build succeeded!"
+    } );
 
 =back
 

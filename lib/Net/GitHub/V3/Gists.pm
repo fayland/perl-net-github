@@ -11,7 +11,7 @@ with 'Net::GitHub::V3::Query';
 
 sub gists {
     my ( $self, $user ) = @_;
-    
+
     my $u = $user ? "/users/" . uri_escape($user) . '/gists' : '/gists';
     return $self->query($u);
 }
@@ -28,13 +28,13 @@ my %__methods = (
     is_starred => { url => "/gists/%s/star", method => "GET", check_status => 204 },
     fork => { url => "/gists/%s/fork", method => "POST" },
     delete => { url => "/gists/%s", method => "DELETE", check_status => 204 },
-    
+
     # http://developer.github.com/v3/gists/comments/
     comments => { url => "/gists/%s/comments" },
-    comment  => { url => "/gists/comments/%s" },
+    comment  => { url => "/gists/%s/comments/%s" },
     create_comment => { url => "/gists/%s/comments", method => 'POST',  args => 1 },
-    update_comment => { url => "/gists/comments/%s", method => 'PATCH', args => 1 },
-    delete_comment => { url => "/gists/comments/%s", method => 'DELETE', check_status => 204 },
+    update_comment => { url => "/gists/%s/comments/%s", method => 'PATCH', args => 1 },
+    delete_comment => { url => "/gists/%s/comments/%s", method => 'DELETE', check_status => 204 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -139,10 +139,10 @@ L<http://developer.github.com/v3/gists/comments/>
     my $comment  = $gist->create_comment($gist_id, {
         "body" => "a new comment"
     });
-    my $comment = $gist->update_comment($gist_id, {
+    my $comment = $gist->update_comment($gist_id, $comment_id, {
         "body" => "Nice change"
     });
-    my $st = $gist->delete_comment($gist_id);
+    my $st = $gist->delete_comment($gist_id, $comment_id);
 
 =back
 
