@@ -11,17 +11,6 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Net/GitHub.pm
-lib/Net/GitHub/V2.pm
-lib/Net/GitHub/V2/Commits.pm
-lib/Net/GitHub/V2/HasRepo.pm
-lib/Net/GitHub/V2/Issues.pm
-lib/Net/GitHub/V2/Network.pm
-lib/Net/GitHub/V2/NoRepo.pm
-lib/Net/GitHub/V2/Object.pm
-lib/Net/GitHub/V2/Organizations.pm
-lib/Net/GitHub/V2/PullRequest.pm
-lib/Net/GitHub/V2/Repositories.pm
-lib/Net/GitHub/V2/Users.pm
 lib/Net/GitHub/V3.pm
 lib/Net/GitHub/V3/Events.pm
 lib/Net/GitHub/V3/Gists.pm
@@ -32,6 +21,7 @@ lib/Net/GitHub/V3/Orgs.pm
 lib/Net/GitHub/V3/PullRequests.pm
 lib/Net/GitHub/V3/Query.pm
 lib/Net/GitHub/V3/Repos.pm
+lib/Net/GitHub/V3/Search.pm
 lib/Net/GitHub/V3/Users.pm
 Makefile.PL
 MANIFEST			This list of files
@@ -47,3 +37,4 @@ xt/v3/500-org.t
 xt/v3/600-git_data.t
 xt/v3/700-gists.t
 xt/v3/800-oauth.t
+xt/v3/900-search.t
