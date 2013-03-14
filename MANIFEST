@@ -28,7 +28,7 @@ MANIFEST			This list of files
 META.yml
 README
 t/00-load.t
-t/pod.t
+xt/pod.t
 xt/v3/01-access-token.t
 xt/v3/02-user-pass.t
 xt/v3/100-users.t
