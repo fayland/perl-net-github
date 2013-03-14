@@ -67,8 +67,6 @@ L<http://developer.github.com/v3/search/>
     my %data = $search->email('fayland@gmail.com');
     print Dumper(\$data{user});
 
-=item
-
 =back
 
 =head1 AUTHOR & COPYRIGHT & LICENSE

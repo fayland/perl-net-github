@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.51    2013.03.14
+        - move pod.t to xt and fix POD (RT 83926)
+
 0.50    2012.11.28
         - repos merging and statuses
         - fix gist comments changes
