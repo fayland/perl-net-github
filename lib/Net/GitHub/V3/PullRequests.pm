@@ -10,13 +10,10 @@ use URI::Escape;
 with 'Net::GitHub::V3::Query';
 
 sub pulls {
-    my $self = @_;
-    
-    if (@_ < 3) {
-        unshift @_, $self->repo;
-        unshift @_, $self->u;
-    }
-    my ($user, $repos, $args) = @_;
+    my ($self, $user, $repos, $args) = @_;
+    $user = $self->u unless defined $user;
+    $repos = $self->repo unless defined $repos;
+    $args = $self unless defined $args;
     
     my @p;
     foreach my $p (qw/state/) {
