@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.52    2013.03.28
+        - Fix argument handling for pulls (dagolden)
+
 0.51    2013.03.14
         - move pod.t to xt and fix POD (RT 83926)
 
