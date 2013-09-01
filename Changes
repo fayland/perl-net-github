@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.53    2013.09.01
+        - listing all public repos (kimmel)
+
 0.52    2013.03.28
         - Fix argument handling for pulls (dagolden)
 
