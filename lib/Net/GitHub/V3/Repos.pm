@@ -18,6 +18,14 @@ sub list {
     return $self->query($u);
 }
 
+sub list_all {
+    my ( $self, $since ) = @_;
+    $since ||= 'first';
+    my $u = '/repositories';
+    $u .= '?since=' . $since if $since ne 'first';
+    return $self->query($u);
+}
+
 sub list_user {
     my ($self, $user, $type) = @_;
     $user ||= $self->u;
@@ -224,6 +232,13 @@ L<http://developer.github.com/v3/repos/>
 =over 4
 
 =item list
+
+=item list_all
+
+    # All public repositories on Github
+    my @rp = $repos->list_all;
+    # starting at id 500
+    my @rp = $repos->list_all(500);
 
 =item list_user
 
