@@ -42,6 +42,16 @@ sub following {
     return $self->query($u);
 }
 
+sub contributions {
+    my ( $self, $user ) = @_;
+    my $path = "/users/" . uri_escape($user) . "/contributions_calendar_data";
+    my $domain
+        = $self->api_url eq 'https://api.github.com'
+        ? 'https://github.com'
+        : $self->api_url;
+    return $self->query( $domain . $path );
+}
+
 ## build methods on fly
 my %__methods = (
 
