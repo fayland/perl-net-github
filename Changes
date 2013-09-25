@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.54    2013.09.25
+        - $user->contributions (mikegrb)(Rev Michael Greb)
+
 0.53    2013.09.01
         - listing all public repos (kimmel)
 

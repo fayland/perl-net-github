@@ -2,7 +2,7 @@ package Net::GitHub::V3::Users;
 
 use Any::Moose;
 
-our $VERSION = '0.40';
+our $VERSION = '0.54';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -11,7 +11,7 @@ with 'Net::GitHub::V3::Query';
 
 sub show {
     my ( $self, $user ) = @_;
-    
+
     my $u = $user ? "/users/" . uri_escape($user) : '/user';
     return $self->query($u);
 }
@@ -19,7 +19,7 @@ sub show {
 sub update {
     my $self = shift;
     my $data = @_ % 2 ? shift @_ : { @_ };
-    
+
     return $self->query('PATCH', '/user', $data);
 }
 
@@ -31,13 +31,13 @@ sub remove_email {
 }
 sub followers {
     my ($self, $user) = @_;
-    
+
     my $u = $user ? "/users/" . uri_escape($user) . '/followers' : '/user/followers';
     return $self->query($u);
 }
 sub following {
     my ($self, $user) = @_;
-    
+
     my $u = $user ? "/users/" . uri_escape($user) . '/following' : '/user/following';
     return $self->query($u);
 }
@@ -56,7 +56,7 @@ sub contributions {
 my %__methods = (
 
     emails => { url => "/user/emails" },
-    
+
     is_following => { url => "/user/following/%s", check_status => 204 },
     follow => { url => "/user/following/%s", method => 'PUT', check_status => 204 },
     unfollow => { url => "/user/following/%s", method => 'DELETE', check_status => 204 },
