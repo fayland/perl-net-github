@@ -185,6 +185,16 @@ L<http://developer.github.com/v3/users/keys/>
     });
     $user->delete_key($key_id);
 
+=item contributions
+
+    my $contributions = $user->contributions($username);
+    # $contributions = ( ..., ['2013/09/22', 3], [ '2013/09/23', 2 ] )
+
+Unpublished GitHub API used to build the 'Public contributions' graph on a
+users' profile page.  The data structure is a list of 365 arrayrefs, one per day.
+Each array has two elements, the date in YYYY/MM/DD format is the first element,
+the second is the number of contrubtions for that day.stree .
+
 =back
 
 =head1 AUTHOR & COPYRIGHT & LICENSE
