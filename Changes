@@ -1,6 +1,9 @@
 Revision history for Net-GitHub
 
-0.54    2013.09.25
+0.55    2013-12-19
+        - remove JSON::XS requirements in Makefile.PL (no code changes)
+
+0.54    2013-09-25
         - $user->contributions (mikegrb)(Rev Michael Greb)
 
 0.53    2013.09.01
