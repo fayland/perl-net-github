@@ -128,9 +128,11 @@ sub query {
 
     $url = $self->api_url . $url unless $url =~ /^https\:/;
 
+    print STDERR ">>> $request_method $url\n" if $ENV{NG_DEBUG};
     my $req = HTTP::Request->new( $request_method, $url );
     if ($data) {
         my $json = $self->json->objToJson($data);
+        print STDERR ">>> $data\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
         $req->content($json);
     }
     $req->header( 'Content-Length' => length $req->content );
@@ -145,6 +147,7 @@ sub query {
             < ($res->header('x-ratelimit-limit') || 60) / 2);
     }
 
+    print STDERR "<<< " . $ua->content . "\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
     return $ua->res if $self->raw_response;
     return $ua->content if $self->raw_string;
 
@@ -313,6 +316,12 @@ Refer L<Net::GitHub::V3>
 Calls C<query> with C<next_url>. See L<Net::GitHub::V3>
 
 =back
+
+=head3 NG_DEBUG
+
+export NG_DEBUG=1 to view the request URL
+
+NG_DEBUG > 1 to view request/response string
 
 =head1 AUTHOR & COPYRIGHT & LICENSE
 
