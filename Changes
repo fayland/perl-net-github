@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.56    2014-02-07
+        - Add Subscription methods. (Kevin Falcone)
+
 0.55    2013-12-19
         - remove JSON::XS requirements in Makefile.PL (no code changes)
 
