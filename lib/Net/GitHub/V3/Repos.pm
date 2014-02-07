@@ -107,6 +107,13 @@ my %__methods = (
     watch   => { url => "/user/watched/%s/%s", is_u_repo => 1, method => 'PUT', check_status => 204 },
     unwatch => { url => "/user/watched/%s/%s", is_u_repo => 1, method => 'DELETE', check_status => 204 },
 
+    subscribers   => { url => "/repos/%s/%s/subscribers" },
+    subscription  => { url => "/repos/%s/%s/subscription" },
+    is_subscribed => { url => "/repos/%s/%s/subscription", check_status => 200 },
+    subscribe     => { url => "/repos/%s/%s/subscription", method => 'PUT',
+        check_status => 200, args => 1 },
+    unsubscribe   => { url => "/repos/%s/%s/subscription", method => 'DELETE', check_status => 204 },
+
     # http://developer.github.com/v3/repos/hooks/
     hooks => { url => "/repos/%s/%s/hooks" },
     hook  => { url => "/repos/%s/%s/hooks/%s" },
@@ -489,6 +496,47 @@ L<http://developer.github.com/v3/repos/watching/>
     my $st = $repos->watch('fayland', 'perl-net-github');
     my $st = $repos->unwatch();
     my $st = $repos->unwatch('fayland', 'perl-net-github');
+
+=back
+
+=head3 Subscriptions
+
+Github changed the ideas of Watchers (stars) and Subscriptions (new watchers).
+
+    https://github.com/blog/1204-notifications-stars
+
+The Watchers code in this module predates the terminology change, so the new
+Watcher methods use the GitHub 'subscription' terminology.
+
+=item subscribers
+
+Returns a list of subscriber data hashes.
+
+=item is_subscribed
+
+Returns true or false if you are subscribed
+
+    $repos->is_subscribed();
+    $repos->is_subscribed('fayland','perl-net-github');
+
+=item subscription
+
+Returns more information about your subscription to a repo.
+is_subscribed is a shortcut to calling this and checking for
+subscribed => 1.
+
+=item subscribe
+
+Required argument telling github if you want to subscribe or if you want
+to ignore mentions. If you want to change from subscribed to ignores you
+need to unsubscribe first.
+
+    $repos->subscribe('fayland','perl-net-github', { subscribed => 1 })
+    $repos->subscribe('fayland','perl-net-github', { ignored => 1 })
+
+=item unsubscribe
+
+    $repos->unsubscribe('fayland','perl-net-github');
 
 =back
 
