@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.57    2014-03-07
+        - POD fix (jotamjr)
+
 0.56    2014-02-07
         - Add Subscription methods. (Kevin Falcone)
 

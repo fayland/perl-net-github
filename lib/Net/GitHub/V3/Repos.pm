@@ -508,6 +508,8 @@ Github changed the ideas of Watchers (stars) and Subscriptions (new watchers).
 The Watchers code in this module predates the terminology change, so the new
 Watcher methods use the GitHub 'subscription' terminology.
 
+=over 4
+
 =item subscribers
 
 Returns a list of subscriber data hashes.
