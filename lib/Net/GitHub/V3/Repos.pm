@@ -654,7 +654,7 @@ L<http://developer.github.com/v3/repos/releases/>
 
     my $asset = $repos->upload_asset($release_id, $name, $content_type, $file_content);
 
-Check examples/upload_asset.pl for an working examples.
+Check examples/upload_asset.pl for an working example.
 
 =item release_asset
 
