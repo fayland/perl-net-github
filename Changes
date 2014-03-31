@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.58    2014-03-30
+        - Release API
+
 0.57    2014-03-07
         - POD fix (jotamjr)
 

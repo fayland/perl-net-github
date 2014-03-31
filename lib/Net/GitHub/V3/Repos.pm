@@ -2,7 +2,7 @@ package Net::GitHub::V3::Repos;
 
 use Any::Moose;
 
-our $VERSION = '0.56';
+our $VERSION = '0.58';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -91,6 +91,18 @@ my %__methods = (
     downloads => { url => "/repos/%s/%s/downloads" },
     download  => { url => "/repos/%s/%s/downloads/%s" },
     delete_download => { url => "/repos/%s/%s/downloads/%s", method => 'DELETE', check_status => 204 },
+
+    # http://developer.github.com/v3/repos/releases/
+    releases => { url => "/repos/%s/%s/releases" },
+    release  => { url => "/repos/%s/%s/releases/%s" },
+    create_release => { url => "/repos/%s/%s/releases", method => 'POST', args => 1 },
+    update_release => { url => "/repos/%s/%s/releases/%s", method => 'PATCH', args => 1 },
+    delete_release => { url => "/repos/%s/%s/releases/%s", method => 'DELETE', check_status => 204 },
+
+    release_assets => { url => "/repos/%s/%s/releases/%s/assets" },
+    release_asset => { url => "/repos/%s/%s/releases/%s/assets/%s" },
+    update_release_asset => { url => "/repos/%s/%s/releases/%s/assets/%s", method => 'PATCH', args => 1 },
+    delete_release_asset => { url => "/repos/%s/%s/releases/%s/assets/%s", method => 'DELETE', check_status => 204 },
 
     forks => { url => "/repos/%s/%s/forks" },
 
@@ -383,45 +395,6 @@ L<http://developer.github.com/v3/repos/commits/>
 
 =back
 
-=head3 Downloads
-
-L<http://developer.github.com/v3/repos/downloads/>
-
-=over 4
-
-=item downloads
-
-=item download
-
-=item delete_download
-
-    my @downloads = $repos->downloads;
-    my $download  = $repos->download($download_id);
-    my $st = $repos->delete_download($download_id);
-
-=item create_download
-
-=item upload_download
-
-    my $download = $repos->create_download( {
-        "name" => "new_file.jpg",
-        "size" => 114034,
-        "description" => "Latest release",
-        "content_type" => "text/plain"
-    } );
-    my $st = $repos->upload_download($download, "/path/to/new_file.jpg");
-
-    # or batch it
-    my $st = $repos->create_download( {
-        "name" => "new_file.jpg",
-        "size" => 114034,
-        "description" => "Latest release",
-        "content_type" => "text/plain",
-        file => '/path/to/new_file.jpg',
-    } );
-
-=back
-
 =head3 Forks API
 
 L<http://developer.github.com/v3/repos/forks/>
@@ -602,6 +575,64 @@ L<http://developer.github.com/v3/repos/statuses/>
         "target_url" => "https://example.com/build/status",
         "description" => "The build succeeded!"
     } );
+
+=back
+
+=head3 Repo Releases API
+
+L<http://developer.github.com/v3/repos/releases/>
+
+=over 4
+
+=item releases
+
+    my @releases = $repos->releases();
+
+=item release
+
+    my $release = $repos->release($release_id);
+
+=item create_release
+
+    my $release = $repos->create_release({
+      "tag_name" => "v1.0.0",
+      "target_commitish" => "master",
+      "name" => "v1.0.0",
+      "body" => "Description of the release",
+      "draft" => \1,
+    });
+
+=item update_release
+
+    my $release = $repos->update_release($release_id, {
+      "tag_name" => "v1.0.0",
+      "target_commitish" => "master",
+      "name" => "v1.0.0",
+      "body" => "Description of the release",
+    });
+
+=item delete_release
+
+    $repos->delete_release($release_id);
+
+=item release_assets
+
+    my @release_assets = $repos->release_assets($release_id);
+
+=item release_asset
+
+    my $release_asset = $repos->release_asset($release_id, $asset_id);
+
+=item update_release_asset
+
+    my $release_asset = $repos->update_release_asset($release_id, $asset_id, {
+        name" => "foo-1.0.0-osx.zip",
+        "label" => "Mac binary"
+    });
+
+=item delete_release_asset
+
+    my $ok = $repos->delete_release_asset($release_id, $asset_id);
 
 =back
 
