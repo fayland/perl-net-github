@@ -2,9 +2,10 @@ package Net::GitHub::V3::Repos;
 
 use Any::Moose;
 
-our $VERSION = '0.58';
+our $VERSION = '0.59';
 our $AUTHORITY = 'cpan:FAYLAND';
 
+use Carp;
 use URI::Escape;
 use HTTP::Request::Common qw(POST);
 
@@ -53,6 +54,36 @@ sub create {
     }
 
     return $self->query('POST', $u, $data);
+}
+
+sub upload_asset {
+    my $self = shift;
+    unshift @_, $self->u, $self->repo if @_ < 5;
+    my ($user, $repos, $release_id, $name, $content_type, $file_content) = @_;
+
+    my $ua = $self->ua;
+    my $url = $self->upload_url . "/repos/$user/$repos/releases/$release_id/assets?name=" . uri_escape($name);
+    my $req = HTTP::Request->new( 'POST', $url );
+    $req->content($file_content);
+    $req->header( 'Content-Type', $content_type );
+
+    my $res = $ua->request($req);
+
+    my $data;
+    if ($res->header('Content-Type') and $res->header('Content-Type') =~ 'application/json') {
+        my $json = $ua->content;
+        $data = eval { $self->json->jsonToObj($json) };
+        unless ($data) {
+            # We tolerate bad JSON for errors,
+            # otherwise we just rethrow the JSON parsing problem.
+            die unless $res->is_error;
+            $data = { message => $res->message };
+        }
+    } else {
+        $data = { message => $res->message };
+    }
+
+    return wantarray ? %$data : $data;
 }
 
 ## build methods on fly
@@ -618,6 +649,12 @@ L<http://developer.github.com/v3/repos/releases/>
 =item release_assets
 
     my @release_assets = $repos->release_assets($release_id);
+
+=item upload_asset
+
+    my $asset = $repos->upload_asset($release_id, $name, $content_type, $file_content);
+
+Check examples/upload_asset.pl for an working examples.
 
 =item release_asset
 

@@ -27,6 +27,8 @@ has 'raw_response' => (is => 'rw', isa => 'Bool', default => 0);
 has 'api_url' => (is => 'ro', default => 'https://api.github.com');
 has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
 
+has 'upload_url' => (is => 'ro', default => 'https://uploads.github.com');
+
 # pagination
 has 'next_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_next_page',  clearer => 'clear_next_url' );
 has 'last_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_last_page',  clearer => 'clear_last_url' );
