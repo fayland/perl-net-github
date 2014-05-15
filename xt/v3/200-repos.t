@@ -19,6 +19,18 @@ ok( $repos );
 my @p = $repos->list;
 ok(@p > 3, 'more than 3 repos');
 
+
+=pod
+
+$repos->set_default_user_repo('fayland', 'perl-net-github');
+my @commits = $repos->commits({
+    author => 'jibsheet'
+});
+use Data::Dumper;
+print Dumper(\@commits);
+
+=cut
+
 =pod
 
 $repos->set_default_user_repo('fayland', 'perl-net-github');

@@ -2,21 +2,27 @@ package Net::GitHub::V3::Repos;
 
 use Any::Moose;
 
-our $VERSION = '0.59';
+our $VERSION = '0.60';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Carp;
 use URI::Escape;
+use URI;
 use HTTP::Request::Common qw(POST);
 
 with 'Net::GitHub::V3::Query';
 
 sub list {
-    my ( $self, $type ) = @_;
-    $type ||= 'all';
-    my $u = '/user/repos';
-    $u .= '?type=' . $type if $type ne 'all';
-    return $self->query($u);
+    my ( $self, $args ) = @_;
+
+    # for old
+    unless (ref($args) eq 'HASH') {
+        $args = { type => $args };
+    }
+
+    my $uri = URI->new('/user/repos');
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
 }
 
 sub list_all {
@@ -28,12 +34,17 @@ sub list_all {
 }
 
 sub list_user {
-    my ($self, $user, $type) = @_;
+    my ($self, $user, $args) = @_;
     $user ||= $self->u;
-    $type ||= 'all';
-    my $u = "/users/" . uri_escape($user) . "/repos";
-    $u .= '?type=' . $type if $type ne 'all';
-    return $self->query($u);
+
+    # for old
+    unless (ref($args) eq 'HASH') {
+        $args = { type => $args };
+    }
+
+    my $uri = URI->new("/users/" . uri_escape($user) . "/repos");
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
 }
 
 sub list_org {
@@ -86,6 +97,19 @@ sub upload_asset {
     return wantarray ? %$data : $data;
 }
 
+sub commits {
+    my $self = shift;
+    if (@_ < 2) {
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
+    }
+    my ($user, $repos, $args) = @_;
+
+    my $uri = URI->new("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits');
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
+}
+
 ## build methods on fly
 my %__methods = (
 
@@ -96,6 +120,8 @@ my %__methods = (
     teams     => { url => "/repos/%s/%s/teams" },
     tags      => { url => "/repos/%s/%s/tags" },
     branches  => { url => "/repos/%s/%s/branches" },
+    branch => { url => "/repos/%s/%s/branches/%s" },
+    delete => { url => "/repos/%s/%s", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/repos/collaborators/
     collaborators       => { url => "/repos/%s/%s/collaborators" },
@@ -104,7 +130,6 @@ my %__methods = (
     delete_collaborator => { url => "/repos/%s/%s/collaborators/%s", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/repos/commits/
-    commits  => { url => "/repos/%s/%s/commits" },
     commit   => { url => "/repos/%s/%s/commits/%s" },
     comments => { url => "/repos/%s/%s/comments" },
     comment  => { url => "/repos/%s/%s/comments/%s" },
@@ -295,9 +320,14 @@ L<http://developer.github.com/v3/repos/>
 =item list_org
 
     my @rp = $repos->list; # or my $rp = $repos->list;
-    my @rp = $repos->list('private');
+    my @rp = $repos->list({
+        type => 'private'
+        sort => 'updated'
+    });
     my @rp = $repos->list_user('c9s');
-    my @rp = $repos->list_user('c9s', 'member');
+    my @rp = $repos->list_user('c9s', {
+        type => 'member'
+    });
     my @rp = $repos->list_org('perlchina');
     my @rp = $repos->list_org('perlchina', 'public');
 
@@ -341,6 +371,10 @@ B<To ease the keyboard, we provied two ways to call any method which starts with
 
     $repos->update({ homepage => 'https://metacpan.org/module/Net::GitHub' });
 
+=item delete
+
+    $repos->delete();
+
 =item contributors
 
 =item languages
@@ -356,6 +390,7 @@ B<To ease the keyboard, we provied two ways to call any method which starts with
     my @teams = $repos->teams;
     my @tags = $repos->tags;
     my @branches = $repos->branches;
+    my $branch = $repos->branch('master');
 
 =back
 
@@ -391,6 +426,9 @@ L<http://developer.github.com/v3/repos/commits/>
 =item commit
 
     my @commits = $repos->commits;
+    my @commits = $repos->commits({
+        author => 'fayland'
+    });
     my $commit  = $repos->commit($sha);
 
 =item comments

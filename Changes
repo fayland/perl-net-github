@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.60    2014-05-16
+        filters in commits, delete repos etc.
+
 0.59    2014-03-30
         - upload_asset
 
