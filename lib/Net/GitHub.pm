@@ -1,6 +1,5 @@
 package Net::GitHub;
 
-use Any::Moose;
 use Net::GitHub::V3;
 
 our $VERSION = '0.60';
@@ -8,17 +7,11 @@ our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
     my $class = shift;
-    my $params = $class->BUILDARGS(@_);
-
-    return Net::GitHub::V3->new($params);
-
-    #return $class->meta->new_object( __INSTANCE__ => $obj, @_,);
+    Net::GitHub::V3->new(@_);
 }
 
-no Any::Moose;
-__PACKAGE__->meta->make_immutable(inline_constructor => 0);
-
 1;
+
 __END__
 
 =head1 NAME

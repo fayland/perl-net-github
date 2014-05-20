@@ -1,6 +1,6 @@
 package Net::GitHub::V3::Repos;
 
-use Any::Moose;
+use Moo;
 
 our $VERSION = '0.60';
 our $AUTHORITY = 'cpan:FAYLAND';
@@ -274,8 +274,7 @@ sub watched {
     return $self->query($u);
 }
 
-no Any::Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 
 1;
 __END__

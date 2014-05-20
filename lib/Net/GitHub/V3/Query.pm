@@ -1,7 +1,5 @@
 package Net::GitHub::V3::Query;
 
-use Any::Moose 'Role';
-
 our $VERSION = '0.40';
 our $AUTHORITY = 'cpan:FAYLAND';
 
@@ -12,37 +10,40 @@ use MIME::Base64;
 use HTTP::Request;
 use Carp qw/croak/;
 use URI::Escape;
+use Types::Standard qw(Str Bool InstanceOf);
+
+use Moo::Role;
 
 # configurable args
 
 # Authentication
-has 'login'  => ( is => 'rw', isa => 'Str', predicate => 'has_login' );
-has 'pass'  => ( is => 'rw', isa => 'Str', predicate => 'has_pass' );
-has 'access_token' => ( is => 'rw', isa => 'Str', predicate => 'has_access_token' );
+has 'login'  => ( is => 'rw', isa => Str, predicate => 'has_login' );
+has 'pass'  => ( is => 'rw', isa => Str, predicate => 'has_pass' );
+has 'access_token' => ( is => 'rw', isa => Str, predicate => 'has_access_token' );
 
 # return raw unparsed JSON
-has 'raw_string' => (is => 'rw', isa => 'Bool', default => 0);
-has 'raw_response' => (is => 'rw', isa => 'Bool', default => 0);
+has 'raw_string' => (is => 'rw', isa => Bool, default => 0);
+has 'raw_response' => (is => 'rw', isa => Bool, default => 0);
 
 has 'api_url' => (is => 'ro', default => 'https://api.github.com');
-has 'api_throttle' => ( is => 'rw', isa => 'Bool', default => 1 );
+has 'api_throttle' => ( is => 'rw', isa => Bool, default => 1 );
 
 has 'upload_url' => (is => 'ro', default => 'https://uploads.github.com');
 
 # pagination
-has 'next_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_next_page',  clearer => 'clear_next_url' );
-has 'last_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_last_page',  clearer => 'clear_last_url' );
-has 'first_url' => ( is => 'rw', isa => 'Str', predicate => 'has_first_page', clearer => 'clear_first_url' );
-has 'prev_url'  => ( is => 'rw', isa => 'Str', predicate => 'has_prev_page',  clearer => 'clear_prev_url' );
+has 'next_url'  => ( is => 'rw', isa => Str, predicate => 'has_next_page',  clearer => 'clear_next_url' );
+has 'last_url'  => ( is => 'rw', isa => Str, predicate => 'has_last_page',  clearer => 'clear_last_url' );
+has 'first_url' => ( is => 'rw', isa => Str, predicate => 'has_first_page', clearer => 'clear_first_url' );
+has 'prev_url'  => ( is => 'rw', isa => Str, predicate => 'has_prev_page',  clearer => 'clear_prev_url' );
 
 # Error handle
-has 'RaiseError' => ( is => 'rw', isa => 'Bool', default => 1 );
+has 'RaiseError' => ( is => 'rw', isa => Bool, default => 1 );
 
 # optional
-has 'u'  => (is => 'rw', isa => 'Str');
-has 'repo' => (is => 'rw', isa => 'Str');
+has 'u'  => (is => 'rw', isa => Str);
+has 'repo' => (is => 'rw', isa => Str);
 
-has 'is_main_module' => (is => 'ro', isa => 'Bool', default => 0);
+has 'is_main_module' => (is => 'ro', isa => Bool, default => 0);
 sub set_default_user_repo {
     my ($self, $user, $repo) = @_;
 
@@ -79,7 +80,7 @@ sub args_to_pass {
 }
 
 has 'ua' => (
-    isa     => 'WWW::Mechanize::GZip',
+    isa     => InstanceOf['WWW::Mechanize::GZip'],
     is      => 'ro',
     lazy    => 1,
     default => sub {
@@ -97,7 +98,7 @@ has 'ua' => (
 
 has 'json' => (
     is => 'ro',
-    isa => 'JSON::Any',
+    isa => InstanceOf['JSON::Any'],
     lazy => 1,
     default => sub {
         return JSON::Any->new( utf8 => 1 );
@@ -231,7 +232,12 @@ sub __build_methods {
         my $check_status = $v->{check_status};
         my $is_u_repo = $v->{is_u_repo}; # need auto shift u/repo
 
-        $package->meta->add_method( $m => sub {
+        my $glob = do {
+          no strict 'refs';
+          no warnings 'once';
+          *{"${package}::${m}"};
+        };
+        *$glob = sub {
             my $self = shift;
 
             # count how much %s inside u
@@ -257,11 +263,11 @@ sub __build_methods {
             } else {
                 return $self->query($method, $u, @qargs);
             }
-        } );
+        };
     }
 }
 
-no Any::Moose;
+no Moo::Role;
 
 1;
 __END__
