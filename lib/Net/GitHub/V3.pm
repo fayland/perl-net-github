@@ -1,8 +1,9 @@
 package Net::GitHub::V3;
 
-use Any::Moose;
+use Moo;
+use Types::Standard qw(InstanceOf);
 
-our $VERSION = '0.49';
+our $VERSION = '0.60';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V3::Query';
@@ -22,7 +23,7 @@ has '+is_main_module' => (default => 1);
 
 has 'user' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::Users',
+    isa => InstanceOf['Net::GitHub::V3::Users'],
     lazy => 1,
     default => sub {
         my $self = shift;
@@ -32,7 +33,7 @@ has 'user' => (
 
 has 'org' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::Orgs',
+    isa => InstanceOf['Net::GitHub::V3::Orgs'],
     lazy => 1,
     default => sub {
         my $self = shift;
@@ -42,7 +43,7 @@ has 'org' => (
 
 has 'gist' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::Gists',
+    isa => InstanceOf['Net::GitHub::V3::Gists'],
     lazy => 1,
     default => sub {
         my $self = shift;
@@ -52,7 +53,7 @@ has 'gist' => (
 
 has 'repos' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::Repos',
+    isa => InstanceOf['Net::GitHub::V3::Repos'],
     lazy => 1,
     predicate => 'is_repos_init',
     default => sub {
@@ -63,7 +64,7 @@ has 'repos' => (
 
 has 'issue' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::Issues',
+    isa => InstanceOf['Net::GitHub::V3::Issues'],
     lazy => 1,
     predicate => 'is_issue_init',
     default => sub {
@@ -74,7 +75,7 @@ has 'issue' => (
 
 has 'pull_request' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::PullRequests',
+    isa => InstanceOf['Net::GitHub::V3::PullRequests'],
     lazy => 1,
     predicate => 'is_pull_request_init',
     default => sub {
@@ -85,7 +86,7 @@ has 'pull_request' => (
 
 has 'git_data' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::GitData',
+    isa => InstanceOf['Net::GitHub::V3::GitData'],
     lazy => 1,
     predicate => 'is_git_data_init',
     default => sub {
@@ -96,7 +97,7 @@ has 'git_data' => (
 
 has 'oauth' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::OAuth',
+    isa => InstanceOf['Net::GitHub::V3::OAuth'],
     lazy => 1,
     default => sub {
         my $self = shift;
@@ -106,7 +107,7 @@ has 'oauth' => (
 
 has 'event' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::Events',
+    isa => InstanceOf['Net::GitHub::V3::Events'],
     lazy => 1,
     default => sub {
         my $self = shift;
@@ -116,7 +117,7 @@ has 'event' => (
 
 has 'search' => (
     is => 'rw',
-    isa => 'Net::GitHub::V3::Search',
+    isa => InstanceOf['Net::GitHub::V3::Search'],
     lazy => 1,
     default => sub {
         my $self = shift;
@@ -124,8 +125,7 @@ has 'search' => (
     },
 );
 
-no Any::Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 
 1;
 __END__

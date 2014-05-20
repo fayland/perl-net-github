@@ -1,8 +1,8 @@
 package Net::GitHub::V3::Search;
 
-use Any::Moose;
+use Moo;
 
-our $VERSION = '0.49';
+our $VERSION = '0.60';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -20,8 +20,7 @@ my %__methods = (
 );
 __build_methods(__PACKAGE__, %__methods);
 
-no Any::Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 
 1;
 __END__
