@@ -23,6 +23,6 @@ ok($blob);
 my $commit = $git_data->commit('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
 ok($commit);
 
-done_testing;
+done_testing();
 
 1;

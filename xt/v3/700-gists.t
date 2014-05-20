@@ -17,7 +17,7 @@ ok($gist);
 
 my $g = $gist->create( {
       "description" => "the description for this gist",
-      "public" => 'true',
+      "public" => \1,
       "files"  =>  {
         "file1.txt" => {
             "content" => "String file contents"

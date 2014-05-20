@@ -24,6 +24,7 @@ is($uu->{bio}, $bio);
 sleep 1;
 my $u = $user->show();
 is($u->{bio}, $bio);
+delete $u->{updated_at}; delete $uu->{updated_at};
 is_deeply($u, $uu);
 
 =pod
@@ -37,17 +38,17 @@ if ($is_following) {
     ok($ok);
     $ok = $user->follow($f);
     ok($ok);
-    
+
     my $following = $user->following;
     ok( (grep { $_->{login} eq $f } @$following ) );
 } else {
     diag("follow then unfollow");
     my $ok = $user->follow($f);
     ok($ok);
-    
+
     my $following = $user->following;
     ok( (grep { $_->{login} eq $f } @$following ) );
-    
+
     $ok = $user->unfollow($f);
     ok($ok);
 }
