@@ -150,12 +150,12 @@ sub query {
             < ($res->header('x-ratelimit-limit') || 60) / 2);
     }
 
-    print STDERR "<<< " . $ua->content . "\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
-    return $ua->res if $self->raw_response;
-    return $ua->content if $self->raw_string;
+    print STDERR "<<< " . $res->decoded_content . "\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
+    return $res if $self->raw_response;
+    return $res->decoded_content if $self->raw_string;
 
     if ($res->header('Content-Type') and $res->header('Content-Type') =~ 'application/json') {
-        my $json = $ua->content;
+        my $json = $res->decoded_content;
         $data = eval { $self->json->jsonToObj($json) };
         unless ($data) {
             # We tolerate bad JSON for errors,
@@ -168,7 +168,7 @@ sub query {
     }
 
     if ( $self->RaiseError ) {
-        croak $data->{message} if not $ua->success and ref $data eq 'HASH' and exists $data->{message}; # for 'Client Errors'
+        croak $data->{message} if not $res->is_success and ref $data eq 'HASH' and exists $data->{message}; # for 'Client Errors'
     }
 
     $self->_clear_pagination;

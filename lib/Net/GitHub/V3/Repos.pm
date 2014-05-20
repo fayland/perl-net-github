@@ -8,7 +8,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 use Carp;
 use URI::Escape;
 use URI;
-use HTTP::Request;
+use HTTP::Request::Common qw(POST);
 
 with 'Net::GitHub::V3::Query';
 
