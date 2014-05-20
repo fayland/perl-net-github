@@ -3,7 +3,7 @@ package Net::GitHub::V3;
 use Moo;
 use Types::Standard qw(InstanceOf);
 
-our $VERSION = '0.49';
+our $VERSION = '0.60';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V3::Query';

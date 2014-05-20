@@ -2,7 +2,7 @@ package Net::GitHub::V3::Users;
 
 use Moo;
 
-our $VERSION = '0.54';
+our $VERSION = '0.60';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
