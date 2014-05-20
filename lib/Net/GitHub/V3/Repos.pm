@@ -8,7 +8,7 @@ our $AUTHORITY = 'cpan:FAYLAND';
 use Carp;
 use URI::Escape;
 use URI;
-use HTTP::Request::Common qw(POST);
+use HTTP::Request;
 
 with 'Net::GitHub::V3::Query';
 
@@ -75,6 +75,7 @@ sub upload_asset {
     my $ua = $self->ua;
     my $url = $self->upload_url . "/repos/$user/$repos/releases/$release_id/assets?name=" . uri_escape($name);
     my $req = HTTP::Request->new( 'POST', $url );
+    $req->accept_decodable;
     $req->content($file_content);
     $req->header( 'Content-Type', $content_type );
 

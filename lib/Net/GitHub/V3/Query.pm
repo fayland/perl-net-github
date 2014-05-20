@@ -5,8 +5,8 @@ our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;
 use JSON::Any;
-use WWW::Mechanize::GZip;
 use MIME::Base64;
+use LWP::UserAgent;
 use HTTP::Request;
 use Carp qw/croak/;
 use URI::Escape;
@@ -80,12 +80,11 @@ sub args_to_pass {
 }
 
 has 'ua' => (
-    isa     => InstanceOf['WWW::Mechanize::GZip'],
+    isa     => InstanceOf['LWP::UserAgent'],
     is      => 'ro',
     lazy    => 1,
     default => sub {
-        my $self = shift;
-        return WWW::Mechanize::GZip->new(
+        LWP::UserAgent->new(
             agent       => "perl-net-github $VERSION",
             cookie_jar  => {},
             stack_depth => 1,
@@ -133,6 +132,7 @@ sub query {
 
     print STDERR ">>> $request_method $url\n" if $ENV{NG_DEBUG};
     my $req = HTTP::Request->new( $request_method, $url );
+    $req->accept_decodable;
     if ($data) {
         my $json = $self->json->objToJson($data);
         print STDERR ">>> $data\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;

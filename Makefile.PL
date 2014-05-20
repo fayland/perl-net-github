@@ -12,12 +12,12 @@ requires 'URI';
 requires 'URI::Escape';
 requires 'Moo';
 requires 'Types::Standard';
-requires 'Crypt::SSLeay';
-requires 'WWW::Mechanize::GZip';
 requires 'JSON::Any';
 # requires 'JSON::XS'; # avoid "Couldn't find a JSON package. Need XS, JSON, or DWIW"
-requires 'HTML::TreeBuilder';
-requires 'HTTP::Request::Common';
+#
+requires 'LWP::UserAgent';
+requires 'HTTP::Request';
+requires 'LWP::Protocol::https';
 
 test_requires 'Test::More';
 tests('t/*.t t/*/*.t');
