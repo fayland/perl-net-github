@@ -19,9 +19,7 @@ requires 'JSON::Any';
 requires 'HTML::TreeBuilder';
 requires 'HTTP::Request::Common';
 
-build_requires 'Test::More';
-test_requires 'Test::MockModule';
-test_requires 'File::Slurp';
+test_requires 'Test::More';
 tests('t/*.t t/*/*.t');
 
 auto_install;
