@@ -280,7 +280,7 @@ Net::GitHub::V3::Query - Base Query role for Net::GitHub::V3
 
     package Net::GitHub::V3::XXX;
 
-    use Any::Moose;
+    use Moo;
     with 'Net::GitHub::V3::Query';
 
 =head1 DESCRIPTION

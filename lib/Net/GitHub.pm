@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Net::GitHub::V3;
 
-our $VERSION = '0.60';
+our $VERSION = '0.61_01';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -89,7 +89,7 @@ L<http://github.com/fayland/perl-net-github/>
 
 =head1 SEE ALSO
 
-L<Any::Moose>, L<Pithub>
+L<Pithub>
 
 =head1 AUTHOR
 

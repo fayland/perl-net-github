@@ -66,7 +66,7 @@ Git
     <http://github.com/fayland/perl-net-github/>
 
 SEE ALSO
-    Any::Moose, Pithub
+    Pithub
 
 AUTHOR
     Fayland Lam, "<fayland at gmail.com>"

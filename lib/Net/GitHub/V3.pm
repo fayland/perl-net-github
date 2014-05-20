@@ -323,7 +323,7 @@ L<Net::GitHub::V3::Search>
 
 =head1 SEE ALSO
 
-L<Any::Moose>, L<Pithub>
+L<Pithub>
 
 =head1 AUTHOR & COPYRIGHT & LICENSE
 
