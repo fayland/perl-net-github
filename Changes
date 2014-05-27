@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.62    2014-05-27
+        formal release, no code changes
+
 0.61_01    2014-05-20
         from Any::Moose to Moo (github haarg (Graham Knop))
 
