@@ -2,26 +2,26 @@ package Net::GitHub::V3::PullRequests;
 
 use Moo;
 
-our $VERSION = '0.60';
+our $VERSION = '0.63';
 our $AUTHORITY = 'cpan:FAYLAND';
 
+use URI;
 use URI::Escape;
 
 with 'Net::GitHub::V3::Query';
 
 sub pulls {
-    my ($self, $user, $repos, $args) = @_;
-    $user = $self->u unless defined $user;
-    $repos = $self->repo unless defined $repos;
-    $args = $self unless defined $args;
-    
-    my @p;
-    foreach my $p (qw/state/) {
-        push @p, "$p=" . $args->{$p} if exists $args->{$p};
+    my $self = shift @_;
+    my $args = pop @_;
+
+    my ($user, $repos) = ($self->u, $self->repo);
+    if (scalar(@_) >= 2) {
+        ($user, $repos) = @_;
     }
-    my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/pulls';
-    $u .= '?' . join('&', @p) if @p;
-    return $self->query($u);
+
+    my $uri = URI->new('/repos/' . uri_escape($user) . '/' . uri_escape($repos) . '/pulls');
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
 }
 
 ## build methods on fly
@@ -43,7 +43,7 @@ my %__methods = (
     create_comment => { url => "/repos/%s/%s/pulls/%s/comments", method => 'POST',  args => 1 },
     update_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'PATCH', args => 1 },
     delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'DELETE', check_status => 204 },
-    
+
 );
 __build_methods(__PACKAGE__, %__methods);
 

@@ -34,6 +34,7 @@ xt/v3/01-access-token.t
 xt/v3/02-user-pass.t
 xt/v3/100-users.t
 xt/v3/200-repos.t
+xt/v3/300-pull.t
 xt/v3/500-org.t
 xt/v3/600-git_data.t
 xt/v3/700-gists.t

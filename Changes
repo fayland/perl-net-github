@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.63    2014-05-30
+        fix pulls (RT 96068)
+
 0.62    2014-05-27
         formal release, no code changes
 
