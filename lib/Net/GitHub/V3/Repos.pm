@@ -2,7 +2,7 @@ package Net::GitHub::V3::Repos;
 
 use Moo;
 
-our $VERSION = '0.60';
+our $VERSION = '0.64';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Carp;

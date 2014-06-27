@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.64    2014-06-27
+        use decoded_content on res in upload_asset (Alex Vandiver)
+
 0.63    2014-05-30
         fix pulls (RT 96068)
 
