@@ -83,7 +83,7 @@ sub upload_asset {
 
     my $data;
     if ($res->header('Content-Type') and $res->header('Content-Type') =~ 'application/json') {
-        my $json = $ua->content;
+        my $json = $res->content;
         $data = eval { $self->json->jsonToObj($json) };
         unless ($data) {
             # We tolerate bad JSON for errors,
