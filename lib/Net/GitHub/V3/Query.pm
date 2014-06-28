@@ -232,12 +232,9 @@ sub __build_methods {
         my $check_status = $v->{check_status};
         my $is_u_repo = $v->{is_u_repo}; # need auto shift u/repo
 
-        my $glob = do {
-          no strict 'refs';
-          no warnings 'once';
-          *{"${package}::${m}"};
-        };
-        *$glob = sub {
+        no strict 'refs';
+        no warnings 'once';
+        *{"${package}::${m}"} = sub {
             my $self = shift;
 
             # count how much %s inside u

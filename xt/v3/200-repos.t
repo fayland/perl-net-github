@@ -19,6 +19,9 @@ ok( $repos );
 my @p = $repos->list;
 ok(@p > 3, 'more than 3 repos');
 
+my $rp = $repos->get('fayland', 'perl-net-github');
+diag(Dumper(\$rp)); use Data::Dumper;
+
 
 =pod
 
