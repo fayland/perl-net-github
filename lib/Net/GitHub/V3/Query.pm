@@ -1,6 +1,6 @@
 package Net::GitHub::V3::Query;
 
-our $VERSION = '0.65';
+our $VERSION = '0.66';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;
@@ -87,8 +87,6 @@ has 'ua' => (
         LWP::UserAgent->new(
             agent       => "perl-net-github $VERSION",
             cookie_jar  => {},
-            stack_depth => 1,
-            autocheck   => 0,
             keep_alive  => 4,
             timeout     => 60,
         );

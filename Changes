@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.66    2014-07-31
+         "Unrecognized LWP::UserAgent options" warning (RT #97639)
+
 0.65    2014-06-29
         fix glob ref issue for perl < 5.14 (Alex Vandiver)
 
