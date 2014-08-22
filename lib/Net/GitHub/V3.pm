@@ -228,7 +228,7 @@ The C<per_page> parameter mentioned in their docs is B<NOT> supported by this mo
   while ($gh->issue->has_next_page) {
       push @issues, $gh->issue->query($gh->issue->next_url);
       ## OR ##
-      push @issues, $gh->issue->next_page);
+      push @issues, $gh->issue->next_page;
   }
 
 =head2 METHODS

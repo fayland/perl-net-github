@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.67_01 2014-08-22
+        rewrite Net::GitHub::V3::Search (legacy methods is removed)
+
 0.66    2014-07-31
          "Unrecognized LWP::UserAgent options" warning (RT #97639)
 

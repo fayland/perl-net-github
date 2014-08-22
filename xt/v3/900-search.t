@@ -12,18 +12,16 @@ my $search = $gh->search;
 ok( $gh );
 ok( $search );
 
-my %data = $search->issues('fayland', 'perl-net-github', 'closed', 'milestone');
-diag Dumper(\$data{issues});
+my %data = $search->issues({
+    q => 'state:open repo:fayland/perl-net-github',
+});
+diag Dumper(\$data{items});
 
-#%data = $search->repos('perl-net-github');
-#diag Dumper(\$data{repositories});
+#%data = $search->repositories('perl-net-github');
+#diag Dumper(\$data{items});
 
-#%data = $search->user('fayland');
-#diag Dumper(\$data{users});
-
-%data = $search->email('fayland@gmail.com');
-diag Dumper(\$data{user});
-
+#%data = $search->users('fayland');
+#diag Dumper(\$data{items});
 
 done_testing;
 

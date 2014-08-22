@@ -2,23 +2,64 @@ package Net::GitHub::V3::Search;
 
 use Moo;
 
-our $VERSION = '0.60';
+our $VERSION = '0.67';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
 
 with 'Net::GitHub::V3::Query';
 
-## build methods on fly
-my %__methods = (
+sub repositories {
+    my ( $self, $args ) = @_;
 
-    issues => { url => '/legacy/issues/search/%s/%s/%s/%s', is_u_repo => 1 },
-    repos  => { url => '/legacy/repos/search/%s' },
-    user   => { url => '/legacy/user/search/%s' },
-    email  => { url => '/legacy/user/email/%s' },
+    # for old
+    unless (ref($args) eq 'HASH') {
+        $args = { q => $args };
+    }
 
-);
-__build_methods(__PACKAGE__, %__methods);
+    my $uri = URI->new('/search/repositories');
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
+}
+
+sub code {
+    my ( $self, $args ) = @_;
+
+    # for old
+    unless (ref($args) eq 'HASH') {
+        $args = { q => $args };
+    }
+
+    my $uri = URI->new('/search/code');
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
+}
+
+sub issues {
+    my ( $self, $args ) = @_;
+
+    # for old
+    unless (ref($args) eq 'HASH') {
+        $args = { q => $args };
+    }
+
+    my $uri = URI->new('/search/issues');
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
+}
+
+sub users {
+    my ( $self, $args ) = @_;
+
+    # for old
+    unless (ref($args) eq 'HASH') {
+        $args = { q => $args };
+    }
+
+    my $uri = URI->new('/search/users');
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
+}
 
 no Moo;
 
@@ -48,23 +89,37 @@ L<http://developer.github.com/v3/search/>
 
 =item issues
 
-    my %data = $search->issues('fayland', 'perl-net-github', 'closed', 'milestone');
-    print Dumper(\$data{issues});
+    my %data = $search->issues({
+        q => 'state:open repo:fayland/perl-net-github',
+        sort  => 'created',
+        order => 'asc',
+    });
+    print Dumper(\$data{items});
 
-=item repos
+=item repositories
 
-    my %data = $search->repos('perl-net-github');
-    print Dumper(\$data{repositories});
+    my %data = $search->repositories({
+        q => 'perl',
+        sort  => 'stars',
+        order => 'desc',
+    });
+    print Dumper(\$data{items});
 
-=item user
+=item code
 
-    my %data = $search->user('fayland');
+    my %data = $search->code({
+        q => 'addClass in:file language:js repo:jquery/jquery'
+    });
+    print Dumper(\$data{items});
+
+=item users
+
+    my %data = $search->users({
+        q => 'perl',
+        sort  => 'followers',
+        order => 'desc',
+    });
     print Dumper(\$data{users});
-
-=item email
-
-    my %data = $search->email('fayland@gmail.com');
-    print Dumper(\$data{user});
 
 =back
 
