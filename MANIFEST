@@ -1,4 +1,6 @@
 Changes
+examples/create_utf8_repo.pl
+examples/search.pl
 examples/upload_asset.pl
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
