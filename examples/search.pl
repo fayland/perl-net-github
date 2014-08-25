@@ -10,7 +10,10 @@ use Data::Dumper;
 my $gh = Net::GitHub::V3->new();
 my $search = $gh->search;
 
-my %data = $search->repositories('perl');
+my %data = $search->repositories({
+    q => 'perl',
+    per_page => 100,
+});
 map { print $_->{url} . "\n" } @{$data{items}};
 
 while ($search->has_next_page) {
