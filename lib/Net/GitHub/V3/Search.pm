@@ -19,7 +19,12 @@ sub repositories {
 
     my $uri = URI->new('/search/repositories');
     $uri->query_form($args);
-    return $self->query($uri->as_string);
+
+    my $url = $uri->as_string;
+    $url =~ s/%3A/:/g;
+    $url =~ s/%2B/+/g;
+
+    return $self->query($url);
 }
 
 sub code {
