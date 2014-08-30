@@ -2,7 +2,7 @@ package Net::GitHub::V3::Search;
 
 use Moo;
 
-our $VERSION = '0.67';
+our $VERSION = '0.68';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -64,6 +64,14 @@ sub users {
     my $uri = URI->new('/search/users');
     $uri->query_form($args);
     return $self->query($uri->as_string);
+}
+
+## DEPERCATED
+sub repos {
+    (shift)->repositories(@_);
+}
+sub user {
+    (shift)->repositories(@_);
 }
 
 no Moo;

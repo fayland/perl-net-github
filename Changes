@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.68    2014-08-30
+        Fixed URI encoding issue #52 (sillymoose)
+
 0.67_01 2014-08-22
         rewrite Net::GitHub::V3::Search (legacy methods is removed)
 
