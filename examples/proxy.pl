@@ -8,8 +8,8 @@ use Net::GitHub::V3;
 use Data::Dumper;
 
 my $gh = Net::GitHub::V3->new();
-my $search = $gh->search;
 $gh->ua->proxy('https', 'socks://127.0.0.1:9050');
+my $search = $gh->search;
 
 my %data = $search->repositories({
     q => 'perl',
