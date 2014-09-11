@@ -1,6 +1,6 @@
 package Net::GitHub::V3::Query;
 
-our $VERSION = '0.67';
+our $VERSION = '0.69';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;
@@ -72,7 +72,7 @@ sub set_default_user_repo {
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'u', 'repo', 'next_url', 'last_url', 'first_url', 'prev_url') {
+    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'u', 'repo', 'next_url', 'last_url', 'first_url', 'prev_url', 'ua') {
         my $v = $self->$col;
         $ret->{$col} = $v if defined $v;
     }

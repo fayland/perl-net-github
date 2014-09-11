@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.69    2014-09-11
+        pass ua as the args so we can set up proxies for all
+
 0.68    2014-08-30
         Fixed URI encoding issue #52 (sillymoose)
 

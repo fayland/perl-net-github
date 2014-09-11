@@ -3,7 +3,7 @@ package Net::GitHub::V3;
 use Moo;
 use Types::Standard qw(InstanceOf);
 
-our $VERSION = '0.60';
+our $VERSION = '0.69';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 with 'Net::GitHub::V3::Query';
@@ -230,6 +230,14 @@ The C<per_page> parameter mentioned in their docs is B<NOT> supported by this mo
       ## OR ##
       push @issues, $gh->issue->next_page;
   }
+
+=head3 ua
+
+To set the proxy for ua, you can do something like following
+
+    $gh->ua->proxy('https', 'socks://127.0.0.1:9050');
+
+$gh->ua is an instance of L<LWP::UserAgent>
 
 =head2 METHODS
 
