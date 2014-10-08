@@ -13,9 +13,11 @@ diag( 'Using user = ' . $ENV{GITHUB_USER} );
 ok( $gh );
 my $data = $gh->user->show();
 
+# use Data::Dumper;
+# diag(Dumper(\$data));
+
 ok( $data );
 ok( $data->{id} );
-ok( $data->{gravatar_id} );
 ok( $data->{email} );
 ok( $data->{login} );
 ok( $data->{name} );

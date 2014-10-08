@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.70    2014-10-08
+        add per_page in GET no matter it supports or not
+
 0.69    2014-09-11
         pass ua as the args so we can set up proxies for all
 

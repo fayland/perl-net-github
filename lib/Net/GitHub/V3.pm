@@ -211,7 +211,7 @@ from the API. By switching B<RaiseError> on you can make the be turned into
 exceptions instead, so that you don't have to check for error response after
 every call.
 
-=head3 next_url, last_url, prev_url, first_url
+=head3 next_url, last_url, prev_url, first_url, per_page
 
 Any methods which return multiple results I<may> be paginated. After performing
 a query you should check to see if there are more results. These attributes will
@@ -220,9 +220,9 @@ be reset for each query.
 The predicates to check these attributes are C<has_next_page>, C<has_last_page>,
 C<has_prev_page> and C<has_first_page>.
 
-See Github's documentation: L<http://developer.github.com/v3/#pagination>
+C<per_page> is default to 100. it will be applied to GET urls no matter it supports or not.
 
-The C<per_page> parameter mentioned in their docs is B<NOT> supported by this module.
+See Github's documentation: L<http://developer.github.com/v3/#pagination>
 
   my @issues = $gh->issue->repos_issues;
   while ($gh->issue->has_next_page) {
