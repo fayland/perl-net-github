@@ -35,6 +35,7 @@ has 'next_url'  => ( is => 'rw', isa => Str, predicate => 'has_next_page',  clea
 has 'last_url'  => ( is => 'rw', isa => Str, predicate => 'has_last_page',  clearer => 'clear_last_url' );
 has 'first_url' => ( is => 'rw', isa => Str, predicate => 'has_first_page', clearer => 'clear_first_url' );
 has 'prev_url'  => ( is => 'rw', isa => Str, predicate => 'has_prev_page',  clearer => 'clear_prev_url' );
+has 'per_page'  => ( is => 'rw', isa => Str, default => 100 );
 
 # Error handle
 has 'RaiseError' => ( is => 'rw', isa => Bool, default => 1 );
@@ -72,7 +73,7 @@ sub set_default_user_repo {
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'u', 'repo', 'next_url', 'last_url', 'first_url', 'prev_url', 'ua') {
+    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'u', 'repo', 'next_url', 'last_url', 'first_url', 'prev_url', 'per_page', 'ua') {
         my $v = $self->$col;
         $ret->{$col} = $v if defined $v;
     }
@@ -127,6 +128,16 @@ sub query {
     }
 
     $url = $self->api_url . $url unless $url =~ /^https\:/;
+    if ($request_method eq 'GET') {
+        if ($url !~ /per_page=\d/) {
+            ## auto add per_page in url for GET no matter it supports or not
+            my $uri = URI->new($url);
+            my %query_form = $uri->query_form;
+            $query_form{per_page} ||= $self->per_page;
+            $uri->query_form(%query_form);
+            $url = $uri->as_string;
+        }
+    }
 
     print STDERR ">>> $request_method $url\n" if $ENV{NG_DEBUG};
     my $req = HTTP::Request->new( $request_method, $url );
