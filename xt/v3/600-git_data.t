@@ -27,5 +27,3 @@ is $commit->{sha}, '5a1faac3ad54da26be60970ddbbdfbf6b08fdc57';
 is $commit->{message}, "init git data";
 
 done_testing();
-
-1;

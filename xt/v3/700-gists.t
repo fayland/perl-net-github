@@ -30,5 +30,3 @@ is $g->{description}, "the description for this gist";
 is $g->{files}{"file1.txt"}{content}, "String file contents";
 
 done_testing;
-
-1;

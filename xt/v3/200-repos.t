@@ -50,5 +50,3 @@ is($st, 1);
 =cut
 
 done_testing;
-
-1;

@@ -34,5 +34,3 @@ $is_member = $org->is_member('perlchina', 'nothingmuch');
 is($is_member, 0);
 
 done_testing;
-
-1;

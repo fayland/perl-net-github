@@ -30,5 +30,3 @@ $oauth->delete_authorization($o->{id});
 ok !$oauth->authorization($o->{id});
 
 done_testing;
-
-1;

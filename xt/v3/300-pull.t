@@ -25,5 +25,3 @@ for my $request (@closed_pull_requests) {
 }
 
 done_testing;
-
-1;

@@ -19,5 +19,3 @@ ok( $data->{login} );
 ok( $data->{name} );
 
 done_testing;
-
-1;
