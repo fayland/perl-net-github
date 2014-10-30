@@ -17,11 +17,14 @@ ok( $gh );
 ok( $git_data );
 
 $git_data->set_default_user_repo('fayland', 'perl-net-github');
-my $blob = $git_data->blob('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
-ok($blob);
+
+# The Github blobs API doesn't appear to be working.
+#my $blob = $git_data->blob('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
+#ok($blob);
 
 my $commit = $git_data->commit('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
-ok($commit);
+is $commit->{sha}, '5a1faac3ad54da26be60970ddbbdfbf6b08fdc57';
+is $commit->{message}, "init git data";
 
 done_testing();
 

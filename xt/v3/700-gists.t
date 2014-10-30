@@ -24,10 +24,10 @@ my $g = $gist->create( {
         }
       }
     } );
-ok($g);
-
-use Data::Dumper;
-diag(Dumper(\$g));
+ok $g->{id};
+ok $g->{public};
+is $g->{description}, "the description for this gist";
+is $g->{files}{"file1.txt"}{content}, "String file contents";
 
 done_testing;
 

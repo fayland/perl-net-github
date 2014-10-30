@@ -14,7 +14,6 @@ my $data = $gh->user->show();
 
 ok( $data );
 ok( $data->{id} );
-ok( $data->{gravatar_id} );
 ok( $data->{email} );
 ok( $data->{login} );
 ok( $data->{name} );
