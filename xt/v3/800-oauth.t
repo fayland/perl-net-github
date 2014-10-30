@@ -19,10 +19,15 @@ my $o = $oauth->create_authorization( {
     scopes => ['user', 'public_repo', 'repo', 'gist'],
     note   => 'test purpose',
 } );
-ok($o);
+ok $o->{id};
+is_deeply $o->{scopes}, ['user', 'public_repo', 'repo', 'gist'];
+is $o->{note}, "test purpose";
 
-use Data::Dumper;
-diag(Dumper(\$o));
+my $auth = $oauth->authorization($o->{id});
+is $auth->{id}, $o->{id};
+
+$oauth->delete_authorization($o->{id});
+ok !$oauth->authorization($o->{id});
 
 done_testing;
 
