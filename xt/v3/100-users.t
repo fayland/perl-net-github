@@ -56,5 +56,3 @@ if ($is_following) {
 =cut
 
 done_testing;
-
-1;

@@ -12,17 +12,17 @@ my $search = $gh->search;
 ok( $gh );
 ok( $search );
 
-my %data = $search->issues({
-    q => 'state:open repo:fayland/perl-net-github',
+my %issues = $search->issues({
+    q => 'state:closed repo:fayland/perl-net-github',
 });
-diag Dumper(\$data{items});
 
-#%data = $search->repositories('perl-net-github');
-#diag Dumper(\$data{items});
+cmp_ok $issues{total_count}, ">", 10;
 
-#%data = $search->users('fayland');
-#diag Dumper(\$data{items});
+my $items = $issues{items};
+for my $item (@$items) {
+    ok $item->{id};
+    is $item->{state}, "closed";
+    ok $item->{closed_at};
+}
 
 done_testing;
-
-1;
