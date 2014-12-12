@@ -177,7 +177,19 @@ sub query {
     }
 
     if ( $self->RaiseError ) {
-        croak $data->{message} if not $res->is_success and ref $data eq 'HASH' and exists $data->{message}; # for 'Client Errors'
+        # check for 'Client Errors'
+        if (not $res->is_success and ref $data eq 'HASH' and exists $data->{message}) {
+            my $message = $data->{message};
+
+            # Include any additional error information that was returned by the API
+            if (exists $data->{errors}) {
+                $message .= ': '.join(' - ',
+                                     map { $_->{message} }
+                                     grep { exists $_->{message} }
+                                     @{ $data->{errors} });
+            }
+            croak $message;
+        }
     }
 
     $self->_clear_pagination;
