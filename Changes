@@ -1,8 +1,9 @@
 Revision history for Net-GitHub
 
-0.71    2014-12-??
+0.71    2015-01-20
         - When a query fails, include any additional error messages returned by the API,
-          in the croak message.
+          in the croak message. (Neil Bowers)
+        - Make User-Agent header conform to RFCs (Zak Wilcox)
 
 0.70    2014-10-08
         add per_page in GET no matter it supports or not
