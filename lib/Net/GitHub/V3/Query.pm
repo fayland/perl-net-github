@@ -86,7 +86,7 @@ has 'ua' => (
     lazy    => 1,
     default => sub {
         LWP::UserAgent->new(
-            agent       => "perl-net-github $VERSION",
+            agent       => "perl-net-github/$VERSION",
             cookie_jar  => {},
             keep_alive  => 4,
             timeout     => 60,
