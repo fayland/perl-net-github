@@ -24,7 +24,7 @@ my %__methods = (
     refs => { url => "/repos/%s/%s/git/refs" },
     ref  => { url => "/repos/%s/%s/git/refs/%s" },
     create_ref => { url => "/repos/%s/%s/git/refs", method => 'POST', args => 1 },
-    update_ref => { url => "repos/%s/%s/git/refs/%s", method => 'PATCH', args => 1 },
+    update_ref => { url => "/repos/%s/%s/git/refs/%s", method => 'PATCH', args => 1 },
     
     tag => { url => "/repos/%s/%s/git/tags/%s" },
     create_tag => { url => "/repos/%s/%s/git/tags", method => 'POST', args => 1 },
