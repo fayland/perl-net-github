@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Net::GitHub::V3;
 
-our $VERSION = '0.71';
+our $VERSION = '0.72';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {

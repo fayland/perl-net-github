@@ -2,7 +2,7 @@ package Net::GitHub::V3::GitData;
 
 use Moo;
 
-our $VERSION = '0.60';
+our $VERSION = '0.72';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -13,22 +13,22 @@ with 'Net::GitHub::V3::Query';
 my %__methods = (
     blob => { url => "/repos/%s/%s/git/blobs/%s" },
     create_blob => { url => "/repos/%s/%s/git/blobs", method => 'POST', args => 1 },
-    
+
     commit => { url => "/repos/%s/%s/git/commits/%s" },
     create_commit => { url => "/repos/%s/%s/git/commits", method => 'POST', args => 1 },
 
     tree => { url => "/repos/%s/%s/git/trees/%s" },
     trees => { url => "/repos/%s/%s/git/trees/%s?recursive=1" },
     create_tree => { url => "/repos/%s/%s/git/trees", method => 'POST', args => 1 },
-    
+
     refs => { url => "/repos/%s/%s/git/refs" },
     ref  => { url => "/repos/%s/%s/git/refs/%s" },
     create_ref => { url => "/repos/%s/%s/git/refs", method => 'POST', args => 1 },
     update_ref => { url => "/repos/%s/%s/git/refs/%s", method => 'PATCH', args => 1 },
-    
+
     tag => { url => "/repos/%s/%s/git/tags/%s" },
     create_tag => { url => "/repos/%s/%s/git/tags", method => 'POST', args => 1 },
-    
+
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -94,7 +94,7 @@ L<http://developer.github.com/v3/git/commits/>
 =item commit
 
     my $commit = $git_data->commit('5a1faac3ad54da26be60970ddbbdfbf6b08fdc57');
-    
+
 =item create_commit
 
 =back

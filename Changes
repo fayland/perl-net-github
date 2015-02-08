@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.72    2015-02-08
+        - fix update_ref in gitdata (Mike Schilli)
+
 0.71    2015-01-20
         - When a query fails, include any additional error messages returned by the API,
           in the croak message. (Neil Bowers)
