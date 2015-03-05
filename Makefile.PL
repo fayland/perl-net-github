@@ -12,7 +12,7 @@ requires 'URI';
 requires 'URI::Escape';
 requires 'Moo';
 requires 'Types::Standard';
-requires 'JSON::Any';
+requires 'JSON::MaybeXS';
 # requires 'JSON::XS'; # avoid "Couldn't find a JSON package. Need XS, JSON, or DWIW"
 #
 requires 'LWP::UserAgent';
