@@ -4,7 +4,7 @@ our $VERSION = '0.71';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;
-use JSON::Any;
+use JSON::MaybeXS;
 use MIME::Base64;
 use LWP::UserAgent;
 use HTTP::Request;
@@ -96,10 +96,10 @@ has 'ua' => (
 
 has 'json' => (
     is => 'ro',
-    isa => InstanceOf['JSON::Any'],
+    isa => InstanceOf['JSON::MaybeXS'],
     lazy => 1,
     default => sub {
-        return JSON::Any->new( utf8 => 1 );
+        return JSON::MaybeXS->new( utf8 => 1 );
     }
 );
 
@@ -143,7 +143,7 @@ sub query {
     my $req = HTTP::Request->new( $request_method, $url );
     $req->accept_decodable;
     if ($data) {
-        my $json = $self->json->objToJson($data);
+        my $json = $self->json->encode($data);
         print STDERR ">>> $data\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
         $req->content($json);
     }
@@ -165,7 +165,7 @@ sub query {
 
     if ($res->header('Content-Type') and $res->header('Content-Type') =~ 'application/json') {
         my $json = $res->decoded_content;
-        $data = eval { $self->json->jsonToObj($json) };
+        $data = eval { $self->json->decode($json) };
         unless ($data) {
             # We tolerate bad JSON for errors,
             # otherwise we just rethrow the JSON parsing problem.
