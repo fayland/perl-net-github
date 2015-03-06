@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.73    2015-03-06
+        - use JSON::MaybeXS instead of deprecated JSON::Any (Tim Vroom)
+
 0.72    2015-02-08
         - fix update_ref in gitdata (Mike Schilli)
 
