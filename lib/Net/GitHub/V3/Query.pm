@@ -96,7 +96,7 @@ has 'ua' => (
 
 has 'json' => (
     is => 'ro',
-    isa => InstanceOf['JSON::MaybeXS'],
+    isa => 'Object', # InstanceOf['JSON::MaybeXS'],
     lazy => 1,
     default => sub {
         return JSON::MaybeXS->new( utf8 => 1 );

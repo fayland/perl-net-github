@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.74    2015-03-13
+        - fix for gh 61
+
 0.73    2015-03-06
         - use JSON::MaybeXS instead of deprecated JSON::Any (Tim Vroom)
 
