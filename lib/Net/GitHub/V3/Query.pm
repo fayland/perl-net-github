@@ -10,7 +10,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use Carp qw/croak/;
 use URI::Escape;
-use Types::Standard qw(Str Bool InstanceOf);
+use Types::Standard qw(Str Bool InstanceOf Object);
 
 use Moo::Role;
 
@@ -96,7 +96,7 @@ has 'ua' => (
 
 has 'json' => (
     is => 'ro',
-    isa => 'Object', # InstanceOf['JSON::MaybeXS'],
+    isa => Object, # InstanceOf['JSON::MaybeXS'],
     lazy => 1,
     default => sub {
         return JSON::MaybeXS->new( utf8 => 1 );
