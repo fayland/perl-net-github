@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.75    2015-03-26
+        - Corrected the documentation of IssueLabels-API to $labelsName by hoppfrosch
+
 0.74    2015-03-13
         - fix for gh 61
 
