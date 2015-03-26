@@ -240,16 +240,16 @@ L<http://developer.github.com/v3/issues/labels/>
 =item delete_label
 
     my @labels = $issue->labels;
-    my $label  = $issue->label($label_id);
+    my $label  = $issue->label($label_name);
     my $label  = $issue->create_label( {
         "name" => "API",
         "color" => "FFFFFF"
     } );
-    my $label  = $issue->update_label( $label_id, {
+    my $label  = $issue->update_label( $label_name, {
         "name" => "bugs",
         "color" => "000000"
     } );
-    my $st = $issue->delete_label($label_id);
+    my $st = $issue->delete_label($label_name);
 
 =item issue_labels
 
@@ -265,7 +265,7 @@ L<http://developer.github.com/v3/issues/labels/>
 
     my @labels = $issue->issue_label($issue_id);
     my @labels = $issue->create_issue_label($issue_id, ['New Label']);
-    my $st = $issue->delete_issue_label($issue_id, $label_id);
+    my $st = $issue->delete_issue_label($issue_id, $label_name);
     my @labels = $issue->replace_issue_label($issue_id, ['New Label']);
     my $st = $issue->delete_issue_labels($issue_id);
     my @lbales = $issue->milestone_labels($milestone_id);
