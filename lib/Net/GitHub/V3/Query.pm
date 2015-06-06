@@ -10,7 +10,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use Carp qw/croak/;
 use URI::Escape;
-use Types::Standard qw(Str Bool InstanceOf Object);
+use Types::Standard qw(Int Str Bool InstanceOf Object);
 
 use Moo::Role;
 
@@ -39,6 +39,11 @@ has 'per_page'  => ( is => 'rw', isa => Str, default => 100 );
 
 # Error handle
 has 'RaiseError' => ( is => 'rw', isa => Bool, default => 1 );
+
+# Rate limits
+has 'rate_limit' => ( is => 'rw', isa => Int, default => 0 );
+has 'rate_limit_remaining' => ( is => 'rw', isa => Int, default => 0 );
+has 'rate_limit_reset' => ( is => 'rw', isa => Str, default => 0 );
 
 # optional
 has 'u'  => (is => 'rw', isa => Str);
@@ -151,12 +156,17 @@ sub query {
 
     my $res = $ua->request($req);
 
+    # get the rate limit information from the http response headers
+    $self->rate_limit( $res->header('x-ratelimit-limit') );
+    $self->rate_limit_remaining( $res->header('x-ratelimit-remaining') );
+    $self->rate_limit_reset( $res->header('x-ratelimit-reset') );
+
     # Slow down if we're approaching the rate limit
     # By the way GitHub mistakes days for minutes in their documentation --
     # the rate limit is per minute, not per day.
     if ( $self->api_throttle ) {
-        sleep 2 if (($res->header('x-ratelimit-remaining') || 0)
-            < ($res->header('x-ratelimit-limit') || 60) / 2);
+        sleep 2 if (($self->rate_limit_remaining || 0)
+            < ($self->rate_limit || 60) / 2);
     }
 
     print STDERR "<<< " . $res->decoded_content . "\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
@@ -324,6 +334,19 @@ L<http://developer.github.com/>
 =item raw_response
 
 =item api_throttle
+
+=item rate_limit
+
+The maximum number of queries allowed per hour. 60 for anonymous users and
+5,000 for authenticated users.
+
+=item rate_limit_remaining
+
+The number of requests remaining in the current rate limit window.
+
+=item rate_limit_reset
+
+The time the current rate limit resets in UTC epoch seconds.
 
 =item RaiseError
 
