@@ -325,7 +325,7 @@ set Authentication and call API
 
 =item access_token
 
-either set access_token from OAuth or login:pass for Basic Authentication
+Either set access_token from OAuth or login:pass for Basic Authentication
 
 L<http://developer.github.com/>
 
@@ -334,6 +334,8 @@ L<http://developer.github.com/>
 =item raw_response
 
 =item api_throttle
+
+API throttling is enabled by default, set api_throttle to 0 to disable it.
 
 =item rate_limit
 
