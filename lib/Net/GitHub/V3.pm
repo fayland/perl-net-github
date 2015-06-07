@@ -157,7 +157,7 @@ Or:
 
 =head1 DESCRIPTION
 
-L<http://develop.github.com/>
+L<http://developer.github.com/v3/>
 
 =head2 ATTRIBUTES
 
