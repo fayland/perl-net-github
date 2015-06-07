@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.76    2015-06-07
+        - rate_limit, rate_limit_remaining, and rate_limit_reset (kimmel)
+
 0.75    2015-03-26
         - Corrected the documentation of IssueLabels-API to $labelsName by hoppfrosch
 
