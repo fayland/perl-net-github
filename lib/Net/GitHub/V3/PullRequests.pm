@@ -141,7 +141,10 @@ L<http://developer.github.com/v3/pulls/comments/>
     my @comments = $pull_request->comments($pull_id);
     my $comment  = $pull_request->comment($comment_id);
     my $comment  = $pull_request->create_comment($pull_id, {
-        "body" => "a new comment"
+        "body" => "a new comment",
+        commit_id => '586fe4be94c32248043b344e99fa15c72b40d1c2',
+        path => 'test',
+        position => 1,
     });
     my $comment = $pull_request->update_comment($comment_id, {
         "body" => "Nice change"
