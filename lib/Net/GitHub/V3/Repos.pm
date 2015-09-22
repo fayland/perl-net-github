@@ -197,6 +197,10 @@ my %__methods = (
     # http://developer.github.com/v3/repos/statuses/
     list_statuses => { url => "/repos/%s/%s/statuses/%s" },
     create_status => { url => "/repos/%s/%s/statuses/%s", method => 'POST', args => 1 },
+
+    # https://developer.github.com/v3/repos/deployments
+    create_deploy => { url => "/repos/%s/%s/deployments/", method => POST, args => 1 },
+    update_deploy => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'POST', args => 1 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
