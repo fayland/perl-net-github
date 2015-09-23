@@ -201,7 +201,7 @@ my %__methods = (
     # https://developer.github.com/v3/repos/deployments
     create_deployment => { url => "/repos/%s/%s/deployments/", method => 'POST', args => 1 },
     create_deployment_status => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'POST', args => 1 },
-    list_deployment_statuses => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'GET', args => 1 },
+    list_deployment_statuses => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'GET'},
     list_deployments => { url => "/repos/%s/%s/deployments/", method => 'GET', args => 1 },
 );
 __build_methods(__PACKAGE__, %__methods);
@@ -731,7 +731,7 @@ L<http://developer.github.com/v3/repos/deployment/>
 
 =item create_deployment
 
-    my $response = $repos->create_deployment( $owner, $repo {
+    my $response = $repos->create_deployment( $owner, $repo, {
       "ref" => 'feature-branch',
       "description" => "deploying my new feature",
     });
@@ -742,7 +742,7 @@ L<http://developer.github.com/v3/repos/deployment/>
 
 =item create_deployment_status
 
-    my $response = $repos->create_deployment_status( $owner, $repo, $deployment_id {
+    my $response = $repos->create_deployment_status( $owner, $repo, $deployment_id, {
         "state": "success",
         "target_url": "https://example.com/deployment/42/output",
         "description": "Deployment finished successfully."
