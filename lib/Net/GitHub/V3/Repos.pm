@@ -719,7 +719,7 @@ Check examples/upload_asset.pl for a working example.
 
 =head3 Repo Deployment API
 
-L<http://developer.github.com/v3/repos/deployment/>
+L<http://developer.github.com/v3/repos/deployments/>
 
 =over 4
 
