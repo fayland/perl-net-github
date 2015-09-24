@@ -111,6 +111,19 @@ sub commits {
     return $self->query($uri->as_string);
 }
 
+sub list_deployments {
+    my $self = shift;
+    if (@_ < 2) {
+        unshift @_, $self->repo;
+        unshift @_, $self->u;
+    }
+    my ($user, $repos, $args) = @_;
+
+    my $uri = URI->new("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/deployments');
+    $uri->query_form($args);
+    return $self->query($uri->as_string);
+}
+
 ## build methods on fly
 my %__methods = (
 
@@ -199,10 +212,10 @@ my %__methods = (
     create_status => { url => "/repos/%s/%s/statuses/%s", method => 'POST', args => 1 },
 
     # https://developer.github.com/v3/repos/deployments
-    create_deployment => { url => "/repos/%s/%s/deployments/", method => 'POST', args => 1 },
+    create_deployment => { url => "/repos/%s/%s/deployments", method => 'POST', args => 1 },
     create_deployment_status => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'POST', args => 1 },
     list_deployment_statuses => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'GET'},
-    list_deployments => { url => "/repos/%s/%s/deployments/", method => 'GET', args => 1 },
+
 );
 __build_methods(__PACKAGE__, %__methods);
 
