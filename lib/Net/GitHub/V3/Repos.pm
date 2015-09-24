@@ -197,6 +197,12 @@ my %__methods = (
     # http://developer.github.com/v3/repos/statuses/
     list_statuses => { url => "/repos/%s/%s/statuses/%s" },
     create_status => { url => "/repos/%s/%s/statuses/%s", method => 'POST', args => 1 },
+
+    # https://developer.github.com/v3/repos/deployments
+    create_deployment => { url => "/repos/%s/%s/deployments/", method => 'POST', args => 1 },
+    create_deployment_status => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'POST', args => 1 },
+    list_deployment_statuses => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'GET'},
+    list_deployments => { url => "/repos/%s/%s/deployments/", method => 'GET', args => 1 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -708,6 +714,39 @@ Check examples/upload_asset.pl for a working example.
 =item delete_release_asset
 
     my $ok = $repos->delete_release_asset($release_id, $asset_id);
+
+=back
+
+=head3 Repo Deployment API
+
+L<http://developer.github.com/v3/repos/deployments/>
+
+=over 4
+
+=item list_deployments
+
+    my $response = $repos->list_deployments( $owner, $repo, {
+        'ref' => 'feature-branch',
+    });
+
+=item create_deployment
+
+    my $response = $repos->create_deployment( $owner, $repo, {
+      "ref" => 'feature-branch',
+      "description" => "deploying my new feature",
+    });
+
+=item list_deployment_statuses
+
+    my $response = $repos->list_deployment_statuses( $owner, $repo, $deployment_id );
+
+=item create_deployment_status
+
+    my $response = $repos->create_deployment_status( $owner, $repo, $deployment_id, {
+        "state": "success",
+        "target_url": "https://example.com/deployment/42/output",
+        "description": "Deployment finished successfully."
+    });
 
 =back
 
