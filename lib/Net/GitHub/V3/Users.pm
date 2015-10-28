@@ -42,16 +42,6 @@ sub following {
     return $self->query($u);
 }
 
-sub contributions {
-    my ( $self, $user ) = @_;
-    my $path = "/users/" . uri_escape($user) . "/contributions_calendar_data";
-    my $domain
-        = $self->api_url eq 'https://api.github.com'
-        ? 'https://github.com'
-        : $self->api_url;
-    return $self->query( $domain . $path );
-}
-
 ## build methods on fly
 my %__methods = (
 
@@ -68,6 +58,11 @@ my %__methods = (
     delete_key => { url => "/user/keys/%s", method => 'DELETE', check_status => 204 },
 );
 __build_methods(__PACKAGE__, %__methods);
+
+## DEPERCATED
+sub contributions {
+  die "contributions_calender_data is no longer available";
+}
 
 no Moo;
 
