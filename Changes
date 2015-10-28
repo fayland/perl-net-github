@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.79    2015-10-28
+        - depricated GET contributions_calander_data (Hiroki Matsuo)
+
 0.78    2015-09-24
         - Deployments (jdorweiler)
 
