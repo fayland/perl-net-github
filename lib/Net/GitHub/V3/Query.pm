@@ -11,6 +11,7 @@ use HTTP::Request;
 use Carp qw/croak/;
 use URI::Escape;
 use Types::Standard qw(Int Str Bool InstanceOf Object);
+use Cache::LRU;
 
 use Moo::Role;
 
@@ -108,6 +109,17 @@ has 'json' => (
     }
 );
 
+has 'cache' => (
+  isa => InstanceOf['Cache::LRU'],
+  is => 'rw',
+  lazy => 1,
+  default => sub {
+    Cache::LRU->new(
+      size => 200
+    );
+  }
+);
+
 sub query {
     my $self = shift;
 
@@ -154,7 +166,7 @@ sub query {
     }
     $req->header( 'Content-Length' => length $req->content );
 
-    my $res = $ua->request($req);
+    my $res = $self->_make_request($req);
 
     # get the rate limit information from the http response headers
     $self->rate_limit( $res->header('x-ratelimit-limit') );
@@ -248,6 +260,39 @@ sub _extract_link_url {
     }
 
     return 1;
+}
+
+sub _make_request {
+  my($self, $req) = @_;
+
+  my $cached_res = $self->_get_shared_cache($req->uri);
+
+  if ($cached_res) {
+    $req->header("If-None-Match" => $cached_res->header("ETag"));
+    my $res = $self->ua->request($req);
+
+    if ($res->code == 304) {
+      return $cached_res;
+    }
+
+    $self->_set_shared_cache($req->uri, $res);
+
+    return $res;
+  } else {
+    my $res = $self->ua->request($req);
+    $self->_set_shared_cache( $req->uri, $res);
+    return $res;
+  }
+}
+
+sub _get_shared_cache {
+  my ($self, $uri) = @_;
+  return $self->cache->get($uri);
+}
+
+sub _set_shared_cache {
+  my($self, $uri, $response) = @_;
+  $self->cache->set($uri, $response);
 }
 
 ## build methods on fly
