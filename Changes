@@ -1,7 +1,7 @@
 Revision history for Net-GitHub
 
 0.80    2015-10-30
-        - Support Cache Responce (Hiroki Matsuo)
+        - Support Cache Response (Hiroki Matsuo)
 
 0.79    2015-10-28
         - depricated GET contributions_calander_data (Hiroki Matsuo)
