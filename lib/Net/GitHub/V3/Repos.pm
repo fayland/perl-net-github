@@ -216,6 +216,12 @@ my %__methods = (
     create_deployment_status => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'POST', args => 1 },
     list_deployment_statuses => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'GET'},
 
+    contributor_stats => { url => "/repos/%s/%s/stats/contributors", method => 'GET'},
+    commit_activity => { url => "/repos/%s/%s/stats/commit_activity", method => 'GET'},
+    code_frequency => { url => "/repos/%s/%s/stats/code_frequency", method => 'GET'},
+    participation => { url => "/repos/%s/%s/stats/participation", method => 'GET'},
+    punch_card => { url => "/repos/%s/%s/stats/punch_card", method => 'GET'},
+
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -763,6 +769,29 @@ L<http://developer.github.com/v3/repos/deployments/>
 
 =back
 
+=head3 Repo Statistics API
+
+L<http://developer.github.com/v3/repos/statistics/>
+
+=over 4
+
+=item contributor stats
+
+=item commit activity
+
+=item code frequency
+
+=item participation
+
+=item punch card
+
+    my $contributor_stats   = $repos->contributor_stats($owner, $repo);
+    my $commit_activity     = $repos->commit_activity($owner, $repo);
+    my $code_freq           = $repos->code_frequency($owner, $repo);
+    my $participation       = $repos->participation($owner, $repo);
+    my $punch_card          = $repos->punch_card($owner, $repo);
+
+=back
 =head1 AUTHOR & COPYRIGHT & LICENSE
 
 Refer L<Net::GitHub>
