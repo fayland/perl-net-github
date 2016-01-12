@@ -792,6 +792,7 @@ L<http://developer.github.com/v3/repos/statistics/>
     my $punch_card          = $repos->punch_card($owner, $repo);
 
 =back
+
 =head1 AUTHOR & COPYRIGHT & LICENSE
 
 Refer L<Net::GitHub>
