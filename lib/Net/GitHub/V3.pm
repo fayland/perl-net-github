@@ -17,6 +17,7 @@ use Net::GitHub::V3::GitData;
 use Net::GitHub::V3::Gists;
 use Net::GitHub::V3::OAuth;
 use Net::GitHub::V3::Events;
+use Net::GitHub::V3::Gitignore;
 use Net::GitHub::V3::Search;
 
 has '+is_main_module' => (default => 1);
@@ -122,6 +123,16 @@ has 'search' => (
     default => sub {
         my $self = shift;
         return Net::GitHub::V3::Search->new( $self->args_to_pass );
+    },
+);
+
+has 'gitignore' => (
+    is => 'rw',
+    isa => InstanceOf['Net::GitHub::V3::Gitignore'],
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        return Net::GitHub::V3::Gitignore->new( $self->args_to_pass );
     },
 );
 
