@@ -29,7 +29,7 @@ sub template {
     unless (ref($args) eq 'HASH') {
         $args = { type => $args };
     }
-    print $args;
+
     my $uri = URI->new("/gitignore/templates/" . uri_escape($template));
     $uri->query_form($args);
     return $self->query($uri->as_string);

@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.83    2016-01-31
+        - Add the API for .gitignore templates (SkySymbol)
+
 0.82    2016-01-12
         - pod fix from Lucas Kanashiro
 

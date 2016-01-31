@@ -19,6 +19,7 @@ lib/Net/GitHub/V3.pm
 lib/Net/GitHub/V3/Events.pm
 lib/Net/GitHub/V3/Gists.pm
 lib/Net/GitHub/V3/GitData.pm
+lib/Net/GitHub/V3/Gitignore.pm
 lib/Net/GitHub/V3/Issues.pm
 lib/Net/GitHub/V3/OAuth.pm
 lib/Net/GitHub/V3/Orgs.pm
