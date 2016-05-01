@@ -3,7 +3,6 @@ branches:
     - gh-pages
 language: perl
 perl:
-  - "5.23"
   - "5.20"
   - "5.18"
   - "5.22"
