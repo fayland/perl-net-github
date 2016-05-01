@@ -231,7 +231,7 @@ be reset for each query.
 The predicates to check these attributes are C<has_next_page>, C<has_last_page>,
 C<has_prev_page> and C<has_first_page>.
 
-C<per_page> is default to 100. it will be applied to GET urls no matter it supports or not.
+C<per_page> defaults to 100. It will be applied to GET urls no matter it supports or not.
 
 See Github's documentation: L<http://developer.github.com/v3/#pagination>
 
