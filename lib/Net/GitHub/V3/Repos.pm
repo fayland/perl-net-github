@@ -84,7 +84,7 @@ sub upload_asset {
     my $data;
     if ($res->header('Content-Type') and $res->header('Content-Type') =~ 'application/json') {
         my $json = $res->decoded_content;
-        $data = eval { $self->json->jsonToObj($json) };
+        $data = eval { $self->json->decode($json) };
         unless ($data) {
             # We tolerate bad JSON for errors,
             # otherwise we just rethrow the JSON parsing problem.
