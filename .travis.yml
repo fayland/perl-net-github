@@ -11,4 +11,4 @@ perl:
   - "5.20"
   - "5.22"
 
-script: "perl Makefile.PL && make disttest"
+script: "perl Makefile.PL && make test"
