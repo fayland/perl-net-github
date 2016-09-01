@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.85    2016-09-01
+        - adding support for passing permission to add_team_repos #75 (allandrick, Leigh Hart)
+
 0.84    2016-05-03
         - fix json in upload_asset
         - minor Doc fixes and CI (JJ)

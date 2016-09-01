@@ -4,13 +4,13 @@
       "Fayland Lam, C<< <fayland at gmail.com> >>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 5.047, Dist::Milla version v1.0.15, CPAN::Meta::Converter version 2.142690",
+   "generated_by" : "Dist::Zilla version 6.005, Dist::Milla version v1.0.16, CPAN::Meta::Converter version 2.150005",
    "license" : [
       "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : "2"
+      "version" : 2
    },
    "name" : "net-github",
    "no_index" : {
@@ -31,7 +31,7 @@
       },
       "develop" : {
          "requires" : {
-            "Dist::Milla" : "v1.0.15",
+            "Dist::Milla" : "v1.0.16",
             "Test::Pod" : "1.41"
          }
       },
@@ -67,7 +67,7 @@
          "web" : "https://github.com/fayland/perl-net-github"
       }
    },
-   "version" : "0.84",
+   "version" : "0.85",
    "x_contributors" : [
       "Alex Vandiver <alex@chmrr.net>",
       "c9s <cornelius.howl@gmail.com>",
@@ -78,7 +78,6 @@
       "David Golden <dagolden@cpan.org>",
       "David Precious <davidp@preshweb.co.uk>",
       "fayland <fayland@alpha.zorpia.com>",
-      "fayland <fayland@gmail.com>",
       "Fayland Lam <fayland@gmail.com>",
       "Finn Smith <finn@timeghost.net>",
       "franck cuny <franck@lumberjaph.net>",
@@ -94,6 +93,7 @@
       "Johannes Kilian <Johannes.Kilian@vitronic.com>",
       "Kevin Falcone <kevin@jibsheet.com>",
       "Kirk Kimmel <kimmel.k.programmer@gmail.com>",
+      "Leigh Hart <lhart@broadsoft.com>",
       "Lubomir Rintel <lkundrak@v3.sk>",
       "Michael G. Schwern <schwern@pobox.com>",
       "mikegrb <mgreb@linode.com>",
