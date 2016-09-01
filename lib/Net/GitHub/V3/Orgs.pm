@@ -40,7 +40,7 @@ my %__methods = (
     delete_team_member => { url => "/teams/%s/members/%s", method => 'DELETE', check_status => 204 },
     team_repos => { url => "/teams/%s/repos" },
     is_team_repos  => { url => "/teams/%s/repos/%s", check_status => 204 },
-    add_team_repos => { url => "/teams/%s/repos/%s", method => 'PUT', check_status => 204 },
+    add_team_repos => { url => "/teams/%s/repos/%s", method => 'PUT', args => 1, check_status => 204 },
     delete_team_repos => { url => "/teams/%s/repos/%s", method => 'DELETE', check_status => 204 },
 );
 __build_methods(__PACKAGE__, %__methods);
@@ -167,6 +167,9 @@ L<http://developer.github.com/v3/orgs/teams/>
     my @repos = $org->team_repos($team_id);
     my $is_team_repos = $org->is_team_repos($team_id, 'Hello-World');
     my $st = $org->add_team_repos($team_id, 'Hello-World');
+    my $st = $org->add_team_repos($team_id, 'YoinkOrg/Hello-World', { permission => 'admin' });
+    my $st = $org->add_team_repos($team_id, 'YoinkOrg/Hello-World', { permission => 'push' });
+    my $st = $org->add_team_repos($team_id, 'YoinkOrg/Hello-World', { permission => 'pull' });
     my $st = $org->delete_team_repos($team_id, 'Hello-World');
 
 =back
