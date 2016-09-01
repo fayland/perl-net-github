@@ -12,9 +12,9 @@ my %WriteMakefileArgs = (
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0
   },
-  "DISTNAME" => "net-github",
+  "DISTNAME" => "Net-GitHub",
   "LICENSE" => "perl",
-  "NAME" => "net::github",
+  "NAME" => "Net::GitHub",
   "PREREQ_PM" => {
     "Cache::LRU" => 0,
     "HTTP::Request" => 0,
