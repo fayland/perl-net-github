@@ -660,15 +660,35 @@ L<http://developer.github.com/v3/repos/statuses/>
 
 =item list_statuses
 
-    my @statuses = $repos->list_statuses($sha1);
+    $gh->set_default_user_repo('fayland', 'perl-net-github');
+    my @statuses = $repos->lists_statuses($sha);
+
+Or:
+
+    my @statuses = $repos->list_statuses('fayland', 'perl-net-github', $sha);
 
 =item create_status
 
-    my $status = $repos->create_status( {
-        "state" => "success",
-        "target_url" => "https://example.com/build/status",
-        "description" => "The build succeeded!"
-    } );
+    $gh->set_default_user_repo('fayland', 'perl-net-github');
+    my %payload = {
+        "state"       => "success",
+        "target_url"  => "https://example.com/build/status",
+        "description" => "The build succeeded!",
+        "context"     => "build/status"
+    };
+    my $status = $repos->create_status($sha, %payload);
+
+Or:
+
+    my %payload = {
+        "state"       => "success",
+        "target_url"  => "https://example.com/build/status",
+        "description" => "The build succeeded!",
+        "context"     => "build/status"
+    };
+    my $status = $repos->create_status(
+        'fayland', 'perl-net-github', $sha, %payload
+    );
 
 =back
 
