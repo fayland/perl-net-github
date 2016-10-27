@@ -660,7 +660,12 @@ L<http://developer.github.com/v3/repos/statuses/>
 
 =item list_statuses
 
-    my @statuses = $repos->list_statuses($sha1);
+    $gh->set_default_user_repo('fayland', 'perl-net-github');
+    my @statuses = $repos->lists_statuses($sha);
+
+Or:
+
+    my @statuses = $repos->list_statuses('fayland', 'perl-net-github', $sha);
 
 =item create_status
 
