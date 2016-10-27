@@ -67,7 +67,7 @@ L<http://developer.github.com/v3/gitignore/>
 
 =item template
 
-    my template = $gitignore->template('Perl');
+    my $template = $gitignore->template('Perl');
 
 =back
 
