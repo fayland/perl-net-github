@@ -26,9 +26,12 @@ Net::GitHub - Perl Interface for github.com
         login => 'fayland', pass => 'secret'
     );
 
-    # Pass api_url for GitHub Enterprise installations
+    # Pass api_url for GitHub Enterprise installations. Do not include a
+    # trailing slash
     my $github = Net::GitHub->new(  # Net::GitHub::V3
-        login => 'fayland', pass => 'secret',  api_url => 'https://gits.aresweet.com/api/v3'
+        login =>   'fayland',
+        pass =>    'secret',
+        api_url => 'https://gits.aresweet.com/api/v3'
     );
 
     # suggested
