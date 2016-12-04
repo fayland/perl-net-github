@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.86    2016-12-03
+        - Add support for organization membership (alexm)
+
 0.85    2016-09-01
         - adding support for passing permission to add_team_repos #75 (allandrick, Leigh Hart)
 
