@@ -28,6 +28,9 @@ my %__methods = (
     is_public_member => { url => "/orgs/%s/public_members/%s", check_status => 204 },
     publicize_member => { url => "/orgs/%s/public_members/%s", method => 'PUT', check_status => 204 },
     conceal_member => { url => "/orgs/%s/public_members/%s", method => 'DELETE', check_status => 204 },
+    membership => { url => "/orgs/:org/memberships/:username", method => 'GET' },
+    update_membership => { url => "/orgs/:org/memberships/:username", method => 'PUT', args => 1 },
+    delete_membership => { url => "/orgs/:org/memberships/:username", method => 'DELETE', check_status => 204 },
     # Org Teams API
     teams => { url => "/orgs/%s/teams" },
     team  => { url => "/teams/%s" },
@@ -114,6 +117,18 @@ L<http://developer.github.com/v3/orgs/members/>
     my $is_public_member = $org->is_public_member('perlchina', 'fayland');
     my $st = $org->publicize_member('perlchina', 'fayland');
     my $st = $org->conceal_member('perlchina', 'fayland');
+
+=item membership
+
+=item update_membership
+
+=item delete_membership
+
+    my $membership = $org->membership('perlchina', 'fayland');
+    my $membership = $org->update_membership('perlchina', 'fayland', {
+        role => 'admin',
+    });
+    my $st = $org->delete_membership('perlchina', 'fayland');
 
 =back
 
