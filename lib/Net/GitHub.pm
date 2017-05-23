@@ -2,7 +2,7 @@ package Net::GitHub;
 
 use Net::GitHub::V3;
 
-our $VERSION = '0.86';
+our $VERSION = '0.87';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 sub new {
@@ -61,6 +61,8 @@ This distribution provides easy methods to access GitHub via their APIs.
 Check L<http://developer.github.com/> for more details of the GitHub APIs.
 
 Read L<Net::GitHub::V3> for API usage.
+
+Read L<Net::GitHub::V4> for GitHub GraphQL API.
 
 If you prefer object oriented way, L<Pithub> is 'There is more than one way to do it'.
 

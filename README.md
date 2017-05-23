@@ -48,6 +48,8 @@ Check [http://developer.github.com/](http://developer.github.com/) for more deta
 
 Read [Net::GitHub::V3](https://metacpan.org/pod/Net::GitHub::V3) for API usage.
 
+Read [Net::GitHub::V4](https://metacpan.org/pod/Net::GitHub::V4) for GitHub GraphQL API.
+
 If you prefer object oriented way, [Pithub](https://metacpan.org/pod/Pithub) is 'There is more than one way to do it'.
 
 ## FAQ

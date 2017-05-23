@@ -4,7 +4,7 @@
       "Fayland Lam, C<< <fayland at gmail.com> >>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.005, Dist::Milla version v1.0.16, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Dist::Milla version v1.0.17, Dist::Zilla version 6.009, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -31,7 +31,7 @@
       },
       "develop" : {
          "requires" : {
-            "Dist::Milla" : "v1.0.16",
+            "Dist::Milla" : "v1.0.17",
             "Test::Pod" : "1.41"
          }
       },
@@ -67,7 +67,7 @@
          "web" : "https://github.com/fayland/perl-net-github"
       }
    },
-   "version" : "0.86",
+   "version" : "0.87",
    "x_contributors" : [
       "Alex Muntada <alexm@alexm.org>",
       "Alex Vandiver <alex@chmrr.net>",
@@ -110,6 +110,7 @@
       "Vincent Lequertier <sky@riseup.net>",
       "Will Orr <will@worrbase.com>",
       "Zak Wilcox <iwilcox@iwilcox.me.uk>"
-   ]
+   ],
+   "x_serialization_backend" : "Cpanel::JSON::XS version 3.023"
 }
 
