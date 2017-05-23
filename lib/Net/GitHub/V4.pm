@@ -65,13 +65,14 @@ has 'cache' => (
 );
 
 sub query {
-    my ($self, $iql) = @_;
+    my ($self, $iql, $variables) = @_;
 
     my $ua = $self->ua;
 
     $ua->default_header('Authorization', "bearer " . $self->access_token);
 
-    my $data = { query => "query $iql" };
+    my $data = { query => $iql };
+    $data->{variables} = $self->json->encode($variables) if $variables;
     my $json = $self->json->encode($data);
 
     print STDERR ">>> POST {$self->api_url}\n" if $ENV{NG_DEBUG};
@@ -171,8 +172,8 @@ Net::GitHub::V4 - GitHub GraphQL API
         access_token => $oauth_token
     );
 
-    my $data = $gh->query(<<IQL);
-{
+    my $data = $gh->query(<<'IQL');
+query {
   repository(owner: "octocat", name: "Hello-World") {
     pullRequests(last: 10) {
       edges {
@@ -183,6 +184,37 @@ Net::GitHub::V4 - GitHub GraphQL API
       }
     }
   }
+}
+IQL
+
+    # mutation
+    $data = $gh->query(<<'IQL');
+mutation AddCommentToIssue {
+  addComment(input:{subjectId:"MDU6SXNzdWUyMzA0ODQ2Mjg=", body:"A shiny new comment! :tada:"}) {
+    commentEdge {
+      cursor
+    }
+    subject {
+      id
+    }
+    timelineEdge {
+      cursor
+    }
+  }
+}
+IQL
+
+    # variables
+    $data = $gh->query(<<'IQL', { number_of_repos => 3 });
+query($number_of_repos:Int!) {
+  viewer {
+    name
+     repositories(last: $number_of_repos) {
+       nodes {
+         name
+       }
+     }
+   }
 }
 IQL
 
