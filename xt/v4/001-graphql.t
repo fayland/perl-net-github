@@ -27,6 +27,7 @@ IQL
 
 use Data::Dumper;
 diag Dumper(\$data);
-ok(1);
+
+ok($data->{data}->{repository}->{pullRequests});
 
 done_testing;

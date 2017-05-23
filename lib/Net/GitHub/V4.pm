@@ -7,7 +7,6 @@ our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;
 use JSON::MaybeXS;
-use MIME::Base64;
 use LWP::UserAgent;
 use HTTP::Request;
 use Carp qw/croak/;
