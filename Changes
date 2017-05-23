@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.87    2017-05-23
+        - new GitHub GraphQL API
+
 0.86    2016-12-03
         - Add support for organization membership (alexm)
 
