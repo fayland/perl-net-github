@@ -10,6 +10,11 @@ my $gh = Net::GitHub::V3->new( login => $ENV{GITHUB_USER}, pass => $ENV{GITHUB_P
 
 diag( 'Using user = ' . $ENV{GITHUB_USER} );
 
+if ($ENV{GITHUB_OTP}) {
+  diag( 'Using two factor authentication' );
+  $gh->otp($ENV{GITHUB_OTP});
+}
+
 ok( $gh );
 my $data = $gh->user->show();
 
