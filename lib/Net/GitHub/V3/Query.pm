@@ -20,6 +20,7 @@ use Moo::Role;
 # Authentication
 has 'login'  => ( is => 'rw', isa => Str, predicate => 'has_login' );
 has 'pass'  => ( is => 'rw', isa => Str, predicate => 'has_pass' );
+has 'otp'  => ( is => 'rw', isa => Str, predicate => 'has_otp' );
 has 'access_token' => ( is => 'rw', isa => Str, predicate => 'has_access_token' );
 
 # return raw unparsed JSON
@@ -79,7 +80,7 @@ sub set_default_user_repo {
 sub args_to_pass {
     my $self = shift;
     my $ret;
-    foreach my $col ('login', 'pass', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'u', 'repo', 'next_url', 'last_url', 'first_url', 'prev_url', 'per_page', 'ua') {
+    foreach my $col ('login', 'pass', 'otp', 'access_token', 'raw_string', 'raw_response', 'api_url', 'api_throttle', 'u', 'repo', 'next_url', 'last_url', 'first_url', 'prev_url', 'per_page', 'ua') {
         my $v = $self->$col;
         $ret->{$col} = $v if defined $v;
     }
@@ -142,6 +143,9 @@ sub query {
     } elsif ($self->has_login and $self->has_pass) {
         my $auth_basic = $self->login . ':' . $self->pass;
         $ua->default_header('Authorization', 'Basic ' . encode_base64($auth_basic));
+        if ($self->has_otp) {
+            $ua->default_header('X-GitHub-OTP', $self->otp);
+        }
     }
 
     $url = $self->api_url . $url unless $url =~ /^https\:/;
