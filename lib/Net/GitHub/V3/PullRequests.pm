@@ -44,6 +44,10 @@ my %__methods = (
     update_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'PATCH', args => 1 },
     delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'DELETE', check_status => 204 },
 
+    # https://developer.github.com/v3/pulls/review_requests/
+    reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", preview => "black-cat-preview" },
+    add_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'POST', args => 1, preview => "black-cat-preview" },
+    delete_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'DELETE', check_status => 204, args => 1, preview => "black-cat-preview" },
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -150,6 +154,28 @@ L<http://developer.github.com/v3/pulls/comments/>
         "body" => "Nice change"
     });
     my $st = $pull_request->delete_comment($comment_id);
+
+=back
+
+=head3 Pull Request Review API
+
+L<https://developer.github.com/v3/pulls/review_requests/>
+
+=over 4
+
+=item reviewers
+
+=item add_reviewers
+
+=item delete_reviewers
+
+    my @reviewers = $pull_request->reviewers($pull_id);
+    my $result = $pull_request->add_reviewers($pull_id, {
+        reviewers => [$user1, $user2],
+    );
+    my $result = $pull_request->delete_reviewers($pull_id, {
+        reviewers => [$user1, $user2],
+    );
 
 =back
 

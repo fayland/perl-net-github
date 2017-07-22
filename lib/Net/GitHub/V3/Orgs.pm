@@ -22,6 +22,8 @@ my %__methods = (
     update_org => { url => "/orgs/%s", method => 'PATCH', args => 1 },
     # Members
     members   => { url => "/orgs/%s/members" },
+    owner_members => { url => "/orgs/%s/members?role=admin" },
+    no_2fa_members => { url => "/orgs/%s/members?filter=2fa_disabled" },
     is_member => { url => "/orgs/%s/members/%s", check_status => 204 },
     delete_member => { url => "/orgs/%s/members/%s", method => 'DELETE', check_status => 204 },
     public_members => { url => "/orgs/%s/public_members" },
@@ -117,6 +119,14 @@ L<http://developer.github.com/v3/orgs/members/>
     my $is_public_member = $org->is_public_member('perlchina', 'fayland');
     my $st = $org->publicize_member('perlchina', 'fayland');
     my $st = $org->conceal_member('perlchina', 'fayland');
+
+=item owner_members
+
+    my @admins = $org->owner_members('perlchina');
+
+=item no_2fa_members
+
+    my @no_2fa_members = $org->no_2fa_members('perlchina');
 
 =item membership
 
