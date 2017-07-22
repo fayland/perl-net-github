@@ -51,6 +51,9 @@ has 'rate_limit_reset' => ( is => 'rw', isa => Str, default => 0 );
 has 'u'  => (is => 'rw', isa => Str);
 has 'repo' => (is => 'rw', isa => Str);
 
+# accept version
+has 'accept_version' => (is => 'rw', isa => Str, default => "v3");
+
 has 'is_main_module' => (is => 'ro', isa => Bool, default => 0);
 sub set_default_user_repo {
     my ($self, $user, $repo) = @_;
@@ -169,6 +172,10 @@ sub query {
         $req->content($json);
     }
     $req->header( 'Content-Length' => length $req->content );
+
+    # if preview API, specify a custom media type to Accept header
+    # https://developer.github.com/v3/media/
+    $req->header( 'Accept' => sprintf("application/vnd.github.%s.param+json", $self->accept_version) );
 
     my $res = $self->_make_request($req);
 
@@ -311,6 +318,7 @@ sub __build_methods {
         my $args = $v->{args} || 0; # args for ->query
         my $check_status = $v->{check_status};
         my $is_u_repo = $v->{is_u_repo}; # need auto shift u/repo
+        my $preview_version = $v->{preview};
 
         no strict 'refs';
         no warnings 'once';
@@ -328,6 +336,9 @@ sub __build_methods {
             # make url, replace %s with real args
             my @uargs = splice(@_, 0, $n);
             my $u = sprintf($url, @uargs);
+
+            # if preview API, set preview version
+            $self->accept_version($preview_version) if $preview_version;
 
             # args for json data POST
             my @qargs = $args ? splice(@_, 0, $args) : ();
