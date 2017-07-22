@@ -1,5 +1,10 @@
 Revision history for Net-GitHub
 
+0.88    2017-07-22
+        - Add option to pass in OTP token (bentglasstube)
+        - Add support for review requests (waniji)
+        - Add two new methods for filter views of org members (grantm)
+
 0.87    2017-05-23
         - new GitHub GraphQL API
 
