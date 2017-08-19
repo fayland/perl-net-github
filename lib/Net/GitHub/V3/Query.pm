@@ -246,6 +246,21 @@ sub next_page {
     return $self->query($self->next_url);
 }
 
+sub prev_page {
+    my $self = shift;
+    return $self->query($self->prev_url);
+}
+
+sub first_page {
+    my $self = shift;
+    return $self->query($self->first_url);
+}
+
+sub last_page {
+    my $self = shift;
+    return $self->query($self->last_url);
+}
+
 sub _clear_pagination {
     my $self = shift;
     foreach my $page (qw/first last prev next/) {
@@ -436,6 +451,20 @@ Refer L<Net::GitHub::V3>
 =item next_page
 
 Calls C<query> with C<next_url>. See L<Net::GitHub::V3>
+
+=item prev_page
+
+Calls C<query> with C<prev_url>. See L<Net::GitHub::V3>
+
+=item first_page
+
+Calls C<query> with C<first_url>. See L<Net::GitHub::V3>
+
+=item last_page
+
+Calls C<query> with C<last_url>. See L<Net::GitHub::V3>
+
+
 
 =back
 
