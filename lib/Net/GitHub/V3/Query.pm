@@ -13,6 +13,8 @@ use URI::Escape;
 use Types::Standard qw(Int Str Bool InstanceOf Object);
 use Cache::LRU;
 
+use Scalar::Util qw(looks_like_number);
+
 use Moo::Role;
 
 # configurable args
@@ -241,6 +243,25 @@ sub query {
     return $data;
 }
 
+sub set_next_page {
+    my ($self, $page) = @_;
+
+    if( ! looks_like_number($page) ){
+	    croak "Trying to set_next_page to $page, and not a number\n";
+    }
+
+    if( $page > $self->total_page && $page > 0 ){
+	    return 0;
+    }
+
+    my $temp_url = $self->next_url;
+    $temp_url =~ s/([&?])page=[0-9]+([&?]*)/$1page=$page$2/;
+
+    $self->next_url( $temp_url );
+
+    return 1;
+}
+
 sub next_page {
     my $self = shift;
     return $self->query($self->next_url);
@@ -464,7 +485,10 @@ Calls C<query> with C<first_url>. See L<Net::GitHub::V3>
 
 Calls C<query> with C<last_url>. See L<Net::GitHub::V3>
 
+=item set_next_page
 
+Adjusts next_url to be a new url in the pagination space
+I.E. you are jumping to a new index in the pagination
 
 =back
 
