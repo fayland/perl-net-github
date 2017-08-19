@@ -38,6 +38,7 @@ has 'last_url'  => ( is => 'rw', isa => Str, predicate => 'has_last_page',  clea
 has 'first_url' => ( is => 'rw', isa => Str, predicate => 'has_first_page', clearer => 'clear_first_url' );
 has 'prev_url'  => ( is => 'rw', isa => Str, predicate => 'has_prev_page',  clearer => 'clear_prev_url' );
 has 'per_page'  => ( is => 'rw', isa => Str, default => 100 );
+has 'total_pages'  => ( is => 'rw', isa => Str, default => 0 );
 
 # Error handle
 has 'RaiseError' => ( is => 'rw', isa => Bool, default => 1 );
@@ -268,6 +269,12 @@ sub _extract_link_url {
 
         my $url_attr = $rel . "_url";
         $self->$url_attr($link_url);
+
+        # Grab, and expose, some additional header information
+	if( $rel eq "last" ){
+	    $link_url =~ /[\&?]page=([0-9]*)[\&?]*/;
+	    $self->total_pages( $1 );
+	}
     }
 
     return 1;
@@ -409,6 +416,10 @@ The number of requests remaining in the current rate limit window.
 =item rate_limit_reset
 
 The time the current rate limit resets in UTC epoch seconds.
+
+=item last_page
+
+Denotes the index of the last page in the pagination
 
 =item RaiseError
 
