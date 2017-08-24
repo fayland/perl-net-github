@@ -13,6 +13,8 @@ use URI::Escape;
 use Types::Standard qw(Int Str Bool InstanceOf Object);
 use Cache::LRU;
 
+use Scalar::Util qw(looks_like_number);
+
 use Moo::Role;
 
 # configurable args
@@ -38,6 +40,7 @@ has 'last_url'  => ( is => 'rw', isa => Str, predicate => 'has_last_page',  clea
 has 'first_url' => ( is => 'rw', isa => Str, predicate => 'has_first_page', clearer => 'clear_first_url' );
 has 'prev_url'  => ( is => 'rw', isa => Str, predicate => 'has_prev_page',  clearer => 'clear_prev_url' );
 has 'per_page'  => ( is => 'rw', isa => Str, default => 100 );
+has 'total_pages'  => ( is => 'rw', isa => Str, default => 0 );
 
 # Error handle
 has 'RaiseError' => ( is => 'rw', isa => Bool, default => 1 );
@@ -240,9 +243,43 @@ sub query {
     return $data;
 }
 
+sub set_next_page {
+    my ($self, $page) = @_;
+
+    if( ! looks_like_number($page) ){
+	    croak "Trying to set_next_page to $page, and not a number\n";
+    }
+
+    if( $page > $self->total_page && $page > 0 ){
+	    return 0;
+    }
+
+    my $temp_url = $self->next_url;
+    $temp_url =~ s/([&?])page=[0-9]+([&?]*)/$1page=$page$2/;
+
+    $self->next_url( $temp_url );
+
+    return 1;
+}
+
 sub next_page {
     my $self = shift;
     return $self->query($self->next_url);
+}
+
+sub prev_page {
+    my $self = shift;
+    return $self->query($self->prev_url);
+}
+
+sub first_page {
+    my $self = shift;
+    return $self->query($self->first_url);
+}
+
+sub last_page {
+    my $self = shift;
+    return $self->query($self->last_url);
 }
 
 sub _clear_pagination {
@@ -268,6 +305,12 @@ sub _extract_link_url {
 
         my $url_attr = $rel . "_url";
         $self->$url_attr($link_url);
+
+        # Grab, and expose, some additional header information
+	if( $rel eq "last" ){
+	    $link_url =~ /[\&?]page=([0-9]*)[\&?]*/;
+	    $self->total_pages( $1 );
+	}
     }
 
     return 1;
@@ -410,6 +453,10 @@ The number of requests remaining in the current rate limit window.
 
 The time the current rate limit resets in UTC epoch seconds.
 
+=item last_page
+
+Denotes the index of the last page in the pagination
+
 =item RaiseError
 
 =back
@@ -425,6 +472,23 @@ Refer L<Net::GitHub::V3>
 =item next_page
 
 Calls C<query> with C<next_url>. See L<Net::GitHub::V3>
+
+=item prev_page
+
+Calls C<query> with C<prev_url>. See L<Net::GitHub::V3>
+
+=item first_page
+
+Calls C<query> with C<first_url>. See L<Net::GitHub::V3>
+
+=item last_page
+
+Calls C<query> with C<last_url>. See L<Net::GitHub::V3>
+
+=item set_next_page
+
+Adjusts next_url to be a new url in the pagination space
+I.E. you are jumping to a new index in the pagination
 
 =back
 
