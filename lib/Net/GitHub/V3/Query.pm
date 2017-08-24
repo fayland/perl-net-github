@@ -1,6 +1,6 @@
 package Net::GitHub::V3::Query;
 
-our $VERSION = '0.76';
+our $VERSION = '0.89';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;

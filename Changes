@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.90    2017-08-24
+        - Adding some Pagination helpers (warthog9)
+
 0.89    2017-07-22
         - rebuild
 
