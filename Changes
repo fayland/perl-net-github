@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.91    2017-12-11
+        - methods to the Orgs class to list outside collaborators and team maintainers (grantm)
+
 0.90    2017-08-24
         - Adding some Pagination helpers (warthog9)
 
