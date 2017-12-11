@@ -24,6 +24,7 @@ my %__methods = (
     members   => { url => "/orgs/%s/members" },
     owner_members => { url => "/orgs/%s/members?role=admin" },
     no_2fa_members => { url => "/orgs/%s/members?filter=2fa_disabled" },
+    outside_collaborators => { url => "/orgs/%s/outside_collaborators" },
     is_member => { url => "/orgs/%s/members/%s", check_status => 204 },
     delete_member => { url => "/orgs/%s/members/%s", method => 'DELETE', check_status => 204 },
     public_members => { url => "/orgs/%s/public_members" },
@@ -43,6 +44,7 @@ my %__methods = (
     is_team_member  => { url => "/teams/%s/members/%s", check_status => 204 },
     add_team_member => { url => "/teams/%s/members/%s", method => 'PUT', check_status => 204 },
     delete_team_member => { url => "/teams/%s/members/%s", method => 'DELETE', check_status => 204 },
+    team_maintainers => { url => "/teams/%s/members?role=maintainer" },
     team_repos => { url => "/teams/%s/repos" },
     is_team_repos  => { url => "/teams/%s/repos/%s", check_status => 204 },
     add_team_repos => { url => "/teams/%s/repos/%s", method => 'PUT', args => 1, check_status => 204 },
@@ -128,6 +130,10 @@ L<http://developer.github.com/v3/orgs/members/>
 
     my @no_2fa_members = $org->no_2fa_members('perlchina');
 
+=item outside_collaborators
+
+    my @collaborators = $org->outside_collaborators('perlchina');
+
 =item membership
 
 =item update_membership
@@ -180,6 +186,10 @@ L<http://developer.github.com/v3/orgs/teams/>
     my $is_team_member = $org->is_team_member($team_id, 'fayland');
     my $st = $org->add_team_member($team_id, 'fayland');
     my $st = $org->delete_team_member($team_id, 'fayland');
+
+=item team_maintainers
+
+    my @maintainers = $org->team_maintainers($team_id);
 
 =item team_repos
 
