@@ -55,7 +55,7 @@ has 'u'  => (is => 'rw', isa => Str);
 has 'repo' => (is => 'rw', isa => Str);
 
 # accept version
-has 'accept_version' => (is => 'rw', isa => Str, default => "v3");
+has 'accept_version' => (is => 'rw', isa => Str, default => '');
 
 has 'is_main_module' => (is => 'ro', isa => Bool, default => 0);
 sub set_default_user_repo {
@@ -178,7 +178,8 @@ sub query {
 
     # if preview API, specify a custom media type to Accept header
     # https://developer.github.com/v3/media/
-    $req->header( 'Accept' => sprintf("application/vnd.github.%s.param+json", $self->accept_version) );
+    $req->header( 'Accept' => sprintf("application/vnd.github.%s.param+json", $self->accept_version) )
+        if $self->accept_version;
 
     my $res = $self->_make_request($req);
 

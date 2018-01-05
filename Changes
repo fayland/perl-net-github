@@ -1,5 +1,8 @@
 Revision history for Net-GitHub
 
+0.92_01    2018-01-05
+        - fix accept_version
+
 0.91    2017-12-11
         - methods to the Orgs class to list outside collaborators and team maintainers (grantm)
 
