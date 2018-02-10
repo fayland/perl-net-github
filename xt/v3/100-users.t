@@ -16,8 +16,12 @@ diag( 'Using user = ' . $ENV{GITHUB_USER} );
 ok( $gh );
 ok( $user );
 
+# Remember the original value of bio
+my $ou = $user->show();
+my $obio = $ou->{bio};
+
 diag( 'Updating ..' );
-my $bio = 'another Perl programmer and Father';
+my $bio = 'Testing Net::GitHub - please come back in a minute';
 my $uu = $user->update( bio => $bio );
 is($uu->{bio}, $bio);
 
@@ -27,6 +31,9 @@ is($u->{bio}, $bio);
 delete $u->{updated_at}; delete $uu->{updated_at};
 is_deeply($u, $uu);
 
+# Restore bio
+my $ru = $user->update( bio => $obio );
+is($ru->{bio},$obio,"Value of user's Bio restored");
 =pod
 
 diag("Testing follow/unfollow");
