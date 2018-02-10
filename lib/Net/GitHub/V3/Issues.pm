@@ -156,7 +156,7 @@ B<To ease the keyboard, we provied two ways to call any method which starts with
 
 =item issue
 
-    my $issue = $issue->issue($issue_id);
+    my $issue = $issue->issue($issue_number);
 
 =item create_issue
 
@@ -173,7 +173,7 @@ B<To ease the keyboard, we provied two ways to call any method which starts with
 
 =item update_issue
 
-    my $isu = $issue->update_issue( $issue_id, {
+    my $isu = $issue->update_issue( $issue_number, {
         state => 'closed'
     } );
 
@@ -195,9 +195,9 @@ L<http://developer.github.com/v3/issues/comments/>
 
 =item delete_comment
 
-    my @comments = $issue->comments($issue_id);
+    my @comments = $issue->comments($issue_number);
     my $comment  = $issue->comment($comment_id);
-    my $comment  = $issue->create_comment($issue_id, {
+    my $comment  = $issue->create_comment($issue_number, {
         "body" => "a new comment"
     });
     my $comment = $issue->update_comment($comment_id, {
@@ -217,7 +217,7 @@ L<http://developer.github.com/v3/issues/events/>
 
 =item repos_events
 
-    my @events = $issue->events($issue_id);
+    my @events = $issue->events($issue_number);
     my @events = $issue->repos_events;
     my $event  = $issue->event($event_id);
 
@@ -263,12 +263,12 @@ L<http://developer.github.com/v3/issues/labels/>
 
 =item milestone_labels
 
-    my @labels = $issue->issue_label($issue_id);
-    my @labels = $issue->create_issue_label($issue_id, ['New Label']);
-    my $st = $issue->delete_issue_label($issue_id, $label_name);
-    my @labels = $issue->replace_issue_label($issue_id, ['New Label']);
-    my $st = $issue->delete_issue_labels($issue_id);
-    my @lbales = $issue->milestone_labels($milestone_id);
+    my @labels = $issue->issue_label($issue_number);
+    my @labels = $issue->create_issue_label($issue_number, ['New Label']);
+    my $st = $issue->delete_issue_label($issue_number, $label_name);
+    my @labels = $issue->replace_issue_label($issue_number, ['New Label']);
+    my $st = $issue->delete_issue_labels($issue_number);
+    my @lables = $issue->milestone_labels($milestone_id);
 
 =back
 
