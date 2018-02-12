@@ -304,7 +304,7 @@ L<Net::GitHub::V3::Repos>
 =head3 issue
 
     my @issues = $gh->issue->issues();
-    my $issue  = $gh->issue->issue($issue_id);
+    my $issue  = $gh->issue->issue($issue_number);
 
 L<Net::GitHub::V3::Issues>
 
