@@ -222,7 +222,7 @@ from the API. By switching B<RaiseError> on you can make the be turned into
 exceptions instead, so that you don't have to check for error response after
 every call.
 
-=head3 next_url, last_url, prev_url, first_url, per_page
+=head3 Iterating over pages: next_url, last_url, prev_url, first_url, per_page
 
 Any methods which return multiple results I<may> be paginated. After performing
 a query you should check to see if there are more results. These attributes will
@@ -241,6 +241,28 @@ See Github's documentation: L<http://developer.github.com/v3/#pagination>
       ## OR ##
       push @issues, $gh->issue->next_page;
   }
+
+
+=head3 Iterating over items: next_xxx and close_xxx
+
+The queries which can return paginated results can also be evaluated one by
+one, like this:
+
+  while (my $issue = $gh->issue->next_repos_issue( @args )) {
+    # do something with $issue
+  }
+
+The arguments to next_repos_issue are the same as for repos_issues.
+In that case, new API calls will be performed only when needed to fetch more
+items.  An undefined return value means there are no more items.  Do not
+ignore this return value because the next call to next_repos_issues will,
+once again, start from the first issue.
+
+If you want to start over with the first item without having to fetch all
+items, call the corresponding close method:
+
+  $gh->issue->close_repos_issue(@args);
+
 
 =head3 ua
 

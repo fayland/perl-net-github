@@ -10,10 +10,12 @@ use LWP::UserAgent;
 use HTTP::Request;
 use Carp qw/croak/;
 use URI::Escape;
-use Types::Standard qw(Int Str Bool InstanceOf Object);
+use Types::Standard qw(Int Str Bool InstanceOf Object HashRef);
 use Cache::LRU;
 
 use Scalar::Util qw(looks_like_number);
+
+use Net::GitHub::V3::ResultSet;
 
 use Moo::Role;
 
@@ -126,6 +128,54 @@ has 'cache' => (
     );
   }
 );
+
+# per-page pagination
+
+has 'result_sets' => (
+  isa => HashRef,
+  is => 'ro',
+  default => sub { {} },
+);
+
+sub next {
+    my $self = shift;
+    my ($url) = @_;
+    my $result_set;
+    $result_set = $self->result_sets->{$url}  or  do {
+        $result_set = Net::GitHub::V3::ResultSet->new( url => $url );
+        $self->result_sets->{$url} = $result_set;
+    };
+    my $results    = $result_set->results;
+    my $cursor     = $result_set->cursor;
+    if ( $cursor > $#$results ) {
+        return if $result_set->done;
+        my $next_url = $result_set->next_url || $result_set->url;
+        my $new_result = $self->query($next_url);
+        $result_set->results(ref $new_result eq 'ARRAY' ?
+                                 $new_result :
+                                 [$new_result]
+        );
+        $result_set->cursor(0);
+        if ($self->has_next_page) {
+            $result_set->next_url($self->next_url);
+        }
+        else {
+            $result_set->done(1);
+        }
+    }
+    my $result = $result_set->results->[$result_set->cursor];
+    $result_set->cursor($result_set->cursor + 1);
+    return $result;
+}
+
+
+sub close {
+    my $self = shift;
+    my ($url) = @_;
+    delete $self->result_sets->{$url};
+    return;
+}
+
 
 sub query {
     my $self = shift;
@@ -363,6 +413,7 @@ sub __build_methods {
         my $check_status = $v->{check_status};
         my $is_u_repo = $v->{is_u_repo}; # need auto shift u/repo
         my $preview_version = $v->{preview};
+        my $paginate = $v->{paginate};
 
         no strict 'refs';
         no warnings 'once';
@@ -396,6 +447,51 @@ sub __build_methods {
                 return $self->query($method, $u, @qargs);
             }
         };
+        if ($paginate) {
+            # Add methods next... and close...
+            # Make method names singular (next_comments to next_comment)
+            $m =~ s/s$//;
+            *{"${package}::next_${m}"} = sub {
+                my $self = shift;
+
+                # count how much %s inside u
+                my $n = 0; while ($url =~ /\%s/g) { $n++ }
+
+                ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
+                if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
+                    unshift @_, ($self->u, $self->repo);
+                }
+
+                # make url, replace %s with real args
+                my @uargs = splice(@_, 0, $n);
+                my $u = sprintf($url, @uargs);
+
+                # if preview API, set preview version
+                $self->accept_version($preview_version) if $preview_version;
+
+                return $self->next($u);
+            };
+            *{"${package}::close_${m}"} = sub {
+                my $self = shift;
+
+                # count how much %s inside u
+                my $n = 0; while ($url =~ /\%s/g) { $n++ }
+
+                ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
+                if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
+                    unshift @_, ($self->u, $self->repo);
+                }
+
+                # make url, replace %s with real args
+                my @uargs = splice(@_, 0, $n);
+                my $u = sprintf($url, @uargs);
+
+                # if preview API, set preview version
+                $self->accept_version($preview_version) if $preview_version;
+
+                $self->close($u);
+            };
+        }
     }
 }
 
@@ -490,6 +586,23 @@ Calls C<query> with C<last_url>. See L<Net::GitHub::V3>
 
 Adjusts next_url to be a new url in the pagination space
 I.E. you are jumping to a new index in the pagination
+
+=item result_sets
+
+For internal use by the item-per-item pagination: This is a store of
+the state(s) for the pagination.  Each entry maps the initial URL of a
+GitHub query to a L<Net::GitHub::V3::ResultSet> object.
+
+=item next($url)
+
+Returns the next item for the query which started at $url, or undef if
+there are no more items.
+
+=item close($url)
+
+Terminates the item-per-item pagination for the query which started at
+$url.
+
 
 =back
 
