@@ -107,7 +107,7 @@ my %__methods = (
     milestone_labels => { url => "/repos/%s/%s/milestones/%s/labels", paginate => 1 },
 
     # http://developer.github.com/v3/issues/milestones/
-    milestone  => { url => "/repos/%s/%s/milestones/%s", paginate => 1 },
+    milestone  => { url => "/repos/%s/%s/milestones/%s" },
     create_milestone => { url => "/repos/%s/%s/milestones", method => 'POST',  args => 1 },
     update_milestone => { url => "/repos/%s/%s/milestones/%s", method => 'PATCH', args => 1 },
     delete_milestone => { url => "/repos/%s/%s/milestones/%s", method => 'DELETE', check_status => 204 },

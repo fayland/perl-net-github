@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use Test::More;
 use Net::GitHub::V3;
-use Net::GitHub::V3::Iterator;
 
 # For this test we are using the repository of Net::GitHub itself.
 # We filter for "all" states to make sure that the test doesn't fail
@@ -100,5 +99,182 @@ if (! $issue_found) {
 }
 
 $issue->close_repos_issue({state => 'closed'});
+
+
+# More pagination...
+# -- Submodule Net::GitHub::V3::Events
+my $event = $gh->event;
+
+# ---- Public events
+my $next_event = $event->next_event;
+is(ref $next_event,'HASH');
+$event->close_event;
+
+# ---- Events for a repository
+my $next_repos_event = $event->next_repos_event;
+is(ref $next_repos_event,'HASH');
+is($next_repos_event->{repo}{name},'fayland/perl-net-github');
+$event->close_repos_event;
+
+# ---- Just checking whether the functions are correctly defined
+foreach my $function (qw(repos_event issues_event networks_event
+                     orgs_event
+                     user_received_event user_public_received_event
+                     user_event user_public_event
+                     user_orgs_event
+                )) {
+    foreach my $action (qw(next close)) {
+        my $method = "${action}_${function}";
+        ok($event->can($method),"Events::$method is defined");
+    }
+}
+
+
+# -- Submodule Net::GitHub::V3::Gists
+my $gist = $gh->gist;
+foreach my $function (qw(gist
+                         public_gist starred_gist
+                         comment
+                    )) {
+    foreach my $action (qw(next close)) {
+        my $method = "${action}_${function}";
+        ok($gist->can($method),"Gists::$method is defined");
+    }
+}
+
+is(scalar keys %{$gist->result_sets}, 0, 'All result sets are closed');
+
+
+# -- Submodule Net::GitHub::V3::Orgs
+my $org = $gh->org;
+foreach my $function (qw(org
+                         member owner_member no_2fa_member
+                         public_member
+                         outside_collaborator
+                         team team_member team_maintainer team_repo
+                    )) {
+    foreach my $action (qw(next close)) {
+        my $method = "${action}_${function}";
+        ok($org->can($method),"Orgs::$method is defined");
+    }
+}
+is(scalar keys %{$org->result_sets}, 0, 'All result sets are closed');
+
+
+# -- Submodule Net::GitHub::V3::PullRequests
+my $pull_request = $gh->pull_request;
+
+# Find the PR which caused all this
+my $first_pr = $pull_request->next_pull(
+    { head => 'HaraldJoerg:auto-pagination'}
+);
+is($first_pr->{number},86,'PR identified');
+
+# Find a particular commit message
+my $message_found = 0;
+while (my $commit = $pull_request->next_commit($first_pr->{number})) {
+    next unless $commit->{commit}{message} =~ /^Initial patch/;
+    $message_found = 1;
+}
+ok($message_found,'Iterating through commit messages');
+$pull_request->close_commit($first_pr->{number});
+
+my $second_pr = $pull_request->next_pull(
+    { head => 'HaraldJoerg:auto-pagination'}
+);
+ok(! $second_pr,'Only one PR in this selection');
+$pull_request->close_pull(
+    { head => 'HaraldJoerg:auto-pagination'}
+);
+
+foreach my $function (qw(file
+                         comment
+                         reviewer
+                    )) {
+    foreach my $action (qw(next close)) {
+        my $method = "${action}_${function}";
+        ok($pull_request->can($method),"PullRequests::$method is defined");
+    }
+}
+is(scalar keys %{$pull_request->result_sets}, 0, 'All result sets are closed');
+
+
+# -- Submodule Net::GitHub::V3::Repos
+my $repos = $gh->repos;
+
+my $repo_found = 0;
+# -- this has been disabled: It works, but takes many API requests.
+# while (my $r = $repos->next_repo()) {
+#     if ($r->{name}  eq  'perl-net-github') {
+#         $repo_found = 1;
+#         last;
+#     }
+# }
+# ok($repo_found,"'perl-net-github' is listed under repos");
+# $repos->close_repo;
+
+$repo_found =  0;
+while (my $r = $repos->next_user_repo('fayland')) {
+    if ($r->{name}  eq  'perl-net-github') {
+        $repo_found = 1;
+        last;
+    }
+}
+ok($repo_found,"'perl-net-github' is listed under fayland's repos");
+$repos->close_user_repo('fayland');
+
+# -- this has been disabled: I don't know a stable repository
+#    associated with an organisation
+# $repo_found = 0;
+# while (my $r = $repos->next_org_repo('perlchina','public')) {
+#     if ($r->{name}  eq  'perl-net-gitgub') {
+#         $repo_found = 1;
+#         last;
+#     }
+# }
+# ok($repo_found,"'perl-net-github' is listed under perlchina's public repos");
+# $repos->close_org_repo('perlchina','public');
+
+# This should grab three fairly recent commits
+my $selection = { since => '2018-01-01T00:00:00',
+                  until => '2018-01-07T00:00:00',
+                };
+my @commits = ();
+while (my $commit = $repos->next_commit($selection)) {
+    push @commits,$commit;
+}
+is(scalar @commits,3,"Three commits on 05-06 Jan 2018");
+$repos->close_commit($selection);
+
+foreach my $function (qw(comment commit_comment
+                         download
+                         release release_asset
+                         fork
+                         deployment key
+                         subscriber watcher
+                         hook
+                         status deployment_status
+                    )) {
+    foreach my $action (qw(next close)) {
+        my $method = "${action}_${function}";
+        ok($repos->can($method),"Repos::$method is defined");
+    }
+}
+is(scalar keys %{$repos->result_sets}, 0, 'All result sets are closed');
+
+
+# -- Submodule Net::GitHub::V3::Users
+my $user = $gh->user;
+
+foreach my $function (qw(follower following
+                         email
+                         key
+                    )) {
+    foreach my $action (qw(next close)) {
+        my $method = "${action}_${function}";
+        ok($user->can($method),"Users::$method is defined");
+    }
+}
+is(scalar keys %{$user->result_sets}, 0, 'All result sets are closed');
 
 done_testing;

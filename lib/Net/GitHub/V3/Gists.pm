@@ -16,10 +16,24 @@ sub gists {
     return $self->query($u);
 }
 
+sub next_gist {
+    my ( $self, $user ) = @_;
+
+    my $u = $user ? "/users/" . uri_escape($user) . '/gists' : '/gists';
+    return $self->next($u);
+}
+
+sub close_gist {
+    my ( $self, $user ) = @_;
+
+    my $u = $user ? "/users/" . uri_escape($user) . '/gists' : '/gists';
+    return $self->close($u);
+}
+
 ## build methods on fly
 my %__methods = (
-    public_gists  => { url => "/gists/public" },
-    starred_gists => { url => "/gists/starred" },
+    public_gists  => { url => "/gists/public", paginate => 1 },
+    starred_gists => { url => "/gists/starred", paginate => 1 },
     gist => { url => "/gists/%s" },
     create => { url => "/gists", method => "POST", args => 1 },
     update => { url => "/gists/%s", method => "PATCH", args => 1 },
@@ -30,7 +44,7 @@ my %__methods = (
     delete => { url => "/gists/%s", method => "DELETE", check_status => 204 },
 
     # http://developer.github.com/v3/gists/comments/
-    comments => { url => "/gists/%s/comments" },
+    comments => { url => "/gists/%s/comments", paginate => 1 },
     comment  => { url => "/gists/%s/comments/%s" },
     create_comment => { url => "/gists/%s/comments", method => 'POST',  args => 1 },
     update_comment => { url => "/gists/%s/comments/%s", method => 'PATCH', args => 1 },
@@ -68,6 +82,7 @@ L<http://developer.github.com/v3/gists/>
 
     my @gists = $gist->gists;
     my @gists = $gist->gists('nothingmuch');
+    while (my $g = $gist->next_gist) { ...; }
 
 =item public_gists
 
@@ -75,6 +90,8 @@ L<http://developer.github.com/v3/gists/>
 
     my @gists = $gist->public_gists;
     my @gists = $gist->starred_gists;
+    while (my $g = $gist->next_public_gist) { ...; }
+    while (my $g = $gist->next_starred_gist) { ...; }
 
 =item gist
 
@@ -134,6 +151,7 @@ L<http://developer.github.com/v3/gists/comments/>
 =item delete_comment
 
     my @comments = $gist->comments();
+    while (my $c = $gist->next_comment) { ...; }
     my $comment  = $gist->comment($comment_id);
     my $comment  = $gist->create_comment($gist_id, {
         "body" => "a new comment"

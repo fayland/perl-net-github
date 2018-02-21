@@ -29,12 +29,29 @@ sub add_email {
 sub remove_email {
     (shift)->query( 'DELETE', '/user/emails', [ @_ ] );
 }
+
 sub followers {
     my ($self, $user) = @_;
 
     my $u = $user ? "/users/" . uri_escape($user) . '/followers' : '/user/followers';
     return $self->query($u);
 }
+
+sub next_follower {
+    my ($self, $user) = @_;
+
+    my $u = $user ? "/users/" . uri_escape($user) . '/followers' : '/user/followers';
+    return $self->next($u);
+}
+
+sub close_follower {
+    my ($self, $user) = @_;
+
+    my $u = $user ? "/users/" . uri_escape($user) . '/followers' : '/user/followers';
+    return $self->close($u);
+}
+
+
 sub following {
     my ($self, $user) = @_;
 
@@ -42,16 +59,30 @@ sub following {
     return $self->query($u);
 }
 
+sub next_following {
+    my ($self, $user) = @_;
+
+    my $u = $user ? "/users/" . uri_escape($user) . '/following' : '/user/following';
+    return $self->next($u);
+}
+
+sub close_following {
+    my ($self, $user) = @_;
+
+    my $u = $user ? "/users/" . uri_escape($user) . '/following' : '/user/following';
+    return $self->close($u);
+}
+
 ## build methods on fly
 my %__methods = (
 
-    emails => { url => "/user/emails" },
+    emails => { url => "/user/emails", paginate => 1 },
 
     is_following => { url => "/user/following/%s", check_status => 204 },
     follow => { url => "/user/following/%s", method => 'PUT', check_status => 204 },
     unfollow => { url => "/user/following/%s", method => 'DELETE', check_status => 204 },
 
-    keys => { url => "/user/keys" },
+    keys => { url => "/user/keys", paginate => 1 },
     key  => { url => "/user/keys/%s" },
     create_key => { url => "/user/keys", method => 'POST', args => 1 },
     update_key => { url => "/user/keys/%s", method => 'PATCH', args => 1 },
@@ -118,6 +149,7 @@ L<http://developer.github.com/v3/users/emails/>
     $user->add_email( 'another@email.com' );
     $user->add_email( 'batch1@email.com', 'batch2@email.com' );
     my $emails = $user->emails;
+    while ($email = $user->next_email) { ...; }
     $user->remove_email( 'another@email.com' );
     $user->remove_email( 'batch1@email.com', 'batch2@email.com' );
 
@@ -133,10 +165,18 @@ L<http://developer.github.com/v3/users/followers/>
 
 =item following
 
+=item next_follower
+
+=item next_following
+
     my $followers = $user->followers;
     my $followers = $user->followers($user);
     my $following = $user->following;
     my $following = $user->following($user);
+    my $next_follower = $user->next_follower
+    my $next_follower = $user->next_follower($user)
+    my $next_following = $user->next_following
+    my $next_following = $user->next_following($user)
 
 =item is_following
 
@@ -168,6 +208,7 @@ L<http://developer.github.com/v3/users/keys/>
 =item delete_key
 
     my $keys = $user->keys;
+    while (my $key = $user->next_key) { ...; }
     my $key  = $user->key($key_id); # get key
     $user->create_key({
         title => 'title',

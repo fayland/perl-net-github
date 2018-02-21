@@ -12,19 +12,19 @@ with 'Net::GitHub::V3::Query';
 ## build methods on fly
 my %__methods = (
 
-    events => { url => '/events' },
-    repos_events => { url => "/repos/%s/%s/events" },
-    issues_events => { url => "/repos/%s/%s/issues/events" },
-    networks_events => { url => "/networks/%s/%s/events" },
-    orgs_events => { url => "/orgs/%s/events" },
+    events => { url => '/events', paginate => 1 },
+    repos_events => { url => "/repos/%s/%s/events", paginate => 1 },
+    issues_events => { url => "/repos/%s/%s/issues/events", paginate => 1 },
+    networks_events => { url => "/networks/%s/%s/events", paginate => 1 },
+    orgs_events => { url => "/orgs/%s/events", paginate => 1 },
 
-    user_received_events => { url => "/users/%s/received_events" },
-    user_public_received_events => { url => "/users/%s/received_events/public" },
+    user_received_events => { url => "/users/%s/received_events", paginate => 1 },
+    user_public_received_events => { url => "/users/%s/received_events/public", paginate => 1 },
 
-    user_events => { url => "/users/%s/events" },
-    user_public_events => { url => "/users/%s/events/public" },
+    user_events => { url => "/users/%s/events", paginate => 1 },
+    user_public_events => { url => "/users/%s/events/public", paginate => 1 },
 
-    user_orgs_events => { url => "/users/%s/events/orgs/%s" },
+    user_orgs_events => { url => "/users/%s/events/orgs/%s", paginate => 1 },
 
 );
 __build_methods(__PACKAGE__, %__methods);
@@ -51,13 +51,14 @@ Net::GitHub::V3::Events - GitHub Events API
 
 =head3 Events
 
-L<http://developer.github.com/v3/events/>
+L<http://developer.github.com/v3/activity/events/>
 
 =over 4
 
 =item events
 
     my @events = $event->events();
+    while (my $ne = $event->next_event) { ...; }
 
 =item repos_events
 
@@ -68,10 +69,14 @@ L<http://developer.github.com/v3/events/>
     my @events = $event->repos_events($user, $repo);
     my @events = $event->issues_events($user, $repo);
     my @events = $event->networks_events($user, $repo);
+    while (my $ur_event = next_repos_event($user,$repo) { ...; }
+    while (my $ur_event = next_issues_event($user,$repo) { ...; }
+    while (my $ur_event = next_networks_event($user,$repo) { ...; }
 
 =item orgs_events
 
     my @events = $event->orgs_events($org);
+    while (my $org_event = $event->next_orgs_event) { ...; }
 
 =item user_received_events
 
@@ -85,10 +90,15 @@ L<http://developer.github.com/v3/events/>
     my @events = $event->user_public_received_events($user);
     my @events = $event->user_events($user);
     my @events = $event->user_public_events($user);
+    while (my $u_event = $event->next_user_received_event) { ...; }
+    while (my $u_event = $event->next_user_public_received_event) { ...; }
+    while (my $u_event = $event->next_user_event) { ...; }
+    while (my $u_event = $event->next_user_public_event) { ...; }
 
 =item user_orgs_events
 
     my @events = $event->user_orgs_events($user, $org);
+    while (my $o_event = $event->next_org_event) { ...; }
 
 =back
 

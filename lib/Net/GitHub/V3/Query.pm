@@ -451,7 +451,8 @@ sub __build_methods {
             # Add methods next... and close...
             # Make method names singular (next_comments to next_comment)
             $m =~ s/s$//;
-            *{"${package}::next_${m}"} = sub {
+            my $m_name = ref $paginate ? $paginate->{name} : $m;
+            *{"${package}::next_${m_name}"} = sub {
                 my $self = shift;
 
                 # count how much %s inside u
@@ -471,7 +472,7 @@ sub __build_methods {
 
                 return $self->next($u);
             };
-            *{"${package}::close_${m}"} = sub {
+            *{"${package}::close_${m_name}"} = sub {
                 my $self = shift;
 
                 # count how much %s inside u
