@@ -243,7 +243,7 @@ See Github's documentation: L<http://developer.github.com/v3/#pagination>
   }
 
 
-=head3 Iterating over items: next_xxx and close_xxx
+=head3 Iterating over individual items: next_xxx and close_xxx
 
 The queries which can return paginated results can also be evaluated one by
 one, like this:
@@ -252,16 +252,35 @@ one, like this:
     # do something with $issue
   }
 
-The arguments to next_repos_issue are the same as for repos_issues.
-In that case, new API calls will be performed only when needed to fetch more
-items.  An undefined return value means there are no more items.  Do not
-ignore this return value because the next call to next_repos_issues will,
-once again, start from the first issue.
+The arguments to next_repos_issue are the same as for repos_issues,
+and is also applicable to all other interfaces which offer a next_xxx
+method.  All available next_xxx methods are listed in the
+documentation of the corresponding modules, see the list below.
 
-If you want to start over with the first item without having to fetch all
-items, call the corresponding close method:
+If you loop over the next_xxx interfaces, new API calls will be
+performed automatically, but only when needed to fetch more items.  An
+undefined return value means there are no more items.
+
+To start over with the first item, you need to close the iteration.
+Every next_xxx method has a corresponding close_xxx method which must
+be called with exactly the same parameters as the next_xxx method to
+take effect:
 
   $gh->issue->close_repos_issue(@args);
+
+If you use Net::GitHub::V3 in a command line program, there is no need
+to call the close_xxx methods at all.  As soon as the Net::GitHub::V3
+object $gh goes out of scope, everything is neatly cleaned up.
+
+However, if you have a long-lived Net::GitHub::V3 object, e.g. in a
+persistent service process which provides an own interface to its
+users and talks to GitHub under the hood, then it is advisable to
+close the iterations when you're done with them.
+
+For brevity and because they usually are not needed, the close_xxx
+methods are not listed with their modules.  It is guaranteed that
+I<every> next_xxx method has a corresponding close_xxx method.
+
 
 
 =head3 ua
