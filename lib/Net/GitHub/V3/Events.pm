@@ -2,7 +2,7 @@ package Net::GitHub::V3::Events;
 
 use Moo;
 
-our $VERSION = '0.60';
+our $VERSION = '0.93';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI::Escape;
@@ -69,9 +69,9 @@ L<http://developer.github.com/v3/activity/events/>
     my @events = $event->repos_events($user, $repo);
     my @events = $event->issues_events($user, $repo);
     my @events = $event->networks_events($user, $repo);
-    while (my $ur_event = next_repos_event($user,$repo) { ...; }
-    while (my $ur_event = next_issues_event($user,$repo) { ...; }
-    while (my $ur_event = next_networks_event($user,$repo) { ...; }
+    while (my $ur_event = $event->next_repos_event($user,$repo) { ...; }
+    while (my $ur_event = $event->next_issues_event($user,$repo) { ...; }
+    while (my $ur_event = $event->next_networks_event($user,$repo) { ...; }
 
 =item orgs_events
 
