@@ -1,6 +1,8 @@
 Revision history for Net-GitHub
 
 {{$NEXT}}
+
+0.94  2018-02-23 09:15:32 CST
         - Add item-per-item iteration (HaraldJoerg)
 
 0.93    2018-01-06

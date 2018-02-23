@@ -27,6 +27,9 @@
       "configure" : {
          "requires" : {
             "ExtUtils::MakeMaker" : "0"
+         },
+         "suggests" : {
+            "JSON::PP" : "2.27300"
          }
       },
       "develop" : {
@@ -67,7 +70,7 @@
          "web" : "https://github.com/fayland/perl-net-github"
       }
    },
-   "version" : "0.93",
+   "version" : "0.94",
    "x_contributors" : [
       "Alan Berndt <alan@eatabrick.org>",
       "Alex Muntada <alexm@alexm.org>",
@@ -86,6 +89,7 @@
       "franck cuny <franck@lumberjaph.net>",
       "Graham Knop <haarg@haarg.org>",
       "Grant McLean <grant@catalyst.net.nz>",
+      "Harald J\u00f6rg <Harald.Joerg@arcor.de>",
       "hiroraba <xornelius0313@gmail.com>",
       "Hristo Dragolov <hdragolov@gmail.com>",
       "Ioan Rogers <ioanr@cpan.org>",
