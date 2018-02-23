@@ -15,6 +15,25 @@ with 'Net::GitHub::V3::Query';
 sub list {
     my ( $self, $args ) = @_;
 
+    return $self->query(_repos_arg2url($args));
+}
+
+
+sub next_repo {
+    my ( $self, $args ) = @_;
+
+    return $self->next(_repos_arg2url($args));
+}
+
+sub close_repo {
+    my ( $self, $args ) = @_;
+
+    return $self->close(_repos_arg2url($args));
+}
+
+sub _repos_arg2url {
+    my ($args) = @_;
+
     # for old
     unless (ref($args) eq 'HASH') {
         $args = { type => $args };
@@ -22,18 +41,55 @@ sub list {
 
     my $uri = URI->new('/user/repos');
     $uri->query_form($args);
-    return $self->query($uri->as_string);
+    return $uri->as_string;
 }
+
 
 sub list_all {
     my ( $self, $since ) = @_;
+
+    return $self->query(_all_repos_arg2url($since));
+}
+
+sub next_all_repo {
+    my ( $self, $since ) = @_;
+
+    return $self->next(_all_repos_arg2url($since));
+}
+
+sub close_all_repo {
+    my ( $self, $since ) = @_;
+
+    return $self->close(_all_repos_arg2url($since));
+}
+
+sub _all_repos_arg2url {
+    my ( $since ) = @_;
     $since ||= 'first';
     my $u = '/repositories';
     $u .= '?since=' . $since if $since ne 'first';
-    return $self->query($u);
+    return $u;
 }
 
 sub list_user {
+    my $self = shift;
+
+    return $self->query($self->_user_repos_arg2url(@_));
+}
+
+sub next_user_repo {
+    my $self = shift;
+
+    return $self->next($self->_user_repos_arg2url(@_));
+}
+
+sub close_user_repo {
+    my $self = shift;
+
+    return $self->close($self->_user_repos_arg2url(@_));
+}
+
+sub _user_repos_arg2url {
     my ($self, $user, $args) = @_;
     $user ||= $self->u;
 
@@ -44,16 +100,35 @@ sub list_user {
 
     my $uri = URI->new("/users/" . uri_escape($user) . "/repos");
     $uri->query_form($args);
-    return $self->query($uri->as_string);
+    return $uri->as_string;
 }
 
 sub list_org {
+    my $self = shift;
+
+    return $self->query($self->_org_repos_arg2url(@_));
+}
+
+sub next_org_repo {
+    my $self = shift;
+
+    return $self->next($self->_org_repos_arg2url(@_));
+}
+
+sub close_org_repo {
+    my $self = shift;
+
+    return $self->close($self->_org_repos_arg2url(@_));
+}
+
+sub _org_repos_arg2url {
     my ($self, $org, $type) = @_;
     $type ||= 'all';
     my $u = "/orgs/" . uri_escape($org) . "/repos";
     $u .= '?type=' . $type if $type ne 'all';
-    return $self->query($u);
+    return $u;
 }
+
 
 sub create {
     my ( $self, $data ) = @_;
@@ -100,6 +175,24 @@ sub upload_asset {
 
 sub commits {
     my $self = shift;
+
+    return $self->query($self->_commits_arg2url(@_));
+}
+
+sub next_commit {
+    my $self = shift;
+
+    return $self->next($self->_commits_arg2url(@_));
+}
+
+sub close_commit {
+    my $self = shift;
+
+    return $self->close($self->_commits_arg2url(@_));
+}
+
+sub _commits_arg2url {
+    my $self = shift;
     if (@_ < 2) {
         unshift @_, $self->repo;
         unshift @_, $self->u;
@@ -108,10 +201,30 @@ sub commits {
 
     my $uri = URI->new("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/commits');
     $uri->query_form($args);
-    return $self->query($uri->as_string);
+    return $uri->as_string;
 }
 
+
+
 sub list_deployments {
+    my $self = shift;
+
+    return $self->query($self->deployments_arg2url(@_));
+}
+
+sub next_deployment {
+    my $self = shift;
+
+    return $self->next($self->deployments_arg2url(@_));
+}
+
+sub close_deployment {
+    my $self = shift;
+
+    return $self->close($self->deployments_arg2url(@_));
+}
+
+sub _deployments_arg2url {
     my $self = shift;
     if (@_ < 2) {
         unshift @_, $self->repo;
@@ -121,33 +234,34 @@ sub list_deployments {
 
     my $uri = URI->new("/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/deployments');
     $uri->query_form($args);
-    return $self->query($uri->as_string);
+    return $uri->as_string;
 }
+
 
 ## build methods on fly
 my %__methods = (
 
     get => { url => "/repos/%s/%s" },
     update => { url => "/repos/%s/%s", method => 'PATCH', args => 1 },
-    contributors => { url => "/repos/%s/%s/contributors" },
+    contributors => { url => "/repos/%s/%s/contributors", paginate => 1 },
     languages => { url => "/repos/%s/%s/languages" },
-    teams     => { url => "/repos/%s/%s/teams" },
-    tags      => { url => "/repos/%s/%s/tags" },
-    branches  => { url => "/repos/%s/%s/branches" },
+    teams     => { url => "/repos/%s/%s/teams", paginate => 1 },
+    tags      => { url => "/repos/%s/%s/tags", paginate => 1 },
+    branches  => { url => "/repos/%s/%s/branches", paginate => 1 },
     branch => { url => "/repos/%s/%s/branches/%s" },
     delete => { url => "/repos/%s/%s", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/repos/collaborators/
-    collaborators       => { url => "/repos/%s/%s/collaborators" },
+    collaborators       => { url => "/repos/%s/%s/collaborators", paginate => 1 },
     is_collaborator     => { url => "/repos/%s/%s/collaborators/%s", check_status => 204 },
     add_collaborator    => { url => "/repos/%s/%s/collaborators/%s", method => 'PUT', check_status => 204 },
     delete_collaborator => { url => "/repos/%s/%s/collaborators/%s", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/repos/commits/
     commit   => { url => "/repos/%s/%s/commits/%s" },
-    comments => { url => "/repos/%s/%s/comments" },
+    comments => { url => "/repos/%s/%s/comments", paginate => 1 },
     comment  => { url => "/repos/%s/%s/comments/%s" },
-    commit_comments => { url => "/repos/%s/%s/commits/%s/comments" },
+    commit_comments => { url => "/repos/%s/%s/commits/%s/comments", paginate => 1 },
     create_comment => { url => "/repos/%s/%s/commits/%s/comments", method => 'POST', args => 1 },
     update_comment => { url => "/repos/%s/%s/comments/%s", method => 'PATCH', args => 1 },
     delete_comment => { url => "/repos/%s/%s/comments/%s", method => 'DELETE', check_status => 204 },
@@ -158,38 +272,38 @@ my %__methods = (
     get_content => { url => "/repos/%s/%s/contents/%s" },
 
     # http://developer.github.com/v3/repos/downloads/
-    downloads => { url => "/repos/%s/%s/downloads" },
+    downloads => { url => "/repos/%s/%s/downloads", paginate => 1 },
     download  => { url => "/repos/%s/%s/downloads/%s" },
     delete_download => { url => "/repos/%s/%s/downloads/%s", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/repos/releases/
-    releases => { url => "/repos/%s/%s/releases" },
+    releases => { url => "/repos/%s/%s/releases", paginate => 1 },
     release  => { url => "/repos/%s/%s/releases/%s" },
     create_release => { url => "/repos/%s/%s/releases", method => 'POST', args => 1 },
     update_release => { url => "/repos/%s/%s/releases/%s", method => 'PATCH', args => 1 },
     delete_release => { url => "/repos/%s/%s/releases/%s", method => 'DELETE', check_status => 204 },
 
-    release_assets => { url => "/repos/%s/%s/releases/%s/assets" },
+    release_assets => { url => "/repos/%s/%s/releases/%s/assets", paginate => 1 },
     release_asset => { url => "/repos/%s/%s/releases/%s/assets/%s" },
     update_release_asset => { url => "/repos/%s/%s/releases/%s/assets/%s", method => 'PATCH', args => 1 },
     delete_release_asset => { url => "/repos/%s/%s/releases/%s/assets/%s", method => 'DELETE', check_status => 204 },
 
-    forks => { url => "/repos/%s/%s/forks" },
+    forks => { url => "/repos/%s/%s/forks", paginate => 1 },
 
     # http://developer.github.com/v3/repos/keys/
-    keys => { url => "/repos/%s/%s/keys" },
+    keys => { url => "/repos/%s/%s/keys", paginate => 1 },
     key  => { url => "/repos/%s/%s/keys/%s" },
     create_key => { url => "/repos/%s/%s/keys", method => 'POST', args => 1 },
     update_key => { url => "/repos/%s/%s/keys/%s", method => 'PATCH', check_status => 204, args => 1 },
     delete_key => { url => "/repos/%s/%s/keys/%s", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/repos/watching/
-    watchers => { url => "/repos/%s/%s/watchers" },
+    watchers => { url => "/repos/%s/%s/watchers", paginate => 1 },
     is_watching => { url => "/user/watched/%s/%s", is_u_repo => 1, check_status => 204 },
     watch   => { url => "/user/watched/%s/%s", is_u_repo => 1, method => 'PUT', check_status => 204 },
     unwatch => { url => "/user/watched/%s/%s", is_u_repo => 1, method => 'DELETE', check_status => 204 },
 
-    subscribers   => { url => "/repos/%s/%s/subscribers" },
+    subscribers   => { url => "/repos/%s/%s/subscribers", paginate => 1 },
     subscription  => { url => "/repos/%s/%s/subscription" },
     is_subscribed => { url => "/repos/%s/%s/subscription", check_status => 200 },
     subscribe     => { url => "/repos/%s/%s/subscription", method => 'PUT',
@@ -197,7 +311,7 @@ my %__methods = (
     unsubscribe   => { url => "/repos/%s/%s/subscription", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/repos/hooks/
-    hooks => { url => "/repos/%s/%s/hooks" },
+    hooks => { url => "/repos/%s/%s/hooks", paginate => 1 },
     hook  => { url => "/repos/%s/%s/hooks/%s" },
     delete_hook => { url => "/repos/%s/%s/hooks/%s", method => 'DELETE', check_status => 204 },
     test_hook   => { url => "/repos/%s/%s/hooks/%s/test", method => 'POST', check_status => 204 },
@@ -208,13 +322,13 @@ my %__methods = (
     merges => { url => "/repos/%s/%s/merges", method => 'POST', args => 1 },
 
     # http://developer.github.com/v3/repos/statuses/
-    list_statuses => { url => "/repos/%s/%s/statuses/%s" },
+    list_statuses => { url => "/repos/%s/%s/statuses/%s", paginate => { name => 'status' } },
     create_status => { url => "/repos/%s/%s/statuses/%s", method => 'POST', args => 1 },
 
     # https://developer.github.com/v3/repos/deployments
     create_deployment => { url => "/repos/%s/%s/deployments", method => 'POST', args => 1 },
-    create_deployment_status => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'POST', args => 1 },
-    list_deployment_statuses => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'GET'},
+    create_deployment_status => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'POST', args => 1},
+    list_deployment_statuses => { url => "/repos/%s/%s/deployments/%s/statuses", method => 'GET', paginate => { name => 'deployment_status' } },
 
     contributor_stats => { url => "/repos/%s/%s/stats/contributors", method => 'GET'},
     commit_activity => { url => "/repos/%s/%s/stats/commit_activity", method => 'GET'},
@@ -356,6 +470,17 @@ L<http://developer.github.com/v3/repos/>
     my @rp = $repos->list_org('perlchina');
     my @rp = $repos->list_org('perlchina', 'public');
 
+=item next_repo, next_all_repo, next_user_repo, next_org_repo
+
+    # Iterate over your repositories
+    while (my $repo = $repos->next_repo) { ...; }
+    # Iterate over all public repositories
+    while (my $repo = $repos->next_all_repo(500)) { ...; }
+    # Iterate over repositories of another user
+    while (my $repo = $repos->next_user_repo('c9s')) { ...; }
+    # Iterate over repositories of an organisation
+    while (my $repo = $repos->next_org_repo('perlchina','public')) { ...; }
+
 =item create
 
     # create for yourself
@@ -416,6 +541,9 @@ B<To ease the keyboard, we provied two ways to call any method which starts with
     my @tags = $repos->tags;
     my @branches = $repos->branches;
     my $branch = $repos->branch('master');
+    while (my $contributor = $repos->next_contributor) { ...; }
+    while (my $team = $repos->next_team) { ... ; }
+    while (my $tags = $repos->next_tag) { ... ; }
 
 =back
 
@@ -434,6 +562,7 @@ L<http://developer.github.com/v3/repos/collaborators/>
 =item delete_collaborator
 
     my @collaborators = $repos->collaborators;
+    while (my $collaborator = $repos->next_collaborator) { ...; }
     my $is = $repos->is_collaborator('fayland');
     $repos->add_collaborator('fayland');
     $repos->delete_collaborator('fayland');
@@ -455,6 +584,7 @@ L<http://developer.github.com/v3/repos/commits/>
         author => 'fayland'
     });
     my $commit  = $repos->commit($sha);
+    while (my $commit = $repos->next_commit({...})) { ...; }
 
 =item comments
 
@@ -469,7 +599,9 @@ L<http://developer.github.com/v3/repos/commits/>
 =item delete_comment
 
     my @comments = $repos->comments;
+    while (my $comment = $repos->next_comment) { ...; }
     my @comments = $repos->commit_comments($sha);
+    while (my $comment = $repos->next_commit_comment($sha)) { ...; }
     my $comment  = $repos->create_comment($sha, {
         "body" => "Nice change",
         "commit_id" => "6dcb09b5b57875f334f61aebed695e2e4193db5e",
@@ -500,6 +632,7 @@ L<http://developer.github.com/v3/repos/forks/>
 =item create_fork
 
     my @forks = $repos->forks;
+    while (my $fork = $repos->next_fork) { ...; }
     my $fork = $repos->create_fork;
     my $fork = $repos->create_fork($org);
 
@@ -522,6 +655,7 @@ L<http://developer.github.com/v3/repos/keys/>
 =item delete_key
 
     my @keys = $repos->keys;
+    while (my $key = $repos->next_key) { ...; }
     my $key  = $repos->key($key_id); # get key
     $repos->create_key( {
         title => 'title',
@@ -544,6 +678,7 @@ L<http://developer.github.com/v3/repos/watching/>
 =item watchers
 
     my @watchers = $repos->watchers;
+    while (my $watcher = $repos->next_watcher) { ...; }
 
 =item watched
 
@@ -581,6 +716,10 @@ Watcher methods use the GitHub 'subscription' terminology.
 
 Returns a list of subscriber data hashes.
 
+=item next_subscriber
+
+Returns the next subscriber in the list, or undef if there are no more subscribers.
+
 =item is_subscribed
 
 Returns true or false if you are subscribed
@@ -617,6 +756,8 @@ L<http://developer.github.com/v3/repos/hooks/>
 
 =item hooks
 
+=item next_hook
+
 =item hook
 
 =item create_hook
@@ -628,6 +769,7 @@ L<http://developer.github.com/v3/repos/hooks/>
 =item delete_hook
 
     my @hooks = $repos->hooks;
+    while (my $hook = $repos->next_hook) { ...; }
     my $hook  = $repos->hook($hook_id);
     my $hook  = $repos->create_hook($hook_hash);
     my $hook  = $repos->update_hook($hook_id, $new_hook_hash);
@@ -667,6 +809,10 @@ Or:
 
     my @statuses = $repos->list_statuses('fayland', 'perl-net-github', $sha);
 
+=item next_status
+
+    while (my $status = $repos->next_status($sha)) { ...; }
+
 =item create_status
 
     $gh->set_default_user_repo('fayland', 'perl-net-github');
@@ -701,6 +847,7 @@ L<http://developer.github.com/v3/repos/releases/>
 =item releases
 
     my @releases = $repos->releases();
+    while (my $release = $repos->next_release) { ...; }
 
 =item release
 
@@ -732,6 +879,7 @@ L<http://developer.github.com/v3/repos/releases/>
 =item release_assets
 
     my @release_assets = $repos->release_assets($release_id);
+    while (my $asset = $repos->next_release_asset($release_id)) { ...; }
 
 =item upload_asset
 
@@ -768,6 +916,12 @@ L<http://developer.github.com/v3/repos/deployments/>
         'ref' => 'feature-branch',
     });
 
+=item next_deployment
+
+    while (my $deployment = $repos->next_deployment( $owner, $repo, {
+        'ref' => 'feature-branch',
+    }) { ...; }
+
 =item create_deployment
 
     my $response = $repos->create_deployment( $owner, $repo, {
@@ -778,6 +932,10 @@ L<http://developer.github.com/v3/repos/deployments/>
 =item list_deployment_statuses
 
     my $response = $repos->list_deployment_statuses( $owner, $repo, $deployment_id );
+
+=item next_deployment_status
+
+    while (my $status = next_deployment_status($o,$r,$id)) { ...; }
 
 =item create_deployment_status
 

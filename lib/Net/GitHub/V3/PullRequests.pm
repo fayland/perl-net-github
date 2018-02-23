@@ -11,6 +11,24 @@ use URI::Escape;
 with 'Net::GitHub::V3::Query';
 
 sub pulls {
+    my $self = shift;
+
+    return $self->query($self->_pulls_arg2url(@_));
+}
+
+sub next_pull {
+    my $self = shift;
+
+    return $self->next($self->_pulls_arg2url(@_));
+}
+
+sub close_pull {
+    my $self = shift;
+
+    return $self->close($self->_pulls_arg2url(@_));
+}
+
+sub _pulls_arg2url {
     my $self = shift @_;
     my $args = pop @_;
 
@@ -21,7 +39,7 @@ sub pulls {
 
     my $uri = URI->new('/repos/' . uri_escape($user) . '/' . uri_escape($repos) . '/pulls');
     $uri->query_form($args);
-    return $self->query($uri->as_string);
+    return $uri->as_string;
 }
 
 ## build methods on fly
@@ -32,20 +50,20 @@ my %__methods = (
     create_pull => { url => "/repos/%s/%s/pulls", method => "POST", args => 1 },
     update_pull => { url => "/repos/%s/%s/pulls/%s", method => "PATCH", args => 1 },
 
-    commits => { url => "/repos/%s/%s/pulls/%s/commits" },
-    files => { url => "/repos/%s/%s/pulls/%s/files" },
+    commits => { url => "/repos/%s/%s/pulls/%s/commits", paginate => 1 },
+    files => { url => "/repos/%s/%s/pulls/%s/files", paginate => 1 },
     is_merged => { url => "/repos/%s/%s/pulls/%s/merge", check_status => 204 },
     merge => { url => "/repos/%s/%s/pulls/%s/merge", method => "PUT" },
 
     # http://developer.github.com/v3/pulls/comments/
-    comments => { url => "/repos/%s/%s/pulls/%s/comments" },
+    comments => { url => "/repos/%s/%s/pulls/%s/comments", paginate => 1 },
     comment  => { url => "/repos/%s/%s/pulls/comments/%s" },
     create_comment => { url => "/repos/%s/%s/pulls/%s/comments", method => 'POST',  args => 1 },
     update_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'PATCH', args => 1 },
     delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'DELETE', check_status => 204 },
 
     # https://developer.github.com/v3/pulls/review_requests/
-    reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", preview => "black-cat-preview" },
+    reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", preview => "black-cat-preview", paginate => 1 },
     add_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'POST', args => 1, preview => "black-cat-preview" },
     delete_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'DELETE', check_status => 204, args => 1, preview => "black-cat-preview" },
 );
@@ -93,10 +111,11 @@ L<http://developer.github.com/v3/pulls/>
 
     my @pulls = $pull_request->pulls();
     my @pulls = $pull_request->pulls( { state => 'open' } );
+    while (my $pr = $pull_request->next_pull( { state => 'open' } )) { ...; }
 
 =item pull
 
-    my $pull  = $pull_request->pull($pull_id);
+    my $pull  = $pull_request->pull($pull_number);
 
 =item create_pull
 
@@ -108,21 +127,24 @@ L<http://developer.github.com/v3/pulls/>
         "head" => "octocat:new-feature",
         "base" => "master"
     } );
-    my $pull = $pull_request->update_pull( $pull_id, $new_pull_data );
+    my $pull = $pull_request->update_pull( $pull_number, $new_pull_data );
 
 =item commits
 
 =item files
 
-    my @commits = $pull_request->commits($pull_id);
-    my @files   = $pull_request->files($pull_id);
+    my @commits = $pull_request->commits($pull_number);
+    my @files   = $pull_request->files($pull_number);
+    while (my $commit = $pull_request->next_commit($pull_number)) { ...; }
+    while (my $file = $pull_request->next_file($pull_number)) { ...; }
+
 
 =item is_merged
 
 =item merge
 
-    my $is_merged = $pull_request->is_merged($pull_id);
-    my $result    = $pull_request->merge($pull_id);
+    my $is_merged = $pull_request->is_merged($pull_number);
+    my $result    = $pull_request->merge($pull_number);
 
 =back
 
@@ -142,9 +164,10 @@ L<http://developer.github.com/v3/pulls/comments/>
 
 =item delete_comment
 
-    my @comments = $pull_request->comments($pull_id);
+    my @comments = $pull_request->comments($pull_number);
+    while (my $comment = $pull_request->next_comment($pull_number)) { ...; }
     my $comment  = $pull_request->comment($comment_id);
-    my $comment  = $pull_request->create_comment($pull_id, {
+    my $comment  = $pull_request->create_comment($pull_number, {
         "body" => "a new comment",
         commit_id => '586fe4be94c32248043b344e99fa15c72b40d1c2',
         path => 'test',
@@ -169,11 +192,12 @@ L<https://developer.github.com/v3/pulls/review_requests/>
 
 =item delete_reviewers
 
-    my @reviewers = $pull_request->reviewers($pull_id);
-    my $result = $pull_request->add_reviewers($pull_id, {
+    my @reviewers = $pull_request->reviewers($pull_number);
+    while (my $reviewer = $pull_request->next_reviever($pull_number)) { ...; }
+    my $result = $pull_request->add_reviewers($pull_number, {
         reviewers => [$user1, $user2],
     );
-    my $result = $pull_request->delete_reviewers($pull_id, {
+    my $result = $pull_request->delete_reviewers($pull_number, {
         reviewers => [$user1, $user2],
     );
 

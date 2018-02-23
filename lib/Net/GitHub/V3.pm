@@ -222,7 +222,7 @@ from the API. By switching B<RaiseError> on you can make the be turned into
 exceptions instead, so that you don't have to check for error response after
 every call.
 
-=head3 next_url, last_url, prev_url, first_url, per_page
+=head3 Iterating over pages: next_url, last_url, prev_url, first_url, per_page
 
 Any methods which return multiple results I<may> be paginated. After performing
 a query you should check to see if there are more results. These attributes will
@@ -241,6 +241,47 @@ See Github's documentation: L<http://developer.github.com/v3/#pagination>
       ## OR ##
       push @issues, $gh->issue->next_page;
   }
+
+
+=head3 Iterating over individual items: next_xxx and close_xxx
+
+The queries which can return paginated results can also be evaluated one by
+one, like this:
+
+  while (my $issue = $gh->issue->next_repos_issue( @args )) {
+    # do something with $issue
+  }
+
+The arguments to next_repos_issue are the same as for repos_issues,
+and is also applicable to all other interfaces which offer a next_xxx
+method.  All available next_xxx methods are listed in the
+documentation of the corresponding modules, see the list below.
+
+If you loop over the next_xxx interfaces, new API calls will be
+performed automatically, but only when needed to fetch more items.  An
+undefined return value means there are no more items.
+
+To start over with the first item, you need to close the iteration.
+Every next_xxx method has a corresponding close_xxx method which must
+be called with exactly the same parameters as the next_xxx method to
+take effect:
+
+  $gh->issue->close_repos_issue(@args);
+
+If you use Net::GitHub::V3 in a command line program, there is no need
+to call the close_xxx methods at all.  As soon as the Net::GitHub::V3
+object $gh goes out of scope, everything is neatly cleaned up.
+
+However, if you have a long-lived Net::GitHub::V3 object, e.g. in a
+persistent service process which provides an own interface to its
+users and talks to GitHub under the hood, then it is advisable to
+close the iterations when you're done with them.
+
+For brevity and because they usually are not needed, the close_xxx
+methods are not listed with their modules.  It is guaranteed that
+I<every> next_xxx method has a corresponding close_xxx method.
+
+
 
 =head3 ua
 
@@ -304,7 +345,7 @@ L<Net::GitHub::V3::Repos>
 =head3 issue
 
     my @issues = $gh->issue->issues();
-    my $issue  = $gh->issue->issue($issue_id);
+    my $issue  = $gh->issue->issue($issue_number);
 
 L<Net::GitHub::V3::Issues>
 

@@ -11,20 +11,54 @@ with 'Net::GitHub::V3::Query';
 
 sub issues {
     my $self = shift;
-    my $args = @_ % 2 ? shift : { @_ };
 
+    return $self->query(_issues_arg2url(@_));
+}
+
+sub next_issue {
+    my $self = shift;
+
+    return $self->next(_issues_arg2url(@_));
+}
+
+sub close_issue {
+    my $self = shift;
+
+    return $self->close(_issues_arg2url(@_));
+}
+
+
+sub _issues_arg2url {
+    my $args = @_ % 2 ? shift : { @_ };
     my @p;
     foreach my $p (qw/filter state labels sort direction since/) {
         push @p, "$p=" . $args->{$p} if exists $args->{$p};
     }
     my $u = '/issues';
     $u .= '?' . join('&', @p) if @p;
-    return $self->query($u);
+    return $u;
 }
 
 sub repos_issues {
     my $self = shift;
 
+    return $self->query($self->_repos_issues_arg2url(@_));
+}
+
+sub next_repos_issue {
+    my $self = shift;
+
+    return $self->next($self->_repos_issues_arg2url(@_));
+}
+
+sub close_repos_issue {
+    my $self = shift;
+
+    return $self->close($self->_repos_issues_arg2url(@_));
+}
+
+sub _repos_issues_arg2url {
+    my $self = shift;
     if (@_ < 2) {
         unshift @_, $self->repo;
         unshift @_, $self->u;
@@ -37,7 +71,7 @@ sub repos_issues {
     }
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/issues';
     $u .= '?' . join('&', @p) if @p;
-    return $self->query($u);
+    return $u;
 }
 
 ## build methods on fly
@@ -48,29 +82,29 @@ my %__methods = (
     update_issue => { url => "/repos/%s/%s/issues/%s", method => 'PATCH', args => 1 },
 
     ## http://developer.github.com/v3/issues/comments/
-    comments => { url => "/repos/%s/%s/issues/%s/comments" },
+    comments => { url => "/repos/%s/%s/issues/%s/comments", paginate => 1 },
     comment  => { url => "/repos/%s/%s/issues/comments/%s" },
     create_comment => { url => "/repos/%s/%s/issues/%s/comments", method => 'POST',  args => 1 },
     update_comment => { url => "/repos/%s/%s/issues/comments/%s", method => 'PATCH', args => 1 },
     delete_comment => { url => "/repos/%s/%s/issues/comments/%s", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/issues/events/
-    events => { url => "/repos/%s/%s/issues/%s/events" },
-    repos_events => { url => "/repos/%s/%s/issues/events" },
+    events => { url => "/repos/%s/%s/issues/%s/events", paginate => 1 },
+    repos_events => { url => "/repos/%s/%s/issues/events" , paginate => 1 },
     event => { url => "/repos/%s/%s/issues/events/%s" },
 
     # http://developer.github.com/v3/issues/labels/
-    labels => { url => "/repos/%s/%s/labels" },
+    labels => { url => "/repos/%s/%s/labels", paginate => 1 },
     label  => { url => "/repos/%s/%s/labels/%s" },
     create_label => { url => "/repos/%s/%s/labels", method => 'POST', args => 1 },
     update_label => { url => "/repos/%s/%s/labels/%s", method => 'PATCH', args => 1 },
     delete_label => { url => "/repos/%s/%s/labels/%s", method => 'DELETE', check_status => 204 },
-    issue_labels => { url => "/repos/%s/%s/issues/%s/labels" },
+    issue_labels => { url => "/repos/%s/%s/issues/%s/labels", paginate => 1 },
     create_issue_label  => { url => "/repos/%s/%s/issues/%s/labels", method => 'POST', args => 1 },
     delete_issue_label  => { url => "/repos/%s/%s/issues/%s/labels/%s", method => 'DELETE', check_status => 204 },
     replace_issue_label => { url => "/repos/%s/%s/issues/%s/labels", method => 'PUT', args => 1 },
     delete_issue_labels => { url => "/repos/%s/%s/issues/%s/labels", method => 'DELETE', check_status => 204 },
-    milestone_labels => { url => "/repos/%s/%s/milestones/%s/labels" },
+    milestone_labels => { url => "/repos/%s/%s/milestones/%s/labels", paginate => 1 },
 
     # http://developer.github.com/v3/issues/milestones/
     milestone  => { url => "/repos/%s/%s/milestones/%s" },
@@ -85,6 +119,24 @@ __build_methods(__PACKAGE__, %__methods);
 sub milestones {
     my $self = shift;
 
+    return $self->query($self->_milestones_arg2url(@_));
+}
+
+sub next_milestone {
+    my $self = shift;
+
+    return $self->next($self->_milestones_arg2url(@_));
+}
+
+sub close_milestone {
+    my $self = shift;
+
+    return $self->close($self->_milestones_arg2url(@_));
+}
+
+sub _milestones_arg2url {
+    my $self = shift;
+
     if (@_ < 3) {
         unshift @_, $self->repo;
         unshift @_, $self->u;
@@ -97,7 +149,7 @@ sub milestones {
     }
     my $u = "/repos/" . uri_escape($user) . "/" . uri_escape($repos) . '/milestones';
     $u .= '?' . join('&', @p) if @p;
-    return $self->query($u);
+    return $u;
 }
 
 no Moo;
@@ -130,6 +182,10 @@ L<http://developer.github.com/v3/issues/>
 
     my @issues = $issue->issues();
     my @issues = $issue->issues(filter => 'assigned', state => 'open');
+    while (my $next_issue = $issues->next_issue(...)) { ...; }
+
+Returns issues assigned to the authenticated user.
+
 
 =back
 
@@ -153,10 +209,11 @@ B<To ease the keyboard, we provied two ways to call any method which starts with
     my @issues = $issue->repos_issues($user, $repos);
     my @issues = $issue->repos_issues( { state => 'open' } );
     my @issues = $issue->repos_issues($user, $repos, { state => 'open' } );
+    while (my $r_issue = $issue->next_repos_issue(...)) { ...; }
 
 =item issue
 
-    my $issue = $issue->issue($issue_id);
+    my $issue = $issue->issue($issue_number);
 
 =item create_issue
 
@@ -173,7 +230,7 @@ B<To ease the keyboard, we provied two ways to call any method which starts with
 
 =item update_issue
 
-    my $isu = $issue->update_issue( $issue_id, {
+    my $isu = $issue->update_issue( $issue_number, {
         state => 'closed'
     } );
 
@@ -195,9 +252,10 @@ L<http://developer.github.com/v3/issues/comments/>
 
 =item delete_comment
 
-    my @comments = $issue->comments($issue_id);
+    my @comments = $issue->comments($issue_number);
+    while (my $comment = $issue->next_comment($issue_number)) { ...; }
     my $comment  = $issue->comment($comment_id);
-    my $comment  = $issue->create_comment($issue_id, {
+    my $comment  = $issue->create_comment($issue_number, {
         "body" => "a new comment"
     });
     my $comment = $issue->update_comment($comment_id, {
@@ -217,8 +275,10 @@ L<http://developer.github.com/v3/issues/events/>
 
 =item repos_events
 
-    my @events = $issue->events($issue_id);
+    my @events = $issue->events($issue_number);
+    while (my $event = $issue->next_event($issue_number)) { ...; }
     my @events = $issue->repos_events;
+    while (my $r_event = $issue->next_repos_event) { ...; }
     my $event  = $issue->event($event_id);
 
 =back
@@ -240,6 +300,7 @@ L<http://developer.github.com/v3/issues/labels/>
 =item delete_label
 
     my @labels = $issue->labels;
+    while (my $label = $issue->next_label) { ...; }
     my $label  = $issue->label($label_name);
     my $label  = $issue->create_label( {
         "name" => "API",
@@ -263,12 +324,13 @@ L<http://developer.github.com/v3/issues/labels/>
 
 =item milestone_labels
 
-    my @labels = $issue->issue_label($issue_id);
-    my @labels = $issue->create_issue_label($issue_id, ['New Label']);
-    my $st = $issue->delete_issue_label($issue_id, $label_name);
-    my @labels = $issue->replace_issue_label($issue_id, ['New Label']);
-    my $st = $issue->delete_issue_labels($issue_id);
-    my @lbales = $issue->milestone_labels($milestone_id);
+    my @labels = $issue->issue_labels($issue_number);
+    my @labels = $issue->create_issue_label($issue_number, ['New Label']);
+    my $st = $issue->delete_issue_label($issue_number, $label_name);
+    my @labels = $issue->replace_issue_label($issue_number, ['New Label']);
+    my $st = $issue->delete_issue_labels($issue_number);
+    my @lables = $issue->milestone_labels($milestone_id);
+    while (my $label = $issue->next_milestone_label($milestone_id)) { ...; }
 
 =back
 
@@ -290,6 +352,7 @@ L<http://developer.github.com/v3/issues/milestones/>
 
     my @milestones = $issue->milestones;
     my @milestones = $issue->milestones( { state => 'open' } );
+    while (my $milestone = $issue->next_milestone( ... )) { ...; }
     my $milestone  = $issue->milestone($milestone_id);
     my $milestone  = $issue->create_milestone( {
         "title" => "String",

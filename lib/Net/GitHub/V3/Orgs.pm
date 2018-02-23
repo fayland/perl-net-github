@@ -16,18 +16,32 @@ sub orgs {
     return $self->query($u);
 }
 
+sub next_org {
+    my ( $self, $user ) = @_;
+
+    my $u = $user ? "/users/" . uri_escape($user) . '/orgs' : '/user/orgs';
+    return $self->next($u);
+}
+
+sub close_org {
+    my ( $self, $user ) = @_;
+
+    my $u = $user ? "/users/" . uri_escape($user) . '/orgs' : '/user/orgs';
+    return $self->close($u);
+}
+
 ## build methods on fly
 my %__methods = (
     org => { url => "/orgs/%s" },
     update_org => { url => "/orgs/%s", method => 'PATCH', args => 1 },
     # Members
-    members   => { url => "/orgs/%s/members" },
-    owner_members => { url => "/orgs/%s/members?role=admin" },
-    no_2fa_members => { url => "/orgs/%s/members?filter=2fa_disabled" },
-    outside_collaborators => { url => "/orgs/%s/outside_collaborators" },
+    members   => { url => "/orgs/%s/members", paginate => 1 },
+    owner_members => { url => "/orgs/%s/members?role=admin", paginate => 1 },
+    no_2fa_members => { url => "/orgs/%s/members?filter=2fa_disabled", paginate => 1 },
+    outside_collaborators => { url => "/orgs/%s/outside_collaborators", paginate => 1 },
     is_member => { url => "/orgs/%s/members/%s", check_status => 204 },
     delete_member => { url => "/orgs/%s/members/%s", method => 'DELETE', check_status => 204 },
-    public_members => { url => "/orgs/%s/public_members" },
+    public_members => { url => "/orgs/%s/public_members", paginate => 1 },
     is_public_member => { url => "/orgs/%s/public_members/%s", check_status => 204 },
     publicize_member => { url => "/orgs/%s/public_members/%s", method => 'PUT', check_status => 204 },
     conceal_member => { url => "/orgs/%s/public_members/%s", method => 'DELETE', check_status => 204 },
@@ -35,17 +49,17 @@ my %__methods = (
     update_membership => { url => "/orgs/:org/memberships/:username", method => 'PUT', args => 1 },
     delete_membership => { url => "/orgs/:org/memberships/:username", method => 'DELETE', check_status => 204 },
     # Org Teams API
-    teams => { url => "/orgs/%s/teams" },
+    teams => { url => "/orgs/%s/teams", paginate => 1 },
     team  => { url => "/teams/%s" },
     create_team => { url => "/orgs/%s/teams", method => 'POST', args => 1 },
     update_team => { url => "/teams/%s", method => 'PATCH', args => 1 },
     delete_team => { url => "/teams/%s", method => 'DELETE', check_status => 204 },
-    team_members => { url => "/teams/%s/members" },
+    team_members => { url => "/teams/%s/members", paginate => 1 },
     is_team_member  => { url => "/teams/%s/members/%s", check_status => 204 },
     add_team_member => { url => "/teams/%s/members/%s", method => 'PUT', check_status => 204 },
     delete_team_member => { url => "/teams/%s/members/%s", method => 'DELETE', check_status => 204 },
-    team_maintainers => { url => "/teams/%s/members?role=maintainer" },
-    team_repos => { url => "/teams/%s/repos" },
+    team_maintainers => { url => "/teams/%s/members?role=maintainer", paginate => 1 },
+    team_repos => { url => "/teams/%s/repos", paginate => 1 },
     is_team_repos  => { url => "/teams/%s/repos/%s", check_status => 204 },
     add_team_repos => { url => "/teams/%s/repos/%s", method => 'PUT', args => 1, check_status => 204 },
     delete_team_repos => { url => "/teams/%s/repos/%s", method => 'DELETE', check_status => 204 },
@@ -82,6 +96,7 @@ L<http://developer.github.com/v3/orgs/>
 
     my @orgs = $org->orgs(); # /user/org
     my @orgs = $org->orgs( 'nothingmuch' ); # /users/:user/org
+    while (my $o = $org->next_org) { ...; }
 
 =item org
 
@@ -106,6 +121,7 @@ L<http://developer.github.com/v3/orgs/members/>
 =item delete_member
 
     my @members = $org->members('perlchina');
+    while (my $m = $org->next_member) { ...; }
     my $is_member = $org->is_member('perlchina', 'fayland');
     my $st = $org->delete_member('perlchina', 'fayland');
 
@@ -118,6 +134,7 @@ L<http://developer.github.com/v3/orgs/members/>
 =item conceal_member
 
     my @members = $org->public_members('perlchina');
+    while (my $public_member = $org->next_public_member) { ...; }
     my $is_public_member = $org->is_public_member('perlchina', 'fayland');
     my $st = $org->publicize_member('perlchina', 'fayland');
     my $st = $org->conceal_member('perlchina', 'fayland');
@@ -125,14 +142,17 @@ L<http://developer.github.com/v3/orgs/members/>
 =item owner_members
 
     my @admins = $org->owner_members('perlchina');
+    while (my $admin = $org->next_owner_member) { ...; }
 
 =item no_2fa_members
 
     my @no_2fa_members = $org->no_2fa_members('perlchina');
+    while (my $n2a_m = $org->next_no_2fa_member) { ...; }
 
 =item outside_collaborators
 
     my @collaborators = $org->outside_collaborators('perlchina');
+    while (my $helper = $org->next_outside_collaborator) { ...; }
 
 =item membership
 
@@ -165,6 +185,8 @@ L<http://developer.github.com/v3/orgs/teams/>
 =item delete_team
 
     my @teams = $org->teams('perlchina');
+    while (my $team = $org->next_team('perlchina')) { ...; }
+
     my $team  = $org->team($team_id);
     my $team  = $org->create_team('perlchina', {
         "name" => "new team"
@@ -183,6 +205,7 @@ L<http://developer.github.com/v3/orgs/teams/>
 =item delete_team_member
 
     my @members = $org->team_members($team_id);
+    while (my $member = $org->next_team_member($team_id)) { ...; }
     my $is_team_member = $org->is_team_member($team_id, 'fayland');
     my $st = $org->add_team_member($team_id, 'fayland');
     my $st = $org->delete_team_member($team_id, 'fayland');
@@ -190,6 +213,7 @@ L<http://developer.github.com/v3/orgs/teams/>
 =item team_maintainers
 
     my @maintainers = $org->team_maintainers($team_id);
+    while (my $maintainer = $org->next_team_maintainer($team_id)) { ...; }
 
 =item team_repos
 
@@ -200,6 +224,8 @@ L<http://developer.github.com/v3/orgs/teams/>
 =item delete_item_repos
 
     my @repos = $org->team_repos($team_id);
+    while (my $repo = $org->next_team_repo($team_id)) { ...; }
+
     my $is_team_repos = $org->is_team_repos($team_id, 'Hello-World');
     my $st = $org->add_team_repos($team_id, 'Hello-World');
     my $st = $org->add_team_repos($team_id, 'YoinkOrg/Hello-World', { permission => 'admin' });
