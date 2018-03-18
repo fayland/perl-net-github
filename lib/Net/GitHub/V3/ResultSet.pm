@@ -19,7 +19,7 @@ __END__
 
 =head1 NAME
 
-Net::GitHub::V3::ResultSet
+Net::GitHub::V3::ResultSet - GitHub query iteration helper
 
 =head1 SYNOPSIS
 
