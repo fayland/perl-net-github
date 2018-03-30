@@ -63,9 +63,9 @@ my %__methods = (
     delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'DELETE', check_status => 204 },
 
     # https://developer.github.com/v3/pulls/review_requests/
-    reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", preview => "black-cat-preview", paginate => 1 },
-    add_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'POST', args => 1, preview => "black-cat-preview" },
-    delete_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'DELETE', check_status => 204, args => 1, preview => "black-cat-preview" },
+    reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", paginate => 1 },
+    add_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'POST', args => 1 },
+    delete_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'DELETE', check_status => 204, args => 1 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
