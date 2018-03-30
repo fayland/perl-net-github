@@ -193,12 +193,13 @@ L<https://developer.github.com/v3/pulls/review_requests/>
 =item delete_reviewers
 
     my @reviewers = $pull_request->reviewers($pull_number);
-    while (my $reviewer = $pull_request->next_reviever($pull_number)) { ...; }
     my $result = $pull_request->add_reviewers($pull_number, {
         reviewers => [$user1, $user2],
+        team_reviewers => [$team1],
     );
     my $result = $pull_request->delete_reviewers($pull_number, {
         reviewers => [$user1, $user2],
+        team_reviewers => [$team1],
     );
 
 =back
