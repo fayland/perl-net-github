@@ -70,7 +70,7 @@
          "web" : "https://github.com/fayland/perl-net-github"
       }
    },
-   "version" : "0.94",
+   "version" : "0.95",
    "x_contributors" : [
       "Alan Berndt <alan@eatabrick.org>",
       "Alex Muntada <alexm@alexm.org>",
@@ -89,6 +89,7 @@
       "franck cuny <franck@lumberjaph.net>",
       "Graham Knop <haarg@haarg.org>",
       "Grant McLean <grant@catalyst.net.nz>",
+      "gregor herrmann <gregoa@debian.org>",
       "Harald J\u00f6rg <Harald.Joerg@arcor.de>",
       "hiroraba <xornelius0313@gmail.com>",
       "Hristo Dragolov <hdragolov@gmail.com>",

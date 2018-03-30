@@ -2,6 +2,9 @@ Revision history for Net-GitHub
 
 {{$NEXT}}
 
+0.95  2018-03-30 14:49:06 CST
+        - Review Requests API became an official part of API v3 (waniji)
+
 0.94  2018-02-23 09:15:32 CST
         - Add item-per-item iteration (HaraldJoerg)
 
