@@ -48,9 +48,9 @@ has 'total_pages'  => ( is => 'rw', isa => Str, default => 0 );
 has 'RaiseError' => ( is => 'rw', isa => Bool, default => 1 );
 
 # Rate limits
-has 'rate_limit' => ( is => 'rw', isa => Int, default => 0 );
-has 'rate_limit_remaining' => ( is => 'rw', isa => Int, default => 0 );
-has 'rate_limit_reset' => ( is => 'rw', isa => Str, default => 0 );
+has 'rate_limit'           => ( is => 'rw', isa => Int, default => sub { shift->update_rate_limit('rate_limit') } );
+has 'rate_limit_remaining' => ( is => 'rw', isa => Int, default => sub { shift->update_rate_limit('rate_limit_remaining') } );
+has 'rate_limit_reset'     => ( is => 'rw', isa => Str, default => sub { shift->update_rate_limit('rate_limit_reset') } );
 
 # optional
 has 'u'  => (is => 'rw', isa => Str);
@@ -60,6 +60,18 @@ has 'repo' => (is => 'rw', isa => Str);
 has 'accept_version' => (is => 'rw', isa => Str, default => '');
 
 has 'is_main_module' => (is => 'ro', isa => Bool, default => 0);
+
+sub update_rate_limit {
+    my ( $self, $what ) = @_;
+
+    # If someone calls rate_limit before an API query happens, force these fields to update before giving back a response.
+    # Per github: Accessing this endpoint does not count against your REST API rate limit.
+    # https://developer.github.com/v3/rate_limit/
+    my $content = $self->query('/rate_limit');
+
+    return $self->{$what};
+}
+
 sub set_default_user_repo {
     my ($self, $user, $repo) = @_;
 
@@ -550,6 +562,10 @@ The number of requests remaining in the current rate limit window.
 =item rate_limit_reset
 
 The time the current rate limit resets in UTC epoch seconds.
+
+=item update_rate_limit
+
+Query the /rate_limit API (for free) to update the cached values for rate_limit, rate_limit_remaining, rate_limit_reset
 
 =item last_page
 
