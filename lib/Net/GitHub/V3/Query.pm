@@ -221,7 +221,7 @@ sub query {
     $req->accept_decodable;
     if ($data) {
         my $json = $self->json->encode($data);
-        print STDERR ">>> $data\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
+        print STDERR ">>> $json\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
         $req->content($json);
     }
     $req->header( 'Content-Length' => length $req->content );
