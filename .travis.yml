@@ -1,14 +1,19 @@
 branches:
   except:
     - gh-pages
+sudo: false
 language: perl
-perl:
-  - "5.10"
-  - "5.12"
-  - "5.14"
-  - "5.16"
-  - "5.18"
-  - "5.20"
-  - "5.22"
+matrix:
+    include:
+        - perl: "5.24"
+        - perl: "5.22"
+        - perl: "5.20"
+          dist: trusty
+        - perl: "5.18"
+          dist: trusty
+        - perl: "5.16"
+          dist: trusty
+        - perl: "5.14"
+          dist: trusty
 
-script: "perl Makefile.PL && make test"
+script: "perl Makefile.PL && make && make test"
