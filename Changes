@@ -2,6 +2,9 @@ Revision history for Net-GitHub
 
 {{$NEXT}}
 
+0.96  2020-03-06 15:39:32 CST
+        - add support for deprecation warnings #92 (grantm)
+
 0.95  2018-03-30 14:49:06 CST
         - Review Requests API became an official part of API v3 (waniji)
 

@@ -2,7 +2,7 @@ package Net::GitHub::V3::PullRequests;
 
 use Moo;
 
-our $VERSION = '0.95';
+our $VERSION = '0.96';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;
