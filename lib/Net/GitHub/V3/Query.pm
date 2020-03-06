@@ -44,6 +44,10 @@ has 'prev_url'  => ( is => 'rw', isa => Str, predicate => 'has_prev_page',  clea
 has 'per_page'  => ( is => 'rw', isa => Str, default => 100 );
 has 'total_pages'  => ( is => 'rw', isa => Str, default => 0 );
 
+# deprecation
+has 'deprecation_url' => ( is => 'rw', isa => Str );
+has 'alternate_url'   => ( is => 'rw', isa => Str );
+
 # Error handle
 has 'RaiseError' => ( is => 'rw', isa => Bool, default => 1 );
 
@@ -351,8 +355,21 @@ sub _extract_link_url {
         $link_url =~ s/^<//;
         $link_url =~ s/>$//;
 
-        $rel =~ m/rel="(next|last|first|prev)"/;
-        $rel = $1;
+        if( $rel =~ m/rel="(next|last|first|prev|deprecation|alternate)"/ ){
+            $rel = $1;
+        }
+        elsif( $rel=~ m/rel="(.*?)"/ ){
+            warn "Unexpected link rel='$1' in '$str'";
+            next;
+        }
+        else {
+            warn "Unable to process link rel in '$str'";
+            next;
+        }
+
+        if( $rel eq 'deprecation' ){
+            warn "Deprecation warning: $link_url\n";
+        }
 
         my $url_attr = $rel . "_url";
         $self->$url_attr($link_url);
