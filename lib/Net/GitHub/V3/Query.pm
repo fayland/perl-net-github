@@ -444,13 +444,13 @@ sub __build_methods {
         my $preview_version = $v->{preview};
         my $paginate = $v->{paginate};
 
+        # count how much %s inside u
+        my $n = 0; while ($url =~ /\%s/g) { $n++ }
+
         no strict 'refs';
         no warnings 'once';
         *{"${package}::${m}"} = sub {
             my $self = shift;
-
-            # count how much %s inside u
-            my $n = 0; while ($url =~ /\%s/g) { $n++ }
 
             ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
             if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
