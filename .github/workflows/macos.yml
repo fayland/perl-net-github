@@ -1,0 +1,50 @@
+name: macos
+
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+  pull_request:
+
+jobs:
+  perl:
+
+    runs-on: macOS-latest
+
+    env:
+       PERL_USE_UNSAFE_INC: 0
+       AUTHOR_TESTING: 1
+       AUTOMATED_TESTING: 1
+       RELEASE_TESTING: 1
+       PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Perl
+        run: brew install perl
+      - name: perl -V
+        run: perl -V
+      - name: install cpm
+        run: |
+          curl -fsSL --compressed https://git.io/cpm > cpm
+          chmod +x cpm
+          ./cpm --version
+      - name: Install Dependencies CI
+        run: PERL_USE_UNSAFE_INC=1 ./cpm install -g --show-build-log-on-failure --cpanfile cpanfile.ci
+      - name: Install Dependencies
+        run: ./cpm install -g --show-build-log-on-failure --cpanfile cpanfile
+      - name: perl Makefile.PL
+        run: perl Makefile.PL
+      - name: make
+        run: make
+      - name: Run Tests
+        run: make test
+      # - name: Run Author Tests
+      #   env:
+      #     GITHUB_USER: ${{ github.actor }}
+      #     # or also $secrets.GITHUB_TOKEN
+      #     GITHUB_PASS: ${{ github.token }}
+      #     GITHUB_ACCESS_TOKEN: ${{ github.token }}
+      #   run: prove -vl xt/**/*.t

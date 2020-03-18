@@ -10,6 +10,9 @@ use Net::GitHub::V3;
 # if at some time there are not enough open issues!
 # This test makes two API calls.
 
+plan skip_all => 'Skip for AUTOMATED_TESTING'
+     if $ENV{AUTOMATED_TESTING};
+
 plan skip_all => 'Please export environment variable GITHUB_USER/GITHUB_PASS'
      unless $ENV{GITHUB_USER} and $ENV{GITHUB_PASS};
 

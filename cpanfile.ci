@@ -1,0 +1,2 @@
+# these modules need to be installed earlier using PERL_USE_UNSAFE_INC=1
+requires 'Cache::LRU';
