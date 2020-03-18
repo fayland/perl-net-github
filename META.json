@@ -70,7 +70,7 @@
          "web" : "https://github.com/fayland/perl-net-github"
       }
    },
-   "version" : "0.96",
+   "version" : "0.97",
    "x_contributors" : [
       "Alan Berndt <alan@eatabrick.org>",
       "Alex Muntada <alexm@alexm.org>",
@@ -116,6 +116,7 @@
       "sunnavy <sunnavy@bestpractical.com>",
       "Tim Vroom <vroom@blockstackers.com>",
       "Todd Rinaldo <toddr@cpanel.net>",
+      "Todd Rinaldo <toddr@cpan.org>",
       "unknown <Administrator@.(none)>",
       "Vincent Lequertier <sky@riseup.net>",
       "Will Orr <will@worrbase.com>",

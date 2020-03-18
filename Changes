@@ -2,6 +2,9 @@ Revision history for Net-GitHub
 
 {{$NEXT}}
 
+0.97  2020-03-18 09:21:16 CST
+        - Fetch rate limit if it is not set. (toddr)
+
 0.96  2020-03-06 15:39:32 CST
         - add support for deprecation warnings #92 (grantm)
 
