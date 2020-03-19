@@ -52,9 +52,12 @@ has 'alternate_url'   => ( is => 'rw', isa => Str );
 has 'RaiseError' => ( is => 'rw', isa => Bool, default => 1 );
 
 # Rate limits
-has 'rate_limit'           => ( is => 'rw', isa => Int, default => sub { shift->update_rate_limit('rate_limit') } );
-has 'rate_limit_remaining' => ( is => 'rw', isa => Int, default => sub { shift->update_rate_limit('rate_limit_remaining') } );
-has 'rate_limit_reset'     => ( is => 'rw', isa => Str, default => sub { shift->update_rate_limit('rate_limit_reset') } );
+# has 'rate_limit'           => ( is => 'rw', isa => Int, default => sub { shift->update_rate_limit('rate_limit') } );
+# has 'rate_limit_remaining' => ( is => 'rw', isa => Int, default => sub { shift->update_rate_limit('rate_limit_remaining') } );
+# has 'rate_limit_reset'     => ( is => 'rw', isa => Str, default => sub { shift->update_rate_limit('rate_limit_reset') } );
+has 'rate_limit'           => ( is => 'rw', isa => Int, default => sub { 0 } );
+has 'rate_limit_remaining' => ( is => 'rw', isa => Int, default => sub { 0 } );
+has 'rate_limit_reset'     => ( is => 'rw', isa => Str, default => sub { 0 } );
 
 # optional
 has 'u'  => (is => 'rw', isa => Str);
