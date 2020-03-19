@@ -3,6 +3,7 @@
 use Test::More;
 use Net::GitHub::V3;
 
+plan skip_all => 'Resource not accessible by integration' if $ENV{AUTOMATED_TESTING};
 plan skip_all => 'Please export environment variable GITHUB_USER/GITHUB_PASS'
      unless $ENV{GITHUB_USER} and $ENV{GITHUB_PASS};
 

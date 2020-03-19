@@ -493,7 +493,7 @@ sub __build_methods {
                 }
 
                 # make url, replace %s with real args
-                my @uargs = splice(@_, 0, $n);
+                my @uargs = map { defined $_ ? $_ : '' } splice(@_, 0, $n);
                 my $u = sprintf($url, @uargs);
 
                 # if preview API, set preview version

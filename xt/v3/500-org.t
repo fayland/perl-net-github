@@ -28,11 +28,16 @@ is($o->{name}, 'PerlChina');
 
 =cut
 
-my $is_member = $org->is_member('perlchina', 'fayland');
-is($is_member, 1);
-$is_member = $org->is_member('perlchina', 'nothingmuch');
-is($is_member, 0);
-my $membership = $org->membership('perlchina', 'fayland');
-is($membership->{state}, 'active');
+SKIP: {
+	skip 'Resource not accessible by integration', 3 if $ENV{AUTOMATED_TESTING};
+
+	my $is_member = $org->is_member('perlchina', 'fayland');
+	is($is_member, 1);
+	$is_member = $org->is_member('perlchina', 'nothingmuch');
+	is($is_member, 0);
+
+	my $membership = $org->membership('perlchina', 'fayland');
+	is($membership->{state}, 'active');
+}
 
 done_testing;

@@ -16,24 +16,30 @@ diag( 'Using user = ' . $ENV{GITHUB_USER} );
 ok( $gh );
 ok( $user );
 
-# Remember the original value of bio
-my $ou = $user->show();
-my $obio = $ou->{bio};
+SKIP: {
+    skip 'Resource not accessible by integration', 4 if $ENV{AUTOMATED_TESTING};
 
-diag( 'Updating ..' );
-my $bio = 'Testing Net::GitHub - please come back in a minute';
-my $uu = $user->update( bio => $bio );
-is($uu->{bio}, $bio);
+    # Remember the original value of bio
+    my $ou = $user->show();
+    my $obio = $ou->{bio};
 
-sleep 1;
-my $u = $user->show();
-is($u->{bio}, $bio);
-delete $u->{updated_at}; delete $uu->{updated_at};
-is_deeply($u, $uu);
+    diag( 'Updating ..' );
+    my $bio = 'Testing Net::GitHub - please come back in a minute';
+    my $uu = $user->update( bio => $bio );
+    is($uu->{bio}, $bio);
 
-# Restore bio
-my $ru = $user->update( bio => $obio );
-is($ru->{bio},$obio,"Value of user's Bio restored");
+    sleep 1;
+    my $u = $user->show();
+    is($u->{bio}, $bio);
+    delete $u->{updated_at}; delete $uu->{updated_at};
+    is_deeply($u, $uu);
+
+    # Restore bio
+    my $ru = $user->update( bio => $obio );
+    is($ru->{bio},$obio,"Value of user's Bio restored");
+
+}
+
 =pod
 
 diag("Testing follow/unfollow");
