@@ -70,7 +70,7 @@
          "web" : "https://github.com/fayland/perl-net-github"
       }
    },
-   "version" : "0.97",
+   "version" : "0.98",
    "x_contributors" : [
       "Alan Berndt <alan@eatabrick.org>",
       "Alex Muntada <alexm@alexm.org>",
@@ -112,6 +112,7 @@
       "mschilli <github@perlmeister.com>",
       "nebulous <nebulous@crashed.net>",
       "Neil Bowers <neil@bowers.com>",
+      "Nicolas R <cpan@atoomic.org>",
       "sillymoose <davidnmfarrell@gmail.com>",
       "sunnavy <sunnavy@bestpractical.com>",
       "Tim Vroom <vroom@blockstackers.com>",

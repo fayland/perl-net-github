@@ -2,6 +2,9 @@ Revision history for Net-GitHub
 
 {{$NEXT}}
 
+0.98  2020-03-19 09:29:14 CST
+        - rollback update_rate_limit since it requires permissions
+
 0.97  2020-03-18 09:21:16 CST
         - Fetch rate limit if it is not set. (toddr)
 
