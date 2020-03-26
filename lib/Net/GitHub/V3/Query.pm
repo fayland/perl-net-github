@@ -230,7 +230,7 @@ sub query {
             my $uri = URI->new($url);
             my %query_form = $uri->query_form;
             $query_form{per_page} ||= $self->per_page;
-            $uri->query_form(%query_form);
+            $uri->query_form(%query_form, ref $data eq 'HASH' ? %$data : () );
             $url = $uri->as_string;
         }
     }
@@ -446,6 +446,7 @@ sub __build_methods {
         my $is_u_repo = $v->{is_u_repo}; # need auto shift u/repo
         my $preview_version = $v->{preview};
         my $paginate = $v->{paginate};
+        my $version  = $v->{v} || $v->{version} || 1; # version for the accessor
 
         # count how much %s inside u
         my $n = 0; while ($url =~ /\%s/g) { $n++ }
@@ -455,20 +456,52 @@ sub __build_methods {
         *{"${package}::${m}"} = sub {
             my $self = shift;
 
+            my ( $u, @qargs );
             ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
-            if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
-                unshift @_, ($self->u, $self->repo);
-            }
+            if ( $version == 1 ) {
+                if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
+                    unshift @_, ($self->u, $self->repo);
+                }
 
-            # make url, replace %s with real args
-            my @uargs = splice(@_, 0, $n);
-            my $u = sprintf($url, @uargs);
+                # make url, replace %s with real args
+                my @uargs = splice(@_, 0, $n);
+                $u = sprintf($url, @uargs);
+
+                # args for json data POST
+                @qargs = $args ? splice(@_, 0, $args) : ();
+            }
+            elsif ( $version == 2 ) {
+                my $opts = {};
+                if ( ref $_[0] ) {
+                    my ( $_opts, $_qargs ) = @_;
+
+                    $opts = $_opts;
+                    if ( my $ref = ref $_qargs ) {
+                        @qargs = @$_qargs if $ref eq 'ARRAY';
+                        @qargs = $_qargs  if $ref eq 'HASH';
+                    }
+                } else { # backward compatibility
+                    my $u = $url;
+                    while ( $u =~ s{:([a-z]+)}{} ) {
+                        my $k = $1;
+                        #next if defined $opts->{$k};
+                        $opts->{$k} = shift;
+                        die "$k value is not a scalar value $opts->{$k}" if ref $opts->{$k};
+                    }
+
+                    @qargs = $args ? splice(@_, 0, $args) : ();
+                }
+                # we can now use named :parameter in the url itself
+                $u = "$url";
+                {
+                    no warnings;
+                    $u =~ s{:([a-z]+)}{$opts->{$1}}g;
+                }
+            }
 
             # if preview API, set preview version
             $self->accept_version($preview_version) if $preview_version;
 
-            # args for json data POST
-            my @qargs = $args ? splice(@_, 0, $args) : ();
             if ($check_status) { # need check Response Status
                 my $old_raw_response = $self->raw_response;
                 $self->raw_response(1); # need check header

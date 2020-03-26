@@ -269,7 +269,7 @@ my %__methods = (
 
     # http://developer.github.com/v3/repos/contents/
     readme => { url => "/repos/%s/%s/readme" },
-    get_content => { url => "/repos/%s/%s/contents/%s" },
+    get_content => { url => "/repos/:owner/:repo/contents/:path", v => 2 },
 
     # http://developer.github.com/v3/repos/downloads/
     downloads => { url => "/repos/%s/%s/downloads", paginate => 1 },
@@ -903,6 +903,29 @@ Check examples/upload_asset.pl for a working example.
     my $ok = $repos->delete_release_asset($release_id, $asset_id);
 
 =back
+
+=head3 Contents API
+
+L<https://developer.github.com/v3/repos/contents/>
+
+=over 4
+
+=item get_content
+
+Gets the contents of a file or directory in a repository.
+Specify the file path or directory in $path.
+If you omit $path, you will receive the contents of all files in the repository.
+
+    my $response = $repos->get_content( $owner, $repo, $path )
+        or
+        $repos->get_content(
+            { owner => $owner,  repo => $repo, path => $path },
+         )
+        or
+        $repos->get_content(
+            { owner => $owner,  repo => $repo, path => $path },
+            { ref => 'feature-branch' }
+         )
 
 =head3 Repo Deployment API
 
