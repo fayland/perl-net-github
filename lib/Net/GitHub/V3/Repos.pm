@@ -927,6 +927,8 @@ If you omit $path, you will receive the contents of all files in the repository.
             { ref => 'feature-branch' }
          )
 
+=back
+
 =head3 Repo Deployment API
 
 L<http://developer.github.com/v3/repos/deployments/>

@@ -1,6 +1,7 @@
 Revision history for Net-GitHub
 
 {{$NEXT}}
+        - Use named parameters in API requests #95 (atoomic)
 
 0.98  2020-03-19 09:29:14 CST
         - rollback update_rate_limit since it requires permissions

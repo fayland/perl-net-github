@@ -230,7 +230,13 @@ sub query {
             my $uri = URI->new($url);
             my %query_form = $uri->query_form;
             $query_form{per_page} ||= $self->per_page;
-            $uri->query_form(%query_form, ref $data eq 'HASH' ? %$data : () );
+            $uri->query_form(%query_form);
+            $url = $uri->as_string;
+        }
+        if ($data and ref $data eq 'HASH') {
+            my $uri = URI->new($url);
+            my %query_form = $uri->query_form;
+            $uri->query_form(%$data);
             $url = $uri->as_string;
         }
     }
@@ -238,7 +244,7 @@ sub query {
     print STDERR ">>> $request_method $url\n" if $ENV{NG_DEBUG};
     my $req = HTTP::Request->new( $request_method, $url );
     $req->accept_decodable;
-    if ($data) {
+    if ($request_method ne 'GET' and $data) {
         my $json = $self->json->encode($data);
         print STDERR ">>> $json\n" if $ENV{NG_DEBUG} and $ENV{NG_DEBUG} > 1;
         $req->content($json);
@@ -457,20 +463,8 @@ sub __build_methods {
             my $self = shift;
 
             my ( $u, @qargs );
-            ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
-            if ( $version == 1 ) {
-                if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
-                    unshift @_, ($self->u, $self->repo);
-                }
 
-                # make url, replace %s with real args
-                my @uargs = splice(@_, 0, $n);
-                $u = sprintf($url, @uargs);
-
-                # args for json data POST
-                @qargs = $args ? splice(@_, 0, $args) : ();
-            }
-            elsif ( $version == 2 ) {
+            if ( $version == 2 ) {
                 my $opts = {};
                 if ( ref $_[0] ) {
                     my ( $_opts, $_qargs ) = @_;
@@ -497,6 +491,18 @@ sub __build_methods {
                     no warnings;
                     $u =~ s{:([a-z]+)}{$opts->{$1}}g;
                 }
+            } else {
+                ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
+                if ( ($is_u_repo or index($url, '/repos/%s/%s') > -1) and @_ < $n + $args) {
+                    unshift @_, ($self->u, $self->repo);
+                }
+
+                # make url, replace %s with real args
+                my @uargs = splice(@_, 0, $n);
+                $u = sprintf($url, @uargs);
+
+                # args for json data POST
+                @qargs = $args ? splice(@_, 0, $args) : ();
             }
 
             # if preview API, set preview version
