@@ -2,7 +2,7 @@ package Net::GitHub::V4;
 
 use Moo;
 
-our $VERSION = '0.98';
+our $VERSION = '0.99';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use URI;

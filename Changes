@@ -1,6 +1,8 @@
 Revision history for Net-GitHub
 
 {{$NEXT}}
+
+0.99  2020-03-26 09:33:03 CST
         - Use named parameters in API requests #95 (atoomic)
 
 0.98  2020-03-19 09:29:14 CST
