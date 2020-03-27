@@ -6,46 +6,48 @@ Net::GitHub - Perl Interface for github.com
 
 # SYNOPSIS
 
-    use Net::GitHub;
+```perl
+use Net::GitHub;
 
-    my $github = Net::GitHub->new(  # Net::GitHub::V3
-        login => 'fayland', pass => 'secret'
-    );
+my $github = Net::GitHub->new(  # Net::GitHub::V3
+    login => 'fayland', pass => 'secret'
+);
 
-    # If you use two factor authentication you can pass in the OTP. Do
-    # note that OTPs expire quickly and you will need to generate an oauth
-    # token to do anything non-trivial.
-    my $github = Net::GitHub->new(
-        login =>   'fayland',
-        pass =>    'secret',
-        otp =>     '123456',
-    );
+# If you use two factor authentication you can pass in the OTP. Do
+# note that OTPs expire quickly and you will need to generate an oauth
+# token to do anything non-trivial.
+my $github = Net::GitHub->new(
+    login =>   'fayland',
+    pass =>    'secret',
+    otp =>     '123456',
+);
 
-    # Pass api_url for GitHub Enterprise installations. Do not include a
-    # trailing slash
-    my $github = Net::GitHub->new(  # Net::GitHub::V3
-        login =>   'fayland',
-        pass =>    'secret',
-        api_url => 'https://gits.aresweet.com/api/v3'
-    );
+# Pass api_url for GitHub Enterprise installations. Do not include a
+# trailing slash
+my $github = Net::GitHub->new(  # Net::GitHub::V3
+    login =>   'fayland',
+    pass =>    'secret',
+    api_url => 'https://gits.aresweet.com/api/v3'
+);
 
-    # suggested
-    # use OAuth to create token with user/pass
-    my $github = Net::GitHub->new(  # Net::GitHub::V3
-        access_token => $token
-    );
+# suggested
+# use OAuth to create token with user/pass
+my $github = Net::GitHub->new(  # Net::GitHub::V3
+    access_token => $token
+);
 
-    # L<Net::GitHub::V3::Users>
-    my $user = $github->user->show('nothingmuch');
-    $github->user->update( bio => 'Just Another Perl Programmer' );
+# L<Net::GitHub::V3::Users>
+my $user = $github->user->show('nothingmuch');
+$github->user->update( bio => 'Just Another Perl Programmer' );
 
-    # L<Net::GitHub::V3::Repos>
-    my @repos = $github->repos->list;
-    my $rp = $github->repos->create( {
-        "name" => "Hello-World",
-        "description" => "This is your first repo",
-        "homepage" => "https://github.com"
-    } );
+# L<Net::GitHub::V3::Repos>
+my @repos = $github->repos->list;
+my $rp = $github->repos->create( {
+    "name" => "Hello-World",
+    "description" => "This is your first repo",
+    "homepage" => "https://github.com"
+} );
+```
 
 # DESCRIPTION
 
@@ -55,9 +57,9 @@ This distribution provides easy methods to access GitHub via their APIs.
 
 Check [http://developer.github.com/](http://developer.github.com/) for more details of the GitHub APIs.
 
-Read [Net::GitHub::V3](https://metacpan.org/pod/Net::GitHub::V3) for API usage.
+Read [Net::GitHub::V3](https://metacpan.org/pod/Net%3A%3AGitHub%3A%3AV3) for API usage.
 
-Read [Net::GitHub::V4](https://metacpan.org/pod/Net::GitHub::V4) for GitHub GraphQL API.
+Read [Net::GitHub::V4](https://metacpan.org/pod/Net%3A%3AGitHub%3A%3AV4) for GitHub GraphQL API.
 
 If you prefer object oriented way, [Pithub](https://metacpan.org/pod/Pithub) is 'There is more than one way to do it'.
 
@@ -65,19 +67,23 @@ If you prefer object oriented way, [Pithub](https://metacpan.org/pod/Pithub) is 
 
 - create access\_token for Non-Web Application
 
-        my $gh = Net::GitHub::V3->new( login => 'fayland', pass => 'secret' );
-        my $oauth = $gh->oauth;
-        my $o = $oauth->create_authorization( {
-            scopes => ['user', 'public_repo', 'repo', 'gist'], # just ['public_repo']
-            note   => 'test purpose',
-        } );
-        print $o->{token};
+    ```perl
+    my $gh = Net::GitHub::V3->new( login => 'fayland', pass => 'secret' );
+    my $oauth = $gh->oauth;
+    my $o = $oauth->create_authorization( {
+        scopes => ['user', 'public_repo', 'repo', 'gist'], # just ['public_repo']
+        note   => 'test purpose',
+    } );
+    print $o->{token};
+    ```
 
     after create the token, you can use it without your password publicly written
 
-        my $github = Net::GitHub->new(
-            access_token => $token, # from above
-        );
+    ```perl
+    my $github = Net::GitHub->new(
+        access_token => $token, # from above
+    );
+    ```
 
 # Git
 
