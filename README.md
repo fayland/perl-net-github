@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/fayland/perl-net-github.svg?branch=master)](https://travis-ci.org/fayland/perl-net-github)
+[![Actions Status](https://github.com/fayland/perl-net-github/workflows/linux/badge.svg)](https://github.com/fayland/perl-net-github/actions)
+[![Actions Status](https://github.com/fayland/perl-net-github/workflows/macos/badge.svg)](https://github.com/fayland/perl-net-github/actions)
 
 # NAME
 
