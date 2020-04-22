@@ -292,7 +292,19 @@ For brevity and because they usually are not needed, the close_xxx
 methods are not listed with their modules.  It is guaranteed that
 I<every> next_xxx method has a corresponding close_xxx method.
 
+=head3 Alternate iterator over individual items:
 
+If next_xxx and close_xxx methods are not available for your pagination
+method you can use a generic iterator using the C<iterate> helper.
+
+    $gh->issues->iterate( 'repos_issues', [ @args ], sub {
+        my $issue = shift;
+
+        ... # do something with $issue
+
+        return 1; # if you want to continue iterating
+        return;   # when you want to interrupt the iteration process
+    } );
 
 =head3 ua
 
