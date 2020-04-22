@@ -476,7 +476,7 @@ sub __build_methods {
                     }
                 } else { # backward compatibility
                     my $u = $url;
-                    while ( $u =~ s{:([a-z]+)}{} ) {
+                    while ( $u =~ s{:([a-z_]+)}{} ) {
                         my $k = $1;
                         #next if defined $opts->{$k};
                         $opts->{$k} = shift;
@@ -489,7 +489,7 @@ sub __build_methods {
                 $u = "$url";
                 {
                     no warnings;
-                    $u =~ s{:([a-z]+)}{$opts->{$1}}g;
+                    $u =~ s{:([a-z_]+)}{$opts->{$1}}g;
                 }
             } else {
                 ## if is_u_repo, both ($user, $repo, @args) or (@args) should be supported
