@@ -1,6 +1,4 @@
 [![Build Status](https://travis-ci.org/fayland/perl-net-github.svg?branch=master)](https://travis-ci.org/fayland/perl-net-github)
-[![Actions Status](https://github.com/fayland/perl-net-github/workflows/linux/badge.svg)](https://github.com/fayland/perl-net-github/actions)
-[![Actions Status](https://github.com/fayland/perl-net-github/workflows/macos/badge.svg)](https://github.com/fayland/perl-net-github/actions)
 
 # NAME
 
@@ -59,9 +57,9 @@ This distribution provides easy methods to access GitHub via their APIs.
 
 Check [http://developer.github.com/](http://developer.github.com/) for more details of the GitHub APIs.
 
-Read [Net::GitHub::V3](https://metacpan.org/pod/Net%3A%3AGitHub%3A%3AV3) for API usage.
+Read [Net::GitHub::V3](https://metacpan.org/pod/Net::GitHub::V3) for API usage.
 
-Read [Net::GitHub::V4](https://metacpan.org/pod/Net%3A%3AGitHub%3A%3AV4) for GitHub GraphQL API.
+Read [Net::GitHub::V4](https://metacpan.org/pod/Net::GitHub::V4) for GitHub GraphQL API.
 
 If you prefer object oriented way, [Pithub](https://metacpan.org/pod/Pithub) is 'There is more than one way to do it'.
 

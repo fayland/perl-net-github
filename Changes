@@ -2,6 +2,9 @@ Revision history for Net-GitHub
 
 {{$NEXT}}
 
+1.00  2020-04-22 08:59:14 CST
+        - Basic GitHub actions API calls (atoomic)
+
 0.99  2020-03-26 09:33:03 CST
         - Use named parameters in API requests #95 (atoomic)
 
