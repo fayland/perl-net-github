@@ -2,6 +2,10 @@ Revision history for Net-GitHub
 
 {{$NEXT}}
 
+1.01  2020-04-23 08:32:57 CST
+        - Add 'repos' to Orgs (atoomic)
+        - Basic generic iterator (atoomic)
+
 1.00  2020-04-22 08:59:14 CST
         - Basic GitHub actions API calls (atoomic)
 
