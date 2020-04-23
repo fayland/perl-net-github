@@ -367,6 +367,45 @@ sub _clear_pagination {
     return 1;
 }
 
+sub iterate {
+    my ( $self, $method, $args, $callback ) = @_;
+
+    die "This is a method class" unless ref $self;
+    die "Need a method name as second argument" unless defined $method && $self->can($method);
+
+    die "Missing a callback function as third argument" unless ref $callback eq 'CODE';
+
+    my @list_args; # 3rd argument
+    if ( ref $args eq 'ARRAY' ) {
+        @list_args = @$args;
+    } elsif ( ref $args eq 'HASH' ) {
+        # used for v2 api which are passing a hash of named parameters instead of a list
+        @list_args = $args;
+    } else {
+        @list_args = $args; # can be undefined [need to preserve it instead of an empty list]
+    }
+
+    my $chunk = $self->can($method)->( $self, $args );
+
+    my $continue = 1;
+    while ( ref $chunk eq 'ARRAY' && scalar @$chunk ) {
+        # process a chunk
+        foreach my $item ( @$chunk ) {
+            $continue = $callback->( $item );
+            last unless $continue; # user has requested to stop iterating
+        }
+        last unless $continue; # user has requested to stop iterating
+
+        # get the next chunk
+        last unless $self->has_next_page;
+        $chunk = $self->next_page;
+    }
+
+    $self->_clear_pagination;
+
+    return;
+}
+
 sub _extract_link_url {
     my ($self, $raw_strs) = @_;
     foreach my $str (@$raw_strs) {
@@ -662,6 +701,33 @@ Calls C<query> with C<last_url>. See L<Net::GitHub::V3>
 
 Adjusts next_url to be a new url in the pagination space
 I.E. you are jumping to a new index in the pagination
+
+=item iterate($method_name, $arguments, $callback)
+
+This provides an helper to iterate over APIs call using pagination,
+using the combo: has_next_page, next_page... for you.
+
+The arguments can be either a scalar if the function is using
+a single argument, an ArrayRef when the function is using multiple
+arguments. You can also use one HashRef for functions supporting named
+parameters.
+
+The callback function is called with a single item.
+The return value of the callback function can be used to stop the
+iteration when returning a 'false' value.
+
+In common cases, you want to return a true value: '1'.
+
+Sample usage:
+
+    $gh->org->iterate( 'repos', 'OrganizationName', sub {
+        my $item = shift;
+
+        print "Repo Name is $item->{name}"
+
+        return 1; # if you want to continue iterating
+        return;   # use a false value when you want to interrupt the iteration
+    } );
 
 =item result_sets
 
