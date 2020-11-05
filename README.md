@@ -77,7 +77,7 @@ If you prefer object oriented way, [Pithub](https://metacpan.org/pod/Pithub) is 
     print $o->{token};
     ```
 
-    after create the token, you can use it without your password publicly written
+    after creating the token, you can use it without your password publicly written
 
     ```perl
     my $github = Net::GitHub->new(
