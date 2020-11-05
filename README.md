@@ -30,8 +30,8 @@ my $github = Net::GitHub->new(  # Net::GitHub::V3
     api_url => 'https://gits.aresweet.com/api/v3'
 );
 
-# suggested
-# use OAuth to create token with user/pass
+# Suggested:
+# First use OAuth to create a token with user/pass. Then do:
 my $github = Net::GitHub->new(  # Net::GitHub::V3
     access_token => $token
 );
