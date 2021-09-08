@@ -62,6 +62,13 @@ my %__methods = (
     update_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'PATCH', args => 1 },
     delete_comment => { url => "/repos/%s/%s/pulls/comments/%s", method => 'DELETE', check_status => 204 },
 
+    # http://developer.github.com/v3/pulls/reviews/
+    reviews => { url => "/repos/%s/%s/pulls/%s/reviews", paginate => 1 },
+    review  => { url => "/repos/%s/%s/pulls/%s/reviews/%s" },
+    create_review => { url => "/repos/%s/%s/pulls/%s/reviews", method => 'POST',  args => 1 },
+    delete_review => { url => "/repos/%s/%s/pulls/%s/reviews/%s", method => 'DELETE' },
+    update_review => { url => "/repos/%s/%s/pulls/%s/reviews/%s", method => 'PUT', args => 1 },
+
     # https://developer.github.com/v3/pulls/review_requests/
     reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", paginate => 1 },
     add_reviewers => { url => "/repos/%s/%s/pulls/%s/requested_reviewers", method => 'POST', args => 1 },
@@ -177,6 +184,37 @@ L<http://developer.github.com/v3/pulls/comments/>
         "body" => "Nice change"
     });
     my $st = $pull_request->delete_comment($comment_id);
+
+=back
+
+=head3 Pull Request Reviews API
+
+L<http://developer.github.com/v3/pulls/reviews/>
+
+=over 4
+
+=item reviews
+
+=item review
+
+=item create_review
+
+=item update_review
+
+=item delete_review
+
+    my @reviews = $pull_request->reviews($pull_number);
+    while (my $review = $pull_request->next_review($pull_number)) { ...; }
+    my $review  = $pull_request->review($review_id);
+    my $review  = $pull_request->create_review($pull_number, {
+        "body" => "a new review",
+        commit_id => '586fe4be94c32248043b344e99fa15c72b40d1c2',
+        event => 'APPROVE',
+    });
+    my $review = $pull_request->update_review($review_id, {
+        "body" => "Nice change"
+    });
+    my $st = $pull_request->delete_review($review_id);
 
 =back
 
