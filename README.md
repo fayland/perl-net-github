@@ -30,8 +30,8 @@ my $github = Net::GitHub->new(  # Net::GitHub::V3
     api_url => 'https://gits.aresweet.com/api/v3'
 );
 
-# Suggested:
-# First use OAuth to create a token with user/pass. Then do:
+# suggested
+# use OAuth to create token with user/pass
 my $github = Net::GitHub->new(  # Net::GitHub::V3
     access_token => $token
 );
@@ -77,7 +77,7 @@ If you prefer object oriented way, [Pithub](https://metacpan.org/pod/Pithub) is 
     print $o->{token};
     ```
 
-    after creating the token, you can use it without your password publicly written
+    after create the token, you can use it without your password publicly written
 
     ```perl
     my $github = Net::GitHub->new(

@@ -70,7 +70,7 @@
          "web" : "https://github.com/fayland/perl-net-github"
       }
    },
-   "version" : "1.01",
+   "version" : "1.02",
    "x_contributors" : [
       "Alan Berndt <alan@eatabrick.org>",
       "Alex Muntada <alexm@alexm.org>",
@@ -102,6 +102,7 @@
       "Johannes Kilian <Johannes.Kilian@vitronic.com>",
       "John 'Warthog9' Hawley <jhawley@vmware.com>",
       "Jonathan Gopel <jonathan.gopel@hpe.com>",
+      "J.R. Mash <2574997+jrmash@users.noreply.github.com>",
       "Kevin Falcone <kevin@jibsheet.com>",
       "Kirk Kimmel <kimmel.k.programmer@gmail.com>",
       "Leigh Hart <lhart@broadsoft.com>",
@@ -121,7 +122,8 @@
       "unknown <Administrator@.(none)>",
       "Vincent Lequertier <sky@riseup.net>",
       "Will Orr <will@worrbase.com>",
-      "Zak Wilcox <iwilcox@iwilcox.me.uk>"
+      "Zak Wilcox <iwilcox@iwilcox.me.uk>",
+      "\u7a4d\u4e39\u5c3c Dan Jacobson <jidanni@jidanni.org>"
    ],
    "x_generated_by_perl" : "v5.25.11",
    "x_serialization_backend" : "Cpanel::JSON::XS version 3.023"
