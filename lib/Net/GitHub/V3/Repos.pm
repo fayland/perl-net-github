@@ -258,7 +258,7 @@ my %__methods = (
     delete_collaborator => { url => "/repos/%s/%s/collaborators/%s", method => 'DELETE', check_status => 204 },
 
     # http://developer.github.com/v3/repos/commits/
-    commit   => { url => "/repos/:owner/:repo/commits/:ref", v => 2 },
+    commit   => { url => "/repos/%s/%s/commits/%s" },
     comments => { url => "/repos/%s/%s/comments", paginate => 1 },
     comment  => { url => "/repos/%s/%s/comments/%s" },
     commit_comments => { url => "/repos/%s/%s/commits/%s/comments", paginate => 1 },
