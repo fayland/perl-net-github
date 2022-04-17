@@ -1,6 +1,8 @@
 Revision history for Net-GitHub
 
 {{$NEXT}}
+        - revert #102
+        - merge #111 (PF4Public)
 
 1.02  2021-09-08 13:15:24 CST
         - Add support for reviews #108 (jrmash)
