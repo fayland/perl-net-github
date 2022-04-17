@@ -25,6 +25,7 @@ my %__methods = (
     ref  => { url => "/repos/%s/%s/git/refs/%s" },
     create_ref => { url => "/repos/%s/%s/git/refs", method => 'POST', args => 1 },
     update_ref => { url => "/repos/%s/%s/git/refs/%s", method => 'PATCH', args => 1 },
+    delete_ref => { url => "/repos/%s/%s/git/refs/%s", method => 'DELETE', check_status => 204 },
 
     tag => { url => "/repos/%s/%s/git/tags/%s" },
     create_tag => { url => "/repos/%s/%s/git/tags", method => 'POST', args => 1 },
@@ -113,10 +114,13 @@ L<http://developer.github.com/v3/git/refs/>
 
 =item update_ref
 
+=item delete_ref
+
     my @refs = $git_data->refs;
     my $ref  = $git_data->ref($ref_id);
     my $ref  = $git_data->create_ref($ref_data);
     my $ref  = $git_data->update_ref($ref_id, $ref_data);
+    $git_data->delete_ref($ref_id);
 
 =back
 
