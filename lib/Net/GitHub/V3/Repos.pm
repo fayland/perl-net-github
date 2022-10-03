@@ -336,6 +336,10 @@ my %__methods = (
     participation => { url => "/repos/%s/%s/stats/participation", method => 'GET'},
     punch_card => { url => "/repos/%s/%s/stats/punch_card", method => 'GET'},
 
+    # https://docs.github.com/en/rest/branches/branch-protection
+    branch_protection => { url => "/repos/%s/%s/branches/%s/protection", method => 'GET'},
+    delete_branch_protection => { url => "/repos/%s/%s/branches/%s/protection", method => 'DELETE', check_status => 204 },
+    update_branch_protection => { url => "/repos/%s/%s/branches/%s/protection", method => 'PUT', args => 1 },
 );
 __build_methods(__PACKAGE__, %__methods);
 
@@ -995,6 +999,43 @@ L<http://developer.github.com/v3/repos/statistics/>
     my $punch_card          = $repos->punch_card($owner, $repo);
 
 =back
+
+=head3 Branch Protection API
+
+L<https://docs.github.com/en/rest/branches/branch-protection>
+
+=over 4
+
+=item branch_protection
+
+    my $protection = $repos->branch_protection('fayland', 'perl-net-github', 'master');
+
+=item delete_branch_protection
+
+    $repos->delete_branch_protection('fayland', 'perl-net-github', 'master');
+
+=item update_branch_protection
+
+    $repos->update_branch_protection('fayland', 'perl-net-github', 'master', {
+        allow_deletions => \0,
+        allow_force_pushes => \0,
+        block_creations => \1,
+        enforce_admins => \1,
+        required_conversation_resolution => \1,
+        required_linear_history => \0,
+        required_pull_request_reviews => {
+            dismiss_stale_reviews => \1,
+            require_code_owner_reviews => \1,
+            required_approving_review_count => 2,
+        },
+        required_status_checks => {
+            strict => \1,
+            contexts => []
+        },
+        restrictions => undef,
+    });
+
+=back 
 
 =head1 AUTHOR & COPYRIGHT & LICENSE
 
