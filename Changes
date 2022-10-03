@@ -2,6 +2,9 @@ Revision history for Net-GitHub
 
 {{$NEXT}}
 
+1.04  2022-10-03 11:20:30 CST
+        - branch protection (jrmash)
+
 1.03  2022-04-17 12:27:12 CST
         - revert #102
         - merge #111 (PF4Public)
