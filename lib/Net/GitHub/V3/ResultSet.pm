@@ -1,6 +1,6 @@
 package Net::GitHub::V3::ResultSet;
 
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 our $AUTHORITY = 'cpan:FAYLAND';
 
 use Types::Standard qw(Int Str ArrayRef Bool);
