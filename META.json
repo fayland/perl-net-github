@@ -70,7 +70,7 @@
          "web" : "https://github.com/fayland/perl-net-github"
       }
    },
-   "version" : "1.04",
+   "version" : "1.05",
    "x_contributors" : [
       "Alan Berndt <alan@eatabrick.org>",
       "Alex Muntada <alexm@alexm.org>",
